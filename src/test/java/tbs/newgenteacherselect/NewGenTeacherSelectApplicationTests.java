@@ -2,53 +2,54 @@ package tbs.newgenteacherselect;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Example;
-import tbs.Utils.EncryptionTool;
-import tbs.newgenteacherselect.model.StudentVO;
+import tbs.Utils.Async.AsyncToDo;
+import tbs.Utils.Async.AsyncToGet;
+import tbs.Utils.Async.IThreadSign;
+import tbs.Utils.BatchUtil;
+import tbs.Utils.Async.ThreadUtil;
+import tbs.dao.BasicUserDao;
+import tbs.dao.DepartmentDao;
+import tbs.dao.StudentDao;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.pojo.BasicUser;
-import tbs.pojo.StudentDetail;
-import tbs.repo.BasicUserDao;
-import tbs.repo.StudentDao;
+import tbs.pojo.Student;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.UUID;
+import java.util.concurrent.Executor;
 
 @SpringBootTest
 class NewGenTeacherSelectApplicationTests {
     @Resource
     StudentService studentService;
-    @Resource
-    BasicUserDao basicUserDao;
+
     @Resource
     StudentDao studentDao;
 
-    @Test
-    void contextLoads() {
-//        List<StudentVO> datas=new ArrayList<>();
-//        for(int i=1;i<=10;i++)
-//        {
-//            StudentVO vo=new StudentVO();
-//            vo.setGrade(1);
-//            vo.setName("test"+i);
-//            vo.setNumber("number"+i);
-//            vo.setPassword("testpw"+i);
-//            vo.setPhone(i+"");
-//            datas.add(vo);
-//        }
-//        long now=System.currentTimeMillis();
-//        List<StudentDetail> details= studentService.batchRead(datas);
-//        long done=System.currentTimeMillis();
-//        System.out.println("cost "+(done-now)+"ms");
-//        StudentDetail detail=studentDao.studentLoginWithPhone("3",EncryptionTool.encrypt("testpw3"));
-//        System.out.println(detail);
+    @Resource
+    BasicUserDao basicUserDao;
+    @Resource
+    BatchUtil batchUtil;
 
-        for(StudentDetail s:studentDao.findAllByGrade(1))
-        {
-            System.out.println(s);
-        }
+    @Resource
+    ThreadUtil threadUtil;
+
+    @Resource
+    DepartmentDao departmentDao;
+
+    @Test
+    void contextLoads() throws Exception {
+
+        System.out.println(departmentDao.findAllByParent(1));
+        System.out.println(departmentDao.findAllByParent(0));
+        System.out.println(studentDao.findStudentByDepartment(3));
+
+
+//        for(StudentDetail s:studentDao.findAllByGrade(1))
+//        {
+//            System.out.println(s);
+//        }
 
 
     }

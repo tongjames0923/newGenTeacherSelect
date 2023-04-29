@@ -11,7 +11,7 @@ spring:
       min-idle: 10
     password: tongyi0923
     type: com.alibaba.druid.pool.DruidDataSource
-    url: jdbc:mysql://localhost:3306/teacherselect?serverTimezone=Asia/Shanghai
+    url: jdbc:mysql://localhost:3306/teacherselect?serverTimezone=Asia/Shanghai&rewriteBatchedStatements=true
     username: root
   jackson:
     date-format: yyyy-MM-dd HH:mm

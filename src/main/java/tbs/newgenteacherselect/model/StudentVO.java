@@ -1,7 +1,7 @@
 package tbs.newgenteacherselect.model;
 
 public class StudentVO {
-    String name,number,phone,password;
+    String name,number,phone,password,clas;
     Integer grade;
 
     public String getName() {
