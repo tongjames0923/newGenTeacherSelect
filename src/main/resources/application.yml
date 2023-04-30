@@ -21,13 +21,21 @@ spring:
     password: redispw
     port: 6379
     database: 0
-    timeout: 1000
+    timeout: 300000
+    lettuce:
+      pool:
+        enabled: true
+        max-active: -1
+        max-idle: 100
+        min-idle: 50
   rabbitmq:
     host: 127.0.0.1
     port: 5672
     username: root
     password: tongyi0923
-  jpa:
-    hibernate:
-      ddl-auto: update
-    show-sql: true
+tbs:
+  thread:
+    locker:
+      redis:
+        enable: true
+        timeout: 60

@@ -2,7 +2,23 @@ package tbs.newgenteacherselect.model;
 
 public class StudentVO {
     String name,number,phone,password,clas;
-    Integer grade;
+    Integer grade,department;
+
+    public String getClas() {
+        return clas;
+    }
+
+    public void setClas(String clas) {
+        this.clas = clas;
+    }
+
+    public Integer getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Integer department) {
+        this.department = department;
+    }
 
     public String getName() {
         return name;

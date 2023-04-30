@@ -10,12 +10,15 @@ import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.cache.RedisCacheConfiguration;
 import org.springframework.data.redis.cache.RedisCacheManager;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.jedis.JedisClientConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
+import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.RedisSerializationContext;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
+import redis.clients.jedis.JedisPoolConfig;
 
 import java.time.Duration;
 
@@ -48,47 +51,18 @@ public class RedisConfig {
     }
 
 
-    @Bean
-    public RedisConnectionFactory redisConnectionFactory()
-    {
-        return connectionFactory(host,port,password);
-    }
-
-
-
-    @Bean
-    //配置redisTemplate
-    // 默认情况下的模板只能支持 RedisTemplate<String,String>，
-    // 只能存入字符串，很多时候，我们需要自定义 RedisTemplate ，设置序列化器
-    public RedisTemplate<String,Object> redisTemplate(RedisConnectionFactory factory){
-
-        RedisTemplate<String,Object> template = new RedisTemplate <>();
-        template.setConnectionFactory(factory);
-
-        Jackson2JsonRedisSerializer jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer(Object.class);
-        ObjectMapper om = new ObjectMapper();
-        om.setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.ANY);
-        jackson2JsonRedisSerializer.setObjectMapper(om);
-
-        StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-        // key采用String的序列化方式
-        template.setKeySerializer(stringRedisSerializer);
-        // hash的key也采用String的序列化方式
-        template.setHashKeySerializer(stringRedisSerializer);
-        // value序列化方式采用jackson
-        template.setValueSerializer(jackson2JsonRedisSerializer);
-        // hash的value序列化方式采用jackson
-        template.setHashValueSerializer(jackson2JsonRedisSerializer);
-        template.afterPropertiesSet();
-        return template;
-    }
-
-    public RedisConnectionFactory connectionFactory(String host, int port, String password) {
-        JedisConnectionFactory jedisConnectionFactory = new JedisConnectionFactory();
-        jedisConnectionFactory.setHostName(host);
-        jedisConnectionFactory.setPort(port);
-        jedisConnectionFactory.setPassword(password);
-        jedisConnectionFactory.afterPropertiesSet();
-        return jedisConnectionFactory;
-    }
+//    @Bean
+//    public RedisConnectionFactory redisConnectionFactory()
+//    {
+//        return connectionFactory(host,port,password);
+//    }
+//
+//
+//
+//
+//    public RedisConnectionFactory connectionFactory(String host, int port, String password) {
+//        LettuceConnectionFactory connectionFactory=new LettuceConnectionFactory();
+//        connectionFactory.afterPropertiesSet();
+//        return connectionFactory;
+//    }
 }
