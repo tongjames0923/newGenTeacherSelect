@@ -8,7 +8,7 @@ import tbs.utils.BatchUtil;
 import tbs.utils.EncryptionTool;
 import tbs.dao.BasicUserDao;
 import tbs.dao.StudentDao;
-import tbs.newgenteacherselect.model.StudentVO;
+import tbs.newgenteacherselect.model.StudentRegisterVO;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Student;
@@ -23,13 +23,13 @@ public class StudentServiceImpl implements StudentService {
 
 
     @Override
-    public void studentImport(List<StudentVO> vo) throws Exception {
+    public void studentImport(List<StudentRegisterVO> vo) throws Exception {
         List<AsyncToDo> works = new LinkedList<>();
         BatchUtil studentBatch = SpringUtil.getBean(BatchUtil.class);
         BatchUtil userBatch = SpringUtil.getBean(BatchUtil.class);
         works.add((st) -> {
 
-            for (StudentVO s : vo) {
+            for (StudentRegisterVO s : vo) {
                 try {
 
                     studentBatch.batchUpdate(200, () -> {
@@ -47,7 +47,7 @@ public class StudentServiceImpl implements StudentService {
             }
         });
         works.add((us) -> {
-            for (StudentVO s : vo) {
+            for (StudentRegisterVO s : vo) {
                 try {
                     userBatch.batchUpdate(200, () -> {
                         BasicUser basicUser = new BasicUser();

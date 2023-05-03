@@ -1,6 +1,6 @@
 package tbs.newgenteacherselect.model;
 
-public class StudentVO {
+public class StudentRegisterVO {
     String name,number,phone,password,clas;
     Integer grade,department;
 

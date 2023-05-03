@@ -1,10 +1,9 @@
 package tbs.newgenteacherselect.service;
 
-import tbs.utils.BatchUtil;
-import tbs.newgenteacherselect.model.StudentVO;
+import tbs.newgenteacherselect.model.StudentRegisterVO;
 
 import java.util.List;
 
 public interface StudentService {
-    void studentImport(List<StudentVO> vo) throws Exception;
+    void studentImport(List<StudentRegisterVO> vo) throws Exception;
 }

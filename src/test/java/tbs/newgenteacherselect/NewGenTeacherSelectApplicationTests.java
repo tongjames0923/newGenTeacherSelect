@@ -6,12 +6,16 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tbs.dao.RoleDao;
 import tbs.dao.StudentDao;
-import tbs.dao.StudentQO;
-import tbs.newgenteacherselect.model.StudentVO;
+import tbs.dao.TeacherDao;
+import tbs.newgenteacherselect.model.StudentRegisterVO;
+import tbs.newgenteacherselect.model.TeacherRegisterVO;
 import tbs.newgenteacherselect.service.StudentService;
+import tbs.newgenteacherselect.service.TeacherService;
+import tbs.pojo.BasicUser;
+import tbs.pojo.Teacher;
+import tbs.utils.EncryptionTool;
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -24,6 +28,12 @@ class NewGenTeacherSelectApplicationTests {
     StudentDao studentDao;
     @Resource
     RoleDao roleDao;
+
+    @Resource
+    TeacherService teacherService;
+
+    @Resource
+    TeacherDao teacherDao;
 
 
     static long beg, end;
@@ -40,26 +50,8 @@ class NewGenTeacherSelectApplicationTests {
     }
 
     @Test
-    void contextLoads()  {
-        List<StudentVO> list=new LinkedList<>();
-        for(int i=0;i<100000;i++)
-        {
-            StudentVO v=new StudentVO();
-            v.setClas("class-"+i%100);
-            v.setDepartment(3);
-            v.setPhone("000-333-"+i);
-            v.setName("name_"+i);
-            v.setGrade(i%10);
-            v.setPassword("pw123456"+i);
-            v.setNumber("xh_"+i);
-            list.add(v);
-        }
-        try {
-            studentService.studentImport(list);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
+    void contextLoads() {
+        System.out.println(teacherDao.findTeacherByPhone("111-333-2"));
     }
 
 }
