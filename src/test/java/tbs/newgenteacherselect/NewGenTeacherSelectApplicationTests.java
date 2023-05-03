@@ -4,11 +4,14 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import tbs.utils.BatchUtil;
+import tbs.dao.RoleDao;
+import tbs.dao.StudentDao;
+import tbs.dao.StudentQO;
 import tbs.newgenteacherselect.model.StudentVO;
 import tbs.newgenteacherselect.service.StudentService;
 
 import javax.annotation.Resource;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -17,18 +20,23 @@ class NewGenTeacherSelectApplicationTests {
     @Resource
     StudentService studentService;
 
-    static long beg,end;
+    @Resource
+    StudentDao studentDao;
+    @Resource
+    RoleDao roleDao;
+
+
+    static long beg, end;
+
     @BeforeAll
-    static void before()
-    {
-        beg=System.currentTimeMillis();
+    static void before() {
+        beg = System.currentTimeMillis();
     }
 
     @AfterAll
-    static void end()
-    {
-        end=System.currentTimeMillis();
-        System.out.println("cost "+(end-beg)+" ms");
+    static void end() {
+        end = System.currentTimeMillis();
+        System.out.println("cost " + (end - beg) + " ms");
     }
 
     @Test

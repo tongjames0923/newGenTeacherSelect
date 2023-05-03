@@ -22,12 +22,11 @@ public class StudentServiceImpl implements StudentService {
     ThreadUtil threadUtil;
 
 
-
     @Override
     public void studentImport(List<StudentVO> vo) throws Exception {
         List<AsyncToDo> works = new LinkedList<>();
-        BatchUtil studentBatch= SpringUtil.getBean(BatchUtil.class);
-        BatchUtil userBatch= SpringUtil.getBean(BatchUtil.class);
+        BatchUtil studentBatch = SpringUtil.getBean(BatchUtil.class);
+        BatchUtil userBatch = SpringUtil.getBean(BatchUtil.class);
         works.add((st) -> {
 
             for (StudentVO s : vo) {
