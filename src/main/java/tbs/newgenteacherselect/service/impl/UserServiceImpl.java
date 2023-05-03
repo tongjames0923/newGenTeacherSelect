@@ -1,18 +1,21 @@
 package tbs.newgenteacherselect.service.impl;
 
 import org.springframework.stereotype.Component;
+import tbs.dao.AdminDao;
 import tbs.dao.RoleDao;
 import tbs.dao.StudentDao;
 import tbs.dao.TeacherDao;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.service.UserService;
+import tbs.pojo.dto.AdminDetail;
 import tbs.utils.AOP.authorize.interfaces.IAccess;
 import tbs.utils.AOP.authorize.model.BaseRoleModel;
 import tbs.utils.EncryptionTool;
 import tbs.utils.Results.NetResult;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.UUID;
 
 @Component
@@ -26,6 +29,9 @@ public class UserServiceImpl implements UserService {
     TeacherDao teacherDao;
 
     @Resource
+    AdminDao adminDao;
+
+    @Resource
     IAccess access;
 
 
@@ -36,12 +42,19 @@ public class UserServiceImpl implements UserService {
         if (baseRole == null)
             throw NetErrorEnum.makeError(NetErrorEnum.LOGIN_FAIL);
         Object obj = null;
+        String uuid = phone + "_" + UUID.randomUUID().toString();
         switch (baseRole.getRoleCode()) {
             case 0:
                 obj = studentDao.findStudentByPhone(phone);
                 break;
             case 1:
-                throw NetErrorEnum.makeError(NetErrorEnum.NOT_AVALIABLE);
+                List<AdminDetail> ls = adminDao.listSu();
+                for (AdminDetail detail : ls) {
+                    if (detail.getPhone().equals(phone)) {
+                        uuid = detail.getAdminToken();
+                        break;
+                    }
+                }
             case 2:
                 obj = teacherDao.findTeacherByPhone(phone);
                 break;
@@ -49,10 +62,9 @@ public class UserServiceImpl implements UserService {
             default:
                 throw NetErrorEnum.makeError(NetErrorEnum.BAD_ROLE);
         }
-        String uuid = phone + "_" + UUID.randomUUID().toString();
         baseRole.setUserId(phone);
         access.put(uuid, baseRole);
-        return new RoleVO(obj, baseRole,uuid);
+        return new RoleVO(obj, baseRole, uuid);
 
     }
 
@@ -63,6 +75,6 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void renew(String token) throws Exception {
-        access.put(token,null);
+        access.put(token, null);
     }
 }

@@ -7,6 +7,7 @@ public class RoleVO<T> {
     BaseRoleModel role;
 
     String token;
+    public static final int ROLE_ADMIN=1,ROLE_STUDENT=0,ROLE_TEACHER=2;
 
     public RoleVO(T detail, BaseRoleModel role, String token) {
         this.detail = detail;
