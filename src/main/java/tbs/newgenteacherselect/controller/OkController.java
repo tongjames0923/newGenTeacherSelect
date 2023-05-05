@@ -43,18 +43,6 @@ public class OkController {
         }, null);
     }
 
-    @Resource
-    AsyncMethod asyncMethod;
-
-    @RequestMapping("result/{key}")
-    public NetResult getResult(@PathVariable String key) throws Exception {
-        return proxy.method(new IAction() {
-            @Override
-            public Object action(NetResult result) throws Exception {
-                return asyncMethod.get(key);
-            }
-        }, null);
-    }
 
 //
 //    @RequestMapping("mlogin")

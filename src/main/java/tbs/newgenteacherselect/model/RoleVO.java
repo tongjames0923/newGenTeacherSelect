@@ -2,10 +2,23 @@ package tbs.newgenteacherselect.model;
 
 import tbs.utils.AOP.authorize.model.BaseRoleModel;
 
+/**
+ * 登录基本数据
+ * @param <T>
+ */
 public class RoleVO<T> {
+    /**
+     * 详情
+     */
     T detail;
+    /**
+     * 用户权限
+     */
     BaseRoleModel role;
 
+    /**
+     * 密钥
+     */
     String token;
     public static final int ROLE_ADMIN=1,ROLE_STUDENT=0,ROLE_TEACHER=2;
 

@@ -4,14 +4,14 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import tbs.dao.RoleDao;
-import tbs.dao.StudentDao;
-import tbs.dao.TeacherDao;
+import tbs.dao.*;
 import tbs.newgenteacherselect.model.StudentRegisterVO;
 import tbs.newgenteacherselect.model.TeacherRegisterVO;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.newgenteacherselect.service.TeacherService;
+import tbs.pojo.Admin;
 import tbs.pojo.BasicUser;
+import tbs.pojo.Department;
 import tbs.pojo.Teacher;
 import tbs.utils.EncryptionTool;
 
@@ -31,7 +31,8 @@ class NewGenTeacherSelectApplicationTests {
 
     @Resource
     TeacherService teacherService;
-
+    @Resource
+    DepartmentDao departmentDao;
     @Resource
     TeacherDao teacherDao;
 
@@ -49,9 +50,15 @@ class NewGenTeacherSelectApplicationTests {
         System.out.println("cost " + (end - beg) + " ms");
     }
 
+    @Resource
+    AdminDao dao;
+
     @Test
     void contextLoads() {
-        System.out.println(teacherDao.findTeacherByPhone("111-333-2"));
+        Admin admin = new Admin();
+        admin.setAdminToken("test123");
+        admin.setPhone("1776688");
+        dao.saveAdmin(admin);
     }
 
 }

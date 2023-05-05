@@ -55,6 +55,7 @@ public class UserServiceImpl implements UserService {
                         break;
                     }
                 }
+                break;
             case 2:
                 obj = teacherDao.findTeacherByPhone(phone);
                 break;

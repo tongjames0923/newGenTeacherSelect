@@ -5,6 +5,7 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import tbs.newgenteacherselect.service.DepartmentService;
 import tbs.utils.AOP.authorize.annotations.AccessRequire;
 import tbs.utils.AOP.controller.ApiProxy;
 import tbs.utils.Results.NetResult;
@@ -16,11 +17,13 @@ public class DepartmentController {
     @Resource
     ApiProxy apiProxy;
 
+    @Resource
+    DepartmentService departmentService;
+
     @RequestMapping("fullName")
-    @AccessRequire
     public NetResult fulldepartmentName(int id) {
-        return apiProxy.method((NetResult r)->{
-            throw new UnsupportedOperationException();
+        return apiProxy.method((NetResult r) -> {
+            return departmentService.fullName(id);
         }, null);
     }
 
