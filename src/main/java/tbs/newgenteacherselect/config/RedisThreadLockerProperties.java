@@ -14,7 +14,7 @@ import java.util.concurrent.TimeUnit;
 public class RedisThreadLockerProperties {
 
     private boolean enable=false;
-    private long timeout=30;
+    private long timeout=5;
 
     public boolean isEnable() {
         return enable;

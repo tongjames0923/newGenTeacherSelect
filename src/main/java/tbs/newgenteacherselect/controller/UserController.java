@@ -1,14 +1,16 @@
 package tbs.newgenteacherselect.controller;
 
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentRegisterVO;
+import tbs.newgenteacherselect.model.TeacherRegisterVO;
 import tbs.newgenteacherselect.service.StudentService;
+import tbs.newgenteacherselect.service.TeacherService;
 import tbs.newgenteacherselect.service.UserService;
 import tbs.utils.AOP.authorize.annotations.AccessRequire;
-import tbs.utils.AOP.authorize.model.BaseRoleModel;
 import tbs.utils.AOP.controller.ApiProxy;
 import tbs.utils.AOP.controller.IAction;
 import tbs.utils.Results.NetResult;
@@ -25,6 +27,8 @@ public class UserController {
 
     @Resource
     StudentService studentService;
+    @Resource
+    TeacherService teacherService;
 
 
     @Resource
@@ -42,7 +46,7 @@ public class UserController {
     }
 
     @RequestMapping("logout")
-    @AccessRequire(manual = {RoleVO.ROLE_STUDENT,RoleVO.ROLE_TEACHER})
+    @AccessRequire(manual = {RoleVO.ROLE_STUDENT, RoleVO.ROLE_TEACHER})
     public NetResult logout() throws Exception {
         return apiProxy.method(new IAction() {
             @Override
@@ -54,7 +58,7 @@ public class UserController {
     }
 
     @RequestMapping("renew")
-    @AccessRequire(manual = {RoleVO.ROLE_STUDENT,RoleVO.ROLE_TEACHER})
+    @AccessRequire(manual = {RoleVO.ROLE_STUDENT, RoleVO.ROLE_TEACHER})
     public NetResult renew() throws Exception {
         return apiProxy.method(new IAction<RoleVO>() {
             @Override
@@ -67,8 +71,8 @@ public class UserController {
 
     @RequestMapping(value = "studentImport", method = RequestMethod.POST)
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
-    public NetResult importStudent(List<StudentRegisterVO> list) {
-        return apiProxy.method(new IAction() {
+    public NetResult importStudent(@RequestBody List<StudentRegisterVO> list) {
+        return apiProxy.method( new IAction() {
             @Override
             public Object action(NetResult result) throws Exception {
                 studentService.studentImport(list);
@@ -77,5 +81,16 @@ public class UserController {
         }, null);
     }
 
+    @RequestMapping(value = "teacherImport", method = RequestMethod.POST)
+    @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
+    public NetResult importTeacher(@RequestBody List<TeacherRegisterVO> list) {
+        return apiProxy.method( new IAction() {
+            @Override
+            public Object action(NetResult result) throws Exception {
+                teacherService.saveTeacher(list);
+                return null;
+            }
+        }, null);
+    }
 
 }

@@ -36,7 +36,7 @@ public class StudentServiceImpl implements StudentService {
                         Student student = new Student();
                         student.setPhone(s.getPhone());
                         student.setGrade(s.getGrade());
-                        student.setstudentNo(s.getNumber());
+                        student.setStudentNo(s.getNumber());
                         student.setCla(s.getClas());
                         studentBatch.getMapper(StudentDao.class).saveStudent(student);
                     });

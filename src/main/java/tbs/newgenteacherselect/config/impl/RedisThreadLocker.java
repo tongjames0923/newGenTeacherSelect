@@ -21,7 +21,7 @@ import java.util.concurrent.TimeUnit;
  */
 @Component
 @Scope("prototype")
-@ConditionalOnProperty(prefix = "tbs.thread.locker.redis",name = "enable",havingValue = "true")
+@ConditionalOnProperty(prefix = "tbs.thread.locker.redis", name = "enable", havingValue = "true")
 public class RedisThreadLocker implements IThreadLocker {
     @Autowired
     RedisThreadLockerProperties properties;
@@ -32,30 +32,29 @@ public class RedisThreadLocker implements IThreadLocker {
 
     @Override
     public boolean isLock(IThreadSign sign) {
-        return redisService.hasKey(sign.key());
+        return redisService.hasKey(sign.key()) && redisService.getExpire(sign.key(), TimeUnit.MINUTES) != -1;
     }
 
     @Override
     public void lock(IThreadSign sign) {
-        redisService.set(sign.key(),null);
+        redisService.set(sign.key(), null);
     }
 
     @Override
     public void unlock(IThreadSign sign) {
-        redisService.expire(sign.key(), properties.getTimeout(),TimeUnit.SECONDS);
+        redisService.expire(sign.key(), properties.getTimeout(), TimeUnit.SECONDS);
     }
 
     @Override
     public <T> void putObject(IThreadSign sign, T obj) {
-        if(isLock(sign))
-        {
-            redisService.set(sign.key(),obj);
+        if (isLock(sign)) {
+            redisService.set(sign.key(), obj);
         }
     }
 
     @Override
-    public <T> T getObject(IThreadSign sign,Class<? extends T> clas) {
-        return redisService.get(sign.key(),clas);
+    public <T> T getObject(IThreadSign sign, Class<? extends T> clas) {
+        return redisService.get(sign.key(), clas);
     }
 
     @Override
