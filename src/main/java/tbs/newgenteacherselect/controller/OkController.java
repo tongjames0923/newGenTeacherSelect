@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tbs.dao.RoleDao;
 import tbs.dao.StudentDao;
+import tbs.newgenteacherselect.model.RoleVO;
+import tbs.utils.AOP.authorize.annotations.AccessRequire;
 import tbs.utils.AOP.authorize.interfaces.IAccess;
 import tbs.utils.AOP.controller.ApiProxy;
 import tbs.utils.AOP.controller.IAction;
@@ -32,12 +34,11 @@ public class OkController {
 
 
     @RequestMapping("ok")
-    @AsyncReturnFunction
+    @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
     public NetResult ok() throws Exception {
         return proxy.method(new IAction() {
             @Override
             public Object action(NetResult result) throws Exception {
-                Thread.sleep(60000);
                 return "hello world";
             }
         }, null);

@@ -52,6 +52,7 @@ public class UserServiceImpl implements UserService {
                 for (AdminDetail detail : ls) {
                     if (detail.getPhone().equals(phone)) {
                         uuid = detail.getAdminToken();
+                        obj=detail;
                         break;
                     }
                 }

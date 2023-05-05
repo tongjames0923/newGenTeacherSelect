@@ -1,9 +1,12 @@
 package tbs.newgenteacherselect.config.impl;
 
 import org.springframework.stereotype.Component;
+import tbs.dao.AdminDao;
 import tbs.dao.RoleDao;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.RoleVO;
+import tbs.pojo.Admin;
+import tbs.pojo.dto.AdminDetail;
 import tbs.utils.AOP.authorize.error.AuthorizationFailureException;
 import tbs.utils.AOP.authorize.interfaces.IAccess;
 import tbs.utils.AOP.authorize.interfaces.IPermissionVerification;
@@ -30,11 +33,21 @@ public class AccessManager implements IAccess, IPermissionVerification {
     long login_timeout = 30;
     TimeUnit login_timeout_unit = TimeUnit.MINUTES;
 
+    @Resource
+    AdminDao adminDao;
+
     public static final String PREFIX = "ACCESS_TOKEN_", SINGLE_LOGIN_PREFIX = "SINGLE_LOGIN_";
 
     @Override
     public BaseRoleModel readRole(String tokenStr) {
-        return redisService.get(PREFIX + tokenStr, BaseRoleModel.class);
+        BaseRoleModel roleModel = redisService.get(PREFIX + tokenStr, BaseRoleModel.class);
+        if (roleModel == null) {
+            AdminDetail admin = adminDao.find(tokenStr);
+            if (admin == null)
+                return null;
+            roleModel = roleDao.findOne(admin.getRole());
+        }
+        return roleModel;
     }
 
     @Override
