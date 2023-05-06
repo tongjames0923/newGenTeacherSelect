@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentRegisterVO;
 import tbs.newgenteacherselect.model.TeacherRegisterVO;
+import tbs.newgenteacherselect.service.AdminService;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.newgenteacherselect.service.TeacherService;
 import tbs.newgenteacherselect.service.UserService;
@@ -22,6 +23,8 @@ import java.util.List;
 @RestController
 public class UserController {
 
+    @Resource
+    AdminService adminService;
     @Resource
     UserService userService;
 
@@ -46,7 +49,7 @@ public class UserController {
     }
 
     @RequestMapping("logout")
-    @AccessRequire(manual = {RoleVO.ROLE_STUDENT, RoleVO.ROLE_TEACHER})
+    @AccessRequire()
     public NetResult logout() throws Exception {
         return apiProxy.method(new IAction() {
             @Override
@@ -58,7 +61,7 @@ public class UserController {
     }
 
     @RequestMapping("renew")
-    @AccessRequire(manual = {RoleVO.ROLE_STUDENT, RoleVO.ROLE_TEACHER})
+    @AccessRequire()
     public NetResult renew() throws Exception {
         return apiProxy.method(new IAction<RoleVO>() {
             @Override
@@ -70,9 +73,9 @@ public class UserController {
     }
 
     @RequestMapping(value = "studentImport", method = RequestMethod.POST)
-    @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
+    @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
     public NetResult importStudent(@RequestBody List<StudentRegisterVO> list) {
-        return apiProxy.method( new IAction() {
+        return apiProxy.method(new IAction() {
             @Override
             public Object action(NetResult result) throws Exception {
                 studentService.studentImport(list);
@@ -84,10 +87,23 @@ public class UserController {
     @RequestMapping(value = "teacherImport", method = RequestMethod.POST)
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
     public NetResult importTeacher(@RequestBody List<TeacherRegisterVO> list) {
-        return apiProxy.method( new IAction() {
+        return apiProxy.method(new IAction() {
             @Override
             public Object action(NetResult result) throws Exception {
                 teacherService.saveTeacher(list);
+                return null;
+            }
+        }, null);
+    }
+
+
+    @RequestMapping(value = "adminNew", method = RequestMethod.POST)
+    @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
+    public NetResult importAdmin(String token, String name, String password, String phone, int department) {
+        return apiProxy.method(new IAction() {
+            @Override
+            public Object action(NetResult result) throws Exception {
+                adminService.saveAdmin(token, name, password, phone, department);
                 return null;
             }
         }, null);

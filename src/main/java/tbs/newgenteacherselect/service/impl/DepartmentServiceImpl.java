@@ -1,23 +1,23 @@
 package tbs.newgenteacherselect.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import tbs.dao.BasicUserDao;
 import tbs.dao.DepartmentDao;
+import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.service.DepartmentService;
 import tbs.pojo.Department;
-import tbs.utils.Async.ThreadUtil;
+import tbs.utils.error.NetError;
 import tbs.utils.redis.IRedisService;
-import tbs.utils.redis.RedisConfig;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -28,6 +28,8 @@ public class DepartmentServiceImpl implements DepartmentService {
     DepartmentDao departmentDao;
     @Resource
     IRedisService redisService;
+    @Resource
+    BasicUserDao basicUserDao;
 
 
     @Override
@@ -39,6 +41,55 @@ public class DepartmentServiceImpl implements DepartmentService {
         putAllDepartment(map, 0);
         redisService.set("departmentFullName", map);
 
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public Department newDepartment(int parent, String name) throws Exception {
+        if(parent!=0)
+        {
+           if(departmentDao.getById(parent)==null) {
+               throw  NetErrorEnum.makeError(NetErrorEnum.NO_PARENT);
+           }
+        }
+        Department department = new Department();
+        department.setParentId(parent);
+        department.setDepartname(name);
+        department.setId((int) (UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE));
+        departmentDao.save(department.getId(), department.getDepartname(), department.getParentId());
+        updateDepartmentFullName();
+        return department;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public void deleteDepartment(int id) throws Exception {
+        if (depHasUser(id))
+            throw NetErrorEnum.makeError(NetErrorEnum.HAS_MORE_NODE);
+        updateDepartmentFullName();
+    }
+
+    boolean depHasUser(int id) {
+        boolean s = basicUserDao.findByDepartment(id).size() > 0 ? true : false;
+        if (!s) {
+            List<Department> child = departmentDao.findAllByParent(id);
+            for (Department dep : child) {
+                if (depHasUser(dep.getId())) {
+                    return true;
+                } else {
+                    departmentDao.deleteDepartment(dep.getId());
+                }
+            }
+        }
+        return s;
+    }
+
+    @Override
+    @Transactional(rollbackFor = {Exception.class})
+    public Department rename(int id, String name) throws Exception {
+        departmentDao.changeDepartmentName(id, name);
+        updateDepartmentFullName();
+        return departmentDao.getById(id);
     }
 
     Map<Integer, String> departmentFullNamesMap() {

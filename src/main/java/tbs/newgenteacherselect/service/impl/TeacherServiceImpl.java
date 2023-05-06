@@ -14,7 +14,7 @@ import tbs.utils.Async.ThreadUtil;
 import tbs.utils.Async.interfaces.AsyncToDo;
 import tbs.utils.BatchUtil;
 import tbs.utils.EncryptionTool;
-import tbs.utils.Results.AsyncResult;
+import tbs.utils.Results.AsyncTaskResult;
 import tbs.utils.Results.AsyncWaitter;
 
 import javax.annotation.Resource;
@@ -68,11 +68,11 @@ public class TeacherServiceImpl implements TeacherService {
                 batchUtil.flush();
             }));
         }
-        AsyncWaitter.ResultStatusChange change = threadUtil.doWithAsync(works).
+        AsyncWaitter.ResultStatusor change = threadUtil.doWithAsync(works).
                 execute();
         change.waitForDone();
         if (change.getFailList().size() > 0) {
-            for (AsyncResult asyncResult : change.getFailList()) {
+            for (AsyncTaskResult asyncResult : change.getFailList()) {
                 log.error(asyncResult.getException().getMessage(), asyncResult.getException());
             }
             throw change.getFailList().get(0).getException();
