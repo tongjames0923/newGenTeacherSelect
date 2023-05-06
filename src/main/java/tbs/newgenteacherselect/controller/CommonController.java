@@ -19,13 +19,8 @@ public class CommonController {
     ApiProxy proxy;
 
     @RequestMapping("result/{key}")
-    public NetResult getResult(@PathVariable String key) throws Exception {
-        return proxy.method(new IAction() {
-            @Override
-            public Object action(NetResult result) throws Exception {
-                return asyncMethod.get(key);
-            }
-        }, null);
+    public Object getResult(@PathVariable String key) throws Exception {
+        return asyncMethod.get(key);
     }
 
 }

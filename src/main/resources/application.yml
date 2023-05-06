@@ -34,8 +34,6 @@ spring:
     username: root
     password: tongyi0923
 logging:
-  level:
-    root: off
   file:
     path: /Users/abstergo/Downloads/log
 tbs:

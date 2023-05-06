@@ -29,19 +29,11 @@ public class OkController {
     @Resource
     RoleDao roleDao;
 
-    @Resource
-    ApiProxy proxy;
-
 
     @RequestMapping("ok")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
-    public NetResult ok() throws Exception {
-        return proxy.method(new IAction() {
-            @Override
-            public Object action(NetResult result) throws Exception {
-                return "hello world";
-            }
-        }, null);
+    public Object ok() throws Exception {
+        return "hello world";
     }
 
 

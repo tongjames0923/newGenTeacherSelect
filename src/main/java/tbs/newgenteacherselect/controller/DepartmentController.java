@@ -16,53 +16,34 @@ import tbs.utils.Results.NetResult;
 @RequestMapping("department")
 public class DepartmentController {
 
-    @Resource
-    ApiProxy apiProxy;
 
     @Resource
     DepartmentService departmentService;
 
     @RequestMapping("fullName")
     @AccessRequire
-    public NetResult fulldepartmentName(int id) {
-        return apiProxy.method((NetResult r) -> {
-            return departmentService.fullName(id);
-        }, null);
+    public Object fulldepartmentName(int id) {
+        return departmentService.fullName(id);
     }
 
     @RequestMapping("newDepartment")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
-    public NetResult newDepartment(String departmentName, int parent) {
-        return apiProxy.method(new IAction() {
-            @Override
-            public Object action(NetResult result) throws Exception {
-                return departmentService.newDepartment(parent, departmentName);
-            }
-        }, null);
+    public Object newDepartment(String departmentName, int parent) throws Exception {
+        return departmentService.newDepartment(parent, departmentName);
     }
+
     @RequestMapping("deleteDepartment")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
-    public NetResult deleteDepartment(int id) {
-        return apiProxy.method(new IAction() {
-            @Override
-            public Object action(NetResult result) throws Exception {
-                departmentService.deleteDepartment(id);
-                return null;
-            }
-        }, null);
+    public Object deleteDepartment(int id) throws Exception {
+        departmentService.deleteDepartment(id);
+        return null;
     }
+
     @RequestMapping("changeDepartment")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
-    public NetResult ChangeDepartment(String departmentName, int id) {
-        return apiProxy.method(new IAction() {
-            @Override
-            public Object action(NetResult result) throws Exception {
-                return departmentService.rename(id,departmentName);
-            }
-        }, null);
+    public Object ChangeDepartment(String departmentName, int id) throws Exception {
+        return departmentService.rename(id, departmentName);
     }
-
-
 
 
 }
