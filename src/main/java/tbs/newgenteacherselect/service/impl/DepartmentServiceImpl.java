@@ -1,5 +1,7 @@
 package tbs.newgenteacherselect.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -8,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tbs.dao.BasicUserDao;
 import tbs.dao.DepartmentDao;
 import tbs.newgenteacherselect.NetErrorEnum;
+import tbs.newgenteacherselect.model.DepartmentVO;
 import tbs.newgenteacherselect.service.DepartmentService;
 import tbs.pojo.Department;
 import tbs.utils.error.NetError;
@@ -31,26 +34,29 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Resource
     BasicUserDao basicUserDao;
 
+    private static final String DEPARTMENT_MAP = "department_map";
 
     @Override
     @Scheduled(fixedRate = 30, timeUnit = TimeUnit.MINUTES)
     @Async
     public void updateDepartmentFullName() {
         log.debug("定时更新部门全称启动");
-        Map<Integer, String> map = new HashMap<>();
-        putAllDepartment(map, 0);
-        redisService.set("departmentFullName", map);
+        DepartmentVO dv = new DepartmentVO();
+        dv.setFullName("");
+        dv.setDepartmentId(0);
+        Map<Integer, DepartmentVO> map = new HashMap<>();
+        putAllDepartment(map, dv);
+        redisService.set(DEPARTMENT_MAP, map);
 
     }
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
     public Department newDepartment(int parent, String name) throws Exception {
-        if(parent!=0)
-        {
-           if(departmentDao.getById(parent)==null) {
-               throw  NetErrorEnum.makeError(NetErrorEnum.NO_PARENT);
-           }
+        if (parent != 0) {
+            if (departmentDao.getById(parent) == null) {
+                throw NetErrorEnum.makeError(NetErrorEnum.NO_PARENT);
+            }
         }
         Department department = new Department();
         department.setParentId(parent);
@@ -73,6 +79,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         boolean s = basicUserDao.findByDepartment(id).size() > 0 ? true : false;
         if (!s) {
             List<Department> child = departmentDao.findAllByParent(id);
+            departmentDao.deleteDepartment(id);
             for (Department dep : child) {
                 if (depHasUser(dep.getId())) {
                     return true;
@@ -92,8 +99,25 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentDao.getById(id);
     }
 
-    Map<Integer, String> departmentFullNamesMap() {
-        return redisService.get("departmentFullName", Map.class);
+
+    @Override
+    public DepartmentVO listAll(int parent) throws Exception {
+        return departmentFullNamesMap(parent);
+    }
+
+    DepartmentVO departmentFullNamesMap(int id) throws Exception {
+        Map mp = redisService.get(DEPARTMENT_MAP, Map.class);
+        if (mp == null) {
+            updateDepartmentFullName();
+            throw new Exception("部门数据字典异常,稍后再试");
+        }
+        JSONObject obj = (JSONObject) mp.get(id);
+        if (obj == null)
+        {
+            throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND,"不存在"+id+"部门");
+        }
+
+        return JSON.toJavaObject(obj, DepartmentVO.class);
     }
 
     String m_fullName(int id) {
@@ -107,19 +131,22 @@ public class DepartmentServiceImpl implements DepartmentService {
         return m_fullName(d.getParentId()) + "-" + d.getDepartname();
     }
 
-    void putAllDepartment(Map<Integer, String> src, int id) {
-
-        src.put(id, m_fullName(id));
-        List<Department> departmentList = departmentDao.findAllByParent(id);
-        for (Department d : departmentList) {
-            putAllDepartment(src, d.getId());
+    void putAllDepartment(Map<Integer, DepartmentVO> src, DepartmentVO vo) {
+        List<Department> childs = departmentDao.findAllByParent(vo.getDepartmentId());
+        for (Department d : childs) {
+            DepartmentVO dv = new DepartmentVO();
+            dv.setFullName(m_fullName(d.getId()));
+            dv.setDepartmentId(d.getId());
+            dv.setDepartmentName(d.getDepartname());
+            putAllDepartment(src, dv);
+            vo.getChilds().add(dv);
         }
+        src.put(vo.getDepartmentId(), vo);
     }
 
-
     @Override
-    public String fullName(int id) {
-        return departmentFullNamesMap().getOrDefault(id, "");
+    public String fullName(int id) throws Exception {
+        return departmentFullNamesMap(id).getFullName();
     }
 
 }

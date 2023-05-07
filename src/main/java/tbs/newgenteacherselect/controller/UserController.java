@@ -1,6 +1,8 @@
 package tbs.newgenteacherselect.controller;
 
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import tbs.dao.BasicUserDao;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentRegisterVO;
 import tbs.newgenteacherselect.model.TeacherRegisterVO;
@@ -8,10 +10,14 @@ import tbs.newgenteacherselect.service.AdminService;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.newgenteacherselect.service.TeacherService;
 import tbs.newgenteacherselect.service.UserService;
+import tbs.pojo.BasicUser;
+import tbs.pojo.Student;
 import tbs.utils.AOP.authorize.annotations.AccessRequire;
+import tbs.utils.AOP.authorize.model.BaseRoleModel;
 import tbs.utils.AOP.authorize.model.SystemExecutionData;
 import tbs.utils.AOP.controller.ApiProxy;
 import tbs.utils.AOP.controller.IAction;
+import tbs.utils.EncryptionTool;
 import tbs.utils.Results.NetResult;
 
 import javax.annotation.Resource;
@@ -46,13 +52,34 @@ public class UserController {
 
     }
 
+    @RequestMapping("changePassword")
+    @AccessRequire
+    public Object changePassword(@RequestParam(required = false) SystemExecutionData data, String password) {
+        BaseRoleModel roleModel = data.getInvokeRole();
+        if (!StringUtils.isEmpty(roleModel.getUserId())) {
+            BasicUser basicUser = new BasicUser();
+            basicUser.setPhone(roleModel.getUserId());
+            basicUser.setPassword(EncryptionTool.encrypt(password));
+            userService.updateBaiscInfo(basicUser);
+        }
+        return null;
+    }
+
+
+    @RequestMapping(value = "changeStudentInfo", method = RequestMethod.POST)
+    @AccessRequire(manual = {RoleVO.ROLE_TEACHER, RoleVO.ROLE_ADMIN})
+    public Object changeStudent(Student student) {
+        userService.updateStudent(student);
+        return null;
+    }
+
+
     @RequestMapping("renew")
     @AccessRequire()
     public Object renew(@RequestParam(required = false) SystemExecutionData data) throws Exception {
 
         userService.renew(data.getInvokeToken());
         return null;
-
     }
 
     @RequestMapping(value = "studentImport", method = RequestMethod.POST)

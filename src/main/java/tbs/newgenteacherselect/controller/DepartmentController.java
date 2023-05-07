@@ -22,9 +22,16 @@ public class DepartmentController {
 
     @RequestMapping("fullName")
     @AccessRequire
-    public Object fulldepartmentName(int id) {
+    public Object fulldepartmentName(int id) throws Exception {
         return departmentService.fullName(id);
     }
+
+    @RequestMapping("listDepartment")
+    @AccessRequire
+    public Object list(int id) throws Exception {
+        return departmentService.listAll(id);
+    }
+
 
     @RequestMapping("newDepartment")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})

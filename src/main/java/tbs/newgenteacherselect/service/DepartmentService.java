@@ -1,9 +1,11 @@
 package tbs.newgenteacherselect.service;
 
+import tbs.newgenteacherselect.model.DepartmentVO;
 import tbs.pojo.Department;
+import tbs.utils.error.NetError;
 
 public interface DepartmentService {
-    String fullName(int id);
+    String fullName(int id) throws Exception;
 
     void updateDepartmentFullName();
 
@@ -13,4 +15,6 @@ public interface DepartmentService {
 
     Department rename(int id,String name)throws Exception;
 
+
+    DepartmentVO listAll(int parent) throws Exception;
 }

@@ -1,13 +1,13 @@
 package tbs.newgenteacherselect.service.impl;
 
 import org.springframework.stereotype.Component;
-import tbs.dao.AdminDao;
-import tbs.dao.RoleDao;
-import tbs.dao.StudentDao;
-import tbs.dao.TeacherDao;
+import tbs.dao.*;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.service.UserService;
+import tbs.pojo.BasicUser;
+import tbs.pojo.Student;
+import tbs.pojo.Teacher;
 import tbs.pojo.dto.AdminDetail;
 import tbs.utils.AOP.authorize.interfaces.IAccess;
 import tbs.utils.AOP.authorize.model.BaseRoleModel;
@@ -34,6 +34,9 @@ public class UserServiceImpl implements UserService {
     @Resource
     IAccess access;
 
+
+    @Resource
+    BasicUserDao basicUserDao;
 
     @Override
     public RoleVO login(String phone, String password) throws Exception {
@@ -78,5 +81,20 @@ public class UserServiceImpl implements UserService {
     @Override
     public void renew(String token) throws Exception {
         access.put(token, null);
+    }
+
+    @Override
+    public void updateBaiscInfo(BasicUser basicUser) {
+        basicUserDao.updateBaiscUser(basicUser);
+    }
+
+    @Override
+    public void updateStudent(Student student) {
+        studentDao.updateStudent(student);
+    }
+
+    @Override
+    public void updateTeacher(Teacher teacher) {
+        teacherDao.updateTeacher(teacher);
     }
 }
