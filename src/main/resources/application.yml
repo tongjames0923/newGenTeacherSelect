@@ -35,7 +35,7 @@ spring:
     password: tongyi0923
 logging:
   file:
-    path: H:\log
+    path: /Users/abstergo/Downloads/log
   level:
     sql: debug
     tbs: debug

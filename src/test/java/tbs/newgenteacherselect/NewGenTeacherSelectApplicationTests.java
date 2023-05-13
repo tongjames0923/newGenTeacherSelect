@@ -1,23 +1,15 @@
 package tbs.newgenteacherselect;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import tbs.dao.*;
-import tbs.newgenteacherselect.model.StudentRegisterVO;
-import tbs.newgenteacherselect.model.TeacherRegisterVO;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.newgenteacherselect.service.TeacherService;
-import tbs.pojo.Admin;
-import tbs.pojo.BasicUser;
-import tbs.pojo.Department;
-import tbs.pojo.Teacher;
-import tbs.utils.EncryptionTool;
+import tbs.utils.Async.interfaces.ILockProxy;
+import tbs.utils.Async.interfaces.ILocker;
+import tbs.utils.BatchUtil;
 
 import javax.annotation.Resource;
-import java.util.LinkedList;
-import java.util.List;
 
 @SpringBootTest
 class NewGenTeacherSelectApplicationTests {
@@ -36,29 +28,42 @@ class NewGenTeacherSelectApplicationTests {
     @Resource
     TeacherDao teacherDao;
 
+    @Resource
+    ILockProxy lockProxy;
 
-    static long beg, end;
-
-    @BeforeAll
-    static void before() {
-        beg = System.currentTimeMillis();
-    }
-
-    @AfterAll
-    static void end() {
-        end = System.currentTimeMillis();
-        System.out.println("cost " + (end - beg) + " ms");
-    }
 
     @Resource
     AdminDao dao;
 
+    @Resource
+    BatchUtil batchUtil;
+    int num = 0;
+
     @Test
-    void contextLoads() {
-        Admin admin = new Admin();
-        admin.setAdminToken("test123");
-        admin.setPhone("1776688");
-        dao.saveAdmin(admin);
+    void contextLoads() throws InterruptedException {
+        Thread[] threads = new Thread[20];
+        String lk="LLL";
+        for (int i = 0; i < threads.length; i++) {
+            threads[i] = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    lockProxy.run((ILocker l) -> {
+                        for(int j=0;j<10;j++)
+                        {
+                            System.out.println(num++);
+                            try {
+                                Thread.currentThread().join(5);
+                            } catch (InterruptedException e) {
+                                throw new RuntimeException(e);
+                            }
+                        }
+                        return null;
+                    },lk);
+                }
+            });
+            threads[i].start();
+        }
+        Thread.currentThread().join(10000);
     }
 
 }
