@@ -14,6 +14,7 @@ import tbs.utils.Async.interfaces.AsyncToDo;
 import tbs.utils.Results.AsyncTaskResult;
 import tbs.utils.error.NetError;
 import tbs.utils.socket.ISocketManager;
+import tbs.utils.socket.impl.DefaultSocketClient;
 import tbs.utils.socket.model.SocketReceiveMessage;
 
 import javax.annotation.Resource;
@@ -32,12 +33,12 @@ import java.util.Set;
 @Component
 @ServerEndpoint("/adminlog/{key}")
 public class AdminLogSocket {
-    static IAccess access = null;
+    private static IAccess access = null;
 
     public static final String SERVICE_NAME = "test";
-    static ISocketManager socketManager = null;
+    private static ISocketManager socketManager = null;
 
-    static boolean isInit = false;
+    private static boolean isInit = false;
     private static Set<String> keys = new LinkedHashSet<>();
 
 
@@ -85,7 +86,7 @@ public class AdminLogSocket {
             }
             if (socketManager.getSockets(key) != null)
                 throw NetErrorEnum.makeError(NetErrorEnum.Repeated_Login);
-            socketManager.putSocket(key, session);
+            socketManager.putSocket(new DefaultSocketClient(key, session));
             keys.add(key);
         } catch (Exception e) {
             try {
