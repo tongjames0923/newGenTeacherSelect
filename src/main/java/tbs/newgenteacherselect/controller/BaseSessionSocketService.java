@@ -9,27 +9,33 @@ import tbs.utils.socket.ISocketWorker;
 import tbs.utils.socket.impl.DefaultSocketClient;
 import tbs.utils.socket.model.SocketReceiveMessage;
 
-import javax.websocket.OnClose;
-import javax.websocket.OnMessage;
-import javax.websocket.OnOpen;
-import javax.websocket.Session;
+import javax.websocket.*;
 import javax.websocket.server.PathParam;
+import java.io.IOException;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
 public abstract class BaseSessionSocketService {
-    public static ISocketWorker WORKER = null;
+    public ISocketWorker WORKER = null;
 
+    private static ConcurrentHashMap<String, ISocketWorker> workers = new ConcurrentHashMap<>();
 
     public abstract String serviceName();
 
     private void init() {
-        if (WORKER == null) {
+        if (!workers.containsKey(serviceName())) {
             WORKER = SpringUtil.getBean(serviceName());
+            workers.put(serviceName(), WORKER);
+        } else {
+            WORKER = workers.get(serviceName());
         }
     }
 
-    public static void send(String s) {
-        WORKER.sendMessage(s);
+    public static void send(String service, Object data) {
+        if (workers.containsKey(service)) {
+            workers.get(service).sendMessage(data);
+            log.debug("send to {} with :{}", service, JSON.toJSONString(data));
+        }
     }
 
     @OnOpen
@@ -39,17 +45,31 @@ public abstract class BaseSessionSocketService {
             ISocketClient client = new DefaultSocketClient(key, session);
             WORKER.accept(client);
         } catch (Exception e) {
-            log.error("验证失败", e);
+            log.error("验证失败," + e.getMessage(), e);
+            try {
+                session.close();
+            } catch (Exception ex) {
+
+            }
         }
     }
 
     @OnClose
     public void onClose(@PathParam("key") String key) {
+        init();
         WORKER.onClose(new DefaultSocketClient(key, null));
+    }
+
+
+    @OnError
+    public void error(Throwable exception) {
+        init();
+        WORKER.onError(exception);
     }
 
     @OnMessage
     public void onMessage(String message) {
+        init();
         try {
             SocketReceiveMessage receiveMessage = JSON.parseObject(message, SocketReceiveMessage.class);
             if (!WORKER.messageEventFiltering(receiveMessage))
