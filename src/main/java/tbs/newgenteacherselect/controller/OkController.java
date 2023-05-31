@@ -33,6 +33,7 @@ public class OkController {
     @RequestMapping("ok")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
     public Object ok() throws Exception {
+        AdminLogSocket.send("invoke ok request!!");
         return "hello world";
     }
 

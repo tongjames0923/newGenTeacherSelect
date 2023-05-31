@@ -13,6 +13,7 @@ import tbs.utils.AOP.authorize.interfaces.IAccess;
 import tbs.utils.AOP.authorize.model.BaseRoleModel;
 import tbs.utils.EncryptionTool;
 import tbs.utils.Results.NetResult;
+import tbs.utils.socket.ISocketManager;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -37,6 +38,9 @@ public class UserServiceImpl implements UserService {
 
     @Resource
     BasicUserDao basicUserDao;
+
+    @Resource
+    ISocketManager socketManager;
 
     @Override
     public RoleVO login(String phone, String password) throws Exception {
@@ -69,6 +73,7 @@ public class UserServiceImpl implements UserService {
         }
         baseRole.setUserId(phone);
         access.put(uuid, baseRole);
+
         return new RoleVO(obj, baseRole, uuid);
 
     }

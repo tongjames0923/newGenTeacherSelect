@@ -15,9 +15,6 @@ public class CommonController {
     @Resource
     AsyncMethod asyncMethod;
 
-    @Resource
-    ApiProxy proxy;
-
     @RequestMapping("result/{key}")
     public Object getResult(@PathVariable String key) throws Exception {
         return asyncMethod.get(key);

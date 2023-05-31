@@ -15,6 +15,7 @@ import org.springframework.context.annotation.EnableAspectJAutoProxy;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import tbs.newgenteacherselect.config.RedisThreadLockerProperties;
 
 
@@ -31,6 +32,7 @@ import tbs.newgenteacherselect.config.RedisThreadLockerProperties;
 @MapperScan("tbs.dao")
 @EnableConfigurationProperties
 @EnableScheduling
+@EnableWebSocket
 public class NewGenTeacherSelectApplication {
 
     @Bean
