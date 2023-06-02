@@ -24,7 +24,7 @@ public class SocketServiceConfig {
     public static final String ADMIN_LOG_SERVICE = "adminSocketService";
 
     @Bean(ADMIN_LOG_SERVICE)
-    ISocketWorker admin() {
+    public ISocketWorker admin() {
         return new BasicSocketWorker(ADMIN_LOG_SERVICE) {
             @Override
             public void customAccept(ISocketClient client, BaseRoleModel roleModel) throws Exception {

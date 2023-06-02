@@ -14,16 +14,6 @@ import javax.annotation.Resource;
 @RestController
 public class OkController {
 
-    @Resource
-    IAccess access;
-
-    @Resource
-    StudentDao studentDao;
-
-
-    @Resource
-    RoleDao roleDao;
-
 
     @RequestMapping("ok")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
@@ -31,20 +21,4 @@ public class OkController {
         BaseSessionSocketService.send(SocketServiceConfig.ADMIN_LOG_SERVICE, "invoke ok request!!");
         return "hello world";
     }
-
-
-//
-//    @RequestMapping("mlogin")
-//    public NetResult l(String phone, String password) throws Exception {
-//        return NetResult.makeResult(() -> {
-//            String uuid = UUID.randomUUID().toString();
-//            BaseRoleModel role = roleDao.loginRole(phone, tbs.utils.EncryptionTool.encrypt(password) );
-//            if (role != null) {
-//                role.setUserId(phone);
-//                access.put(uuid, role);
-//                return uuid;
-//            }
-//            return "unlogined";
-//        });
-//    }
 }

@@ -68,10 +68,11 @@ public abstract class BaseSessionSocketService {
     }
 
     @OnMessage
-    public void onMessage(String message) {
+    public void onMessage(String message, @PathParam("key") String key) {
         init();
         try {
             SocketReceiveMessage receiveMessage = JSON.parseObject(message, SocketReceiveMessage.class);
+            receiveMessage.setKey(key);
             if (!WORKER.messageEventFiltering(receiveMessage))
                 for (ISocketManager.MessageEvent event : WORKER.messageEvents()) {
                     event.consume(receiveMessage);

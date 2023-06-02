@@ -46,6 +46,7 @@ public class AccessManager implements IAccess, IPermissionVerification {
             if (admin == null)
                 return null;
             roleModel = roleDao.findOne(admin.getRole());
+            roleModel.setUserId(admin.getPhone());
         }
         return roleModel;
     }
