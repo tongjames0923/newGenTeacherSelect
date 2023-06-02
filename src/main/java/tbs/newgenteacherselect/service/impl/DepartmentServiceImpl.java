@@ -76,7 +76,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     boolean depHasUser(int id) {
-        boolean s = basicUserDao.findByDepartment(id).size() > 0 ? true : false;
+        boolean s = basicUserDao.findByDepartment(id).size() > 0;
         if (!s) {
             List<Department> child = departmentDao.findAllByParent(id);
             departmentDao.deleteDepartment(id);

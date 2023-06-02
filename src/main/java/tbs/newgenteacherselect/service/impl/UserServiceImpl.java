@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
         if (baseRole == null)
             throw NetErrorEnum.makeError(NetErrorEnum.LOGIN_FAIL);
         Object obj = null;
-        String uuid = phone + "_" + UUID.randomUUID().toString();
+        String uuid = phone + "_" + UUID.randomUUID();
         switch (baseRole.getRoleCode()) {
             case 0:
                 obj = studentDao.findStudentByPhone(phone);

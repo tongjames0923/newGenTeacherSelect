@@ -104,7 +104,6 @@ public class UserController {
     @RequestMapping(value = "adminNew", method = RequestMethod.POST)
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
     public Object importAdmin(String token, String name, String password, String phone, int department) {
-
         adminService.saveAdmin(token, name, password, phone, department);
         return null;
 
