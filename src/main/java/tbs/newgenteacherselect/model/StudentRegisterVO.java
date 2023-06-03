@@ -3,6 +3,15 @@ package tbs.newgenteacherselect.model;
 public class StudentRegisterVO {
     String name,number,phone,password,clas;
     Integer grade,department;
+    Double score;
+
+    public Double getScore() {
+        return score;
+    }
+
+    public void setScore(Double score) {
+        this.score = score;
+    }
 
     public String getClas() {
         return clas;

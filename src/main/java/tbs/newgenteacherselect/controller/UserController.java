@@ -2,6 +2,7 @@ package tbs.newgenteacherselect.controller;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import tbs.dao.BasicUserDao;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentRegisterVO;
@@ -85,10 +86,8 @@ public class UserController {
     @RequestMapping(value = "studentImport", method = RequestMethod.POST)
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
     public Object importStudent(@RequestBody List<StudentRegisterVO> list) throws Exception {
-
         studentService.studentImport(list);
         return null;
-
     }
 
     @RequestMapping(value = "teacherImport", method = RequestMethod.POST)

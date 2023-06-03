@@ -2,6 +2,7 @@ package tbs.newgenteacherselect.service.impl;
 
 import cn.hutool.extra.spring.SpringUtil;
 import org.springframework.stereotype.Service;
+import tbs.newgenteacherselect.model.RoleVO;
 import tbs.utils.Async.ThreadUtil;
 import tbs.utils.Async.interfaces.AsyncToDo;
 import tbs.utils.BatchUtil;
@@ -38,6 +39,7 @@ public class StudentServiceImpl implements StudentService {
                         student.setGrade(s.getGrade());
                         student.setStudentNo(s.getNumber());
                         student.setCla(s.getClas());
+                        student.setScore(s.getScore());
                         studentBatch.getMapper(StudentDao.class).saveStudent(student);
                     });
 
@@ -55,6 +57,7 @@ public class StudentServiceImpl implements StudentService {
                         basicUser.setPassword(EncryptionTool.encrypt(s.getPassword()));
                         basicUser.setPhone(s.getPhone());
                         basicUser.setDepartmentId(s.getDepartment());
+                        basicUser.setRole(RoleVO.ROLE_STUDENT);
                         basicUser.setUid(EncryptionTool.encrypt("BYPHONE_" + basicUser.getPhone()));
                         userBatch.getMapper(BasicUserDao.class).save(basicUser);
                     });
