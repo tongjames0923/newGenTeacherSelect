@@ -1,5 +1,6 @@
 package tbs.newgenteacherselect.model;
 
+import java.util.LinkedList;
 import java.util.List;
 
 public class ScoreTemplateVO {
@@ -60,7 +61,7 @@ public class ScoreTemplateVO {
         this.items = items;
     }
 
-    private List<Item> items;
+    private List<Item> items=new LinkedList<>();
 
 
 }
