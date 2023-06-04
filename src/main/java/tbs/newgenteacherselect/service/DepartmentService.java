@@ -9,7 +9,9 @@ public interface DepartmentService {
 
     void updateDepartmentFullName();
 
-    Department newDepartment(int parent,String name)throws Exception;
+    public DepartmentVO departmentFullNamesMap(int id) throws Exception;
+
+        Department newDepartment(int parent,String name)throws Exception;
 
     void deleteDepartment(int id)throws Exception;
 

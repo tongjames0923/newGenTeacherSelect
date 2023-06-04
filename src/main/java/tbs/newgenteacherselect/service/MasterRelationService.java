@@ -1,6 +1,7 @@
 package tbs.newgenteacherselect.service;
 
 import tbs.pojo.Student;
+import tbs.pojo.dto.MasterRelationVO;
 import tbs.pojo.dto.StudentUserDetail;
 
 import java.util.List;
@@ -10,6 +11,10 @@ public interface MasterRelationService {
      * 计算定时刷新
      */
     void calLeftForMaster();
+
+
+    List<MasterRelationVO> listStatus(int config,String master);
+
 
     /**
      * 选择导师

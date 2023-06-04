@@ -105,13 +105,13 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentFullNamesMap(parent);
     }
 
-    DepartmentVO departmentFullNamesMap(int id) throws Exception {
+    public DepartmentVO departmentFullNamesMap(int id) throws Exception {
         Map mp = redisService.get(DEPARTMENT_MAP, Map.class);
         if (mp == null) {
             updateDepartmentFullName();
             throw new Exception("部门数据字典异常,稍后再试");
         }
-        JSONObject obj = (JSONObject) mp.get(id);
+        JSONObject obj = (JSONObject) mp.get(String.valueOf(id));
         if (obj == null)
         {
             throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND,"不存在"+id+"部门");

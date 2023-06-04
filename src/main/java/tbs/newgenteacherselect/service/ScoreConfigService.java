@@ -1,6 +1,7 @@
 package tbs.newgenteacherselect.service;
 
 import tbs.newgenteacherselect.model.ScoreTemplateVO;
+import tbs.newgenteacherselect.model.ScoreTemplateVO2;
 import tbs.utils.AOP.authorize.model.BaseRoleModel;
 import tbs.utils.error.NetError;
 
@@ -13,7 +14,7 @@ public interface ScoreConfigService {
     void makeTemplate(ScoreTemplateVO vo, BaseRoleModel roleModel) throws NetError;
 
     void removeTemplate(String template) throws NetError;
-    List<ScoreTemplateVO> listTemplate(int dep)throws Exception;
+    List<ScoreTemplateVO2> listTemplate(int dep)throws Exception;
 
 
     void applyConfig(int department,String template) throws Exception;

@@ -8,6 +8,8 @@ import tbs.dao.*;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.ScoreTemplateVO;
+import tbs.newgenteacherselect.model.ScoreTemplateVO2;
+import tbs.newgenteacherselect.service.DepartmentService;
 import tbs.newgenteacherselect.service.ScoreConfigService;
 import tbs.pojo.*;
 import tbs.utils.AOP.authorize.model.BaseRoleModel;
@@ -32,6 +34,12 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
     DepartmentDao departmentDao;
     @Resource
     StudentDao studentDao;
+
+    @Resource
+    DepartmentService departmentService;
+
+    @Resource
+    BasicUserDao basicUserDao;
 
     void checkInputVO(ScoreTemplateVO v) throws NetError {
         if (v == null)
@@ -95,19 +103,23 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
         scoreConfigDao.deleteTemplateItems(template);
     }
 
+
+
     @Override
-    public List<ScoreTemplateVO> listTemplate(int dep) throws Exception {
-        List<ScoreTemplateVO> list = new LinkedList<>();
+    public List<ScoreTemplateVO2> listTemplate(int dep) throws Exception {
+        List<ScoreTemplateVO2> list = new LinkedList<>();
         for (ScoreConfigTemplate template : scoreConfigDao.listTemplateByDepartment(dep)) {
-            ScoreTemplateVO vo = new ScoreTemplateVO();
-            vo.setDepartment(template.getDepartmentId());
+            ScoreTemplateVO2 vo = new ScoreTemplateVO2();
+            vo.setItems(new LinkedList<>());
+            vo.setDepartment(departmentService.departmentFullNamesMap(dep));
             vo.setTemplateName(template.getTemplateName());
+            vo.setCreateDate(template.getCreateTime());
+            vo.setCreatorPhone(template.getCreateUser());
+            BasicUser basicUser= basicUserDao.findOneByPhone(template.getCreateUser());
+            vo.setCreatorName(basicUser!=null?basicUser.getName():"");
+            vo.setTemplateId(template.getId());
             for (ScoreConfigTemplateItem item : scoreConfigDao.listTemplateItems(template.getId())) {
-                ScoreTemplateVO.Item i = new ScoreTemplateVO.Item();
-                i.setIndex(item.getSortCode());
-                i.setName(item.getConfigName());
-                i.setPercent(item.getPercent());
-                vo.getItems().add(i);
+                vo.getItems().add(item);
             }
             list.add(vo);
         }
@@ -125,8 +137,9 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
     @Transactional
     public void applyConfig(int department, String template) throws Exception {
         int inserted=0;
-        int total= studentDao.listDepartmentNoMasterStudentOrderBySocre(department);
+        List<Student> students = studentDao.listDepartmentNoMasterStudentOrderBySocre(department);
         List<Teacher> teachers=teacherDao.listTeacherByDepartment(department);
+        int total=students.size();
         ScoreConfigTemplate template1= scoreConfigDao.findById(template);
         if(template1==null||template1.getDepartmentId()!=department)
             throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND,"不存在模板id");
@@ -139,7 +152,7 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
             limits.add(num);
         }
         int tindex=0,ttotal=teachers.size();
-        int tempIndex=0;
+        int tempIndex=0,sindex=0;
         for(Integer cnt:limits)
         {
             ScoreConfigTemplateItem item=templateItems.get(tempIndex);
@@ -147,16 +160,23 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
             {
 
                 int finalTindex = tindex;
+                Student student=sindex<total? students.get(sindex):null;
                 batchUtil.batchUpdate(25, new BatchUtil.SqlUpdateExecute() {
                     @Override
                     public void execute() {
                         Teacher teacher=teachers.get(finalTindex);
                         MasterRelation relation=new MasterRelation(teacher.getPhone(),item.getId());
                         batchUtil.getMapper(MasterRelationDao.class).insert(relation);
+                        if(student!=null)
+                        {
+                            StudentLevel level=new StudentLevel(student.getPhone(),item.getId());
+                            batchUtil.getMapper(StudentLevelDao.class).insert(level);
+                        }
                     }
                 });
                 cnt--;
                 tindex=(tindex+1)%ttotal;
+                sindex++;
             }
             batchUtil.flush();
             tempIndex++;
