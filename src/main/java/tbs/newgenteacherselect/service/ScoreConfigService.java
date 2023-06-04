@@ -15,4 +15,7 @@ public interface ScoreConfigService {
     void removeTemplate(String template) throws NetError;
     List<ScoreTemplateVO> listTemplate(int dep)throws Exception;
 
+
+    void applyConfig(int department,String template) throws Exception;
+
 }

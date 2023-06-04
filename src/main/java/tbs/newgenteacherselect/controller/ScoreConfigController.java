@@ -9,6 +9,7 @@ import tbs.newgenteacherselect.model.ScoreTemplateVO;
 import tbs.newgenteacherselect.service.ScoreConfigService;
 import tbs.utils.AOP.authorize.annotations.AccessRequire;
 import tbs.utils.AOP.authorize.model.SystemExecutionData;
+import tbs.utils.Async.annotations.AsyncReturnFunction;
 import tbs.utils.Results.NetResultCallEnum;
 import tbs.utils.error.NetError;
 
@@ -44,4 +45,13 @@ public class ScoreConfigController {
         return scoreConfigService.listTemplate(department);
     }
 
+
+
+    @RequestMapping("applyConfig")
+    @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
+    @AsyncReturnFunction
+    public Object applyConfig(String template,int department) throws Exception {
+        scoreConfigService.applyConfig(department,template);
+        return null;
+    }
 }

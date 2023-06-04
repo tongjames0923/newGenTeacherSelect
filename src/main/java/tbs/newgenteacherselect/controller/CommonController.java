@@ -11,6 +11,7 @@ import tbs.utils.Results.NetResult;
 import javax.annotation.Resource;
 
 @RestController
+@RequestMapping("")
 public class CommonController {
     @Resource
     AsyncMethod asyncMethod;

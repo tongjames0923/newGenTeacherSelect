@@ -4,16 +4,14 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
-import tbs.dao.DepartmentDao;
-import tbs.dao.ScoreConfigDao;
+import tbs.dao.*;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.ScoreTemplateVO;
 import tbs.newgenteacherselect.service.ScoreConfigService;
-import tbs.pojo.Department;
-import tbs.pojo.ScoreConfigTemplate;
-import tbs.pojo.ScoreConfigTemplateItem;
+import tbs.pojo.*;
 import tbs.utils.AOP.authorize.model.BaseRoleModel;
+import tbs.utils.BatchUtil;
 import tbs.utils.EncryptionTool;
 import tbs.utils.error.NetError;
 
@@ -32,6 +30,8 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
 
     @Resource
     DepartmentDao departmentDao;
+    @Resource
+    StudentDao studentDao;
 
     void checkInputVO(ScoreTemplateVO v) throws NetError {
         if (v == null)
@@ -112,5 +112,54 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
             list.add(vo);
         }
         return list;
+    }
+
+
+    @Resource
+    BatchUtil batchUtil;
+
+    @Resource
+    TeacherDao teacherDao;
+
+    @Override
+    @Transactional
+    public void applyConfig(int department, String template) throws Exception {
+        int inserted=0;
+        int total= studentDao.listDepartmentNoMasterStudentOrderBySocre(department);
+        List<Teacher> teachers=teacherDao.listTeacherByDepartment(department);
+        ScoreConfigTemplate template1= scoreConfigDao.findById(template);
+        if(template1==null||template1.getDepartmentId()!=department)
+            throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND,"不存在模板id");
+        List<ScoreConfigTemplateItem> templateItems=scoreConfigDao.listTemplateItems(template);
+        List<Integer> limits=new LinkedList<>();
+        for(ScoreConfigTemplateItem item:templateItems)
+        {
+            double percents= ((double)item.getPercent().intValue())/100.00;
+            int num= (int) (percents*total+1);
+            limits.add(num);
+        }
+        int tindex=0,ttotal=teachers.size();
+        int tempIndex=0;
+        for(Integer cnt:limits)
+        {
+            ScoreConfigTemplateItem item=templateItems.get(tempIndex);
+            while (cnt>0)
+            {
+
+                int finalTindex = tindex;
+                batchUtil.batchUpdate(25, new BatchUtil.SqlUpdateExecute() {
+                    @Override
+                    public void execute() {
+                        Teacher teacher=teachers.get(finalTindex);
+                        MasterRelation relation=new MasterRelation(teacher.getPhone(),item.getId());
+                        batchUtil.getMapper(MasterRelationDao.class).insert(relation);
+                    }
+                });
+                cnt--;
+                tindex=(tindex+1)%ttotal;
+            }
+            batchUtil.flush();
+            tempIndex++;
+        }
     }
 }
