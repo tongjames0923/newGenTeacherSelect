@@ -4,6 +4,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tbs.newgenteacherselect.service.MasterRelationService;
 import tbs.utils.AOP.authorize.annotations.AccessRequire;
+import tbs.utils.error.NetError;
 
 import javax.annotation.Resource;
 
@@ -16,8 +17,7 @@ public class MasterRelationController {
     MasterRelationService relationService;
     @RequestMapping("select")
     @AccessRequire
-    public Object select(String student,String master)
-    {
+    public Object select(String student,String master) throws NetError {
         return relationService.selectMaster(student,master);
     }
 

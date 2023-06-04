@@ -3,6 +3,7 @@ package tbs.newgenteacherselect.service;
 import tbs.pojo.Student;
 import tbs.pojo.dto.MasterRelationVO;
 import tbs.pojo.dto.StudentUserDetail;
+import tbs.utils.error.NetError;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public interface MasterRelationService {
      * @param master 导师手机号
      * @return 关系id
      */
-    int selectMaster(String student,String master);
+    int selectMaster(String student,String master) throws NetError;
 
     /**
      * 退选导师

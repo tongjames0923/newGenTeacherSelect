@@ -8,10 +8,16 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import tbs.dao.MasterRelationDao;
+import tbs.dao.StudentLevelDao;
+import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.DepartmentVO;
 import tbs.newgenteacherselect.service.MasterRelationService;
+import tbs.pojo.MasterRelation;
+import tbs.pojo.Student;
+import tbs.pojo.StudentLevel;
 import tbs.pojo.dto.MasterRelationVO;
 import tbs.pojo.dto.StudentUserDetail;
+import tbs.utils.error.NetError;
 import tbs.utils.redis.IRedisService;
 
 import javax.annotation.Resource;
@@ -30,6 +36,10 @@ public class MasterRelationServiceImpl implements MasterRelationService {
 
     @Resource
     IRedisService redisService;
+
+
+    @Resource
+    StudentLevelDao studentLevelDao;
 
     @Resource
     MasterRelationDao masterRelationDao;
@@ -131,8 +141,16 @@ public class MasterRelationServiceImpl implements MasterRelationService {
     }
 
     @Override
-    public int selectMaster(String student, String master) {
-        return 0;
+    public int selectMaster(String student, String master) throws NetError {
+
+        if(masterRelationDao.findByStudent(student)!=null)
+            throw NetErrorEnum.makeError(NetErrorEnum.NOT_ALLOW,String.format("%s 已选导师",student));
+        StudentLevel studentmodel= studentLevelDao.selectById(student);
+        MasterRelation relation= masterRelationDao.findEmptyByMasterAndConfig(master,studentmodel.getLevelId());
+        if(relation==null)
+            throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND,String.format("导师%s 不存在对应名额",master));
+        relation.setStudentPhone(studentmodel.getStudentPhone());
+        return masterRelationDao.updateById(relation);
     }
 
     @Override
