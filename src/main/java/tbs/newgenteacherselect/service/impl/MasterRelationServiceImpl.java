@@ -142,15 +142,10 @@ public class MasterRelationServiceImpl implements MasterRelationService {
 
     @Override
     public int selectMaster(String student, String master) throws NetError {
-
-        if(masterRelationDao.findByStudent(student)!=null)
-            throw NetErrorEnum.makeError(NetErrorEnum.NOT_ALLOW,String.format("%s 已选导师",student));
         StudentLevel studentmodel= studentLevelDao.selectById(student);
-        MasterRelation relation= masterRelationDao.findEmptyByMasterAndConfig(master,studentmodel.getLevelId());
-        if(relation==null)
-            throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND,String.format("导师%s 不存在对应名额",master));
-        relation.setStudentPhone(studentmodel.getStudentPhone());
-        return masterRelationDao.updateById(relation);
+        if(studentmodel==null)
+            throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND,"该学生 "+student+" 未分级");
+        return masterRelationDao.selectMaster(student,master,studentmodel.getLevelId());
     }
 
     @Override
