@@ -17,6 +17,7 @@ import tbs.pojo.Student;
 import tbs.pojo.StudentLevel;
 import tbs.pojo.dto.MasterRelationVO;
 import tbs.pojo.dto.StudentUserDetail;
+import tbs.utils.Async.annotations.LockIt;
 import tbs.utils.error.NetError;
 import tbs.utils.redis.IRedisService;
 
@@ -150,7 +151,7 @@ public class MasterRelationServiceImpl implements MasterRelationService {
 
     @Override
     public int returnbackMaster(String student, String master) {
-        return 0;
+        return masterRelationDao.unselectMaster(student,master);
     }
 
     @Override

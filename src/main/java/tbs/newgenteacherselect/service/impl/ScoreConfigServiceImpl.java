@@ -13,6 +13,7 @@ import tbs.newgenteacherselect.service.DepartmentService;
 import tbs.newgenteacherselect.service.ScoreConfigService;
 import tbs.pojo.*;
 import tbs.utils.AOP.authorize.model.BaseRoleModel;
+import tbs.utils.Async.annotations.LockIt;
 import tbs.utils.BatchUtil;
 import tbs.utils.EncryptionTool;
 import tbs.utils.error.NetError;

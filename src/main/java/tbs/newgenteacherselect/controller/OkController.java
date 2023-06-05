@@ -8,6 +8,7 @@ import tbs.newgenteacherselect.config.SocketServiceConfig;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.utils.AOP.authorize.annotations.AccessRequire;
 import tbs.utils.AOP.authorize.interfaces.IAccess;
+import tbs.utils.Async.annotations.LockIt;
 
 import javax.annotation.Resource;
 
@@ -16,9 +17,10 @@ public class OkController {
 
 
     @RequestMapping("ok")
+    @LockIt
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
     public Object ok() throws Exception {
-        BaseSessionSocketService.send(SocketServiceConfig.ADMIN_LOG_SERVICE, "invoke ok request!!");
+        Thread.currentThread().join(2000);
         return "hello world";
     }
 }

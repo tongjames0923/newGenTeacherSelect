@@ -20,6 +20,11 @@ public class MasterRelationController {
     public Object select(String student,String master) throws NetError {
         return relationService.selectMaster(student,master);
     }
+    @RequestMapping("unselect")
+    @AccessRequire
+    public Object unselect(String student,String master) throws NetError {
+        return relationService.returnbackMaster(student,master);
+    }
 
     @RequestMapping("listMasterRelationStatus")
     public Object listRelationStatus(int configItem,String master)
