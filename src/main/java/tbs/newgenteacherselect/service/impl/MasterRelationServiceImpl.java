@@ -142,6 +142,7 @@ public class MasterRelationServiceImpl implements MasterRelationService {
     }
 
     @Override
+    @LockIt("SELECT_MASTER")
     public int selectMaster(String student, String master) throws NetError {
         StudentLevel studentmodel= studentLevelDao.selectById(student);
         if(studentmodel==null)
@@ -150,6 +151,7 @@ public class MasterRelationServiceImpl implements MasterRelationService {
     }
 
     @Override
+    @LockIt("SELECT_MASTER")
     public int returnbackMaster(String student, String master) {
         return masterRelationDao.unselectMaster(student,master);
     }
