@@ -3,13 +3,15 @@ package tbs.newgenteacherselect.service.impl;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import tbs.dao.BasicUserDao;
-import tbs.dao.TeacherDao;
+import org.springframework.transaction.annotation.Transactional;
+import tbs.newgenteacherselect.dao.BasicUserDao;
+import tbs.newgenteacherselect.dao.TeacherDao;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.TeacherRegisterVO;
 import tbs.newgenteacherselect.service.TeacherService;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Teacher;
+import tbs.pojo.dto.TeacherDetail;
 import tbs.utils.Async.ThreadUtil;
 import tbs.utils.Async.interfaces.AsyncToDo;
 import tbs.utils.BatchUtil;
@@ -27,7 +29,11 @@ public class TeacherServiceImpl implements TeacherService {
     @Resource
     ThreadUtil threadUtil;
 
+    @Resource
+    TeacherDao teacherDao;
+
     @Override
+    @Transactional
     public void saveTeacher(List<TeacherRegisterVO> vo) throws Exception {
         List<AsyncToDo> works = new LinkedList<>();
         int pertask = 200;
@@ -77,5 +83,10 @@ public class TeacherServiceImpl implements TeacherService {
             }
             throw change.getFailList().get(0).getException();
         }
+    }
+
+    @Override
+    public TeacherDetail findTeacher(String teacher) {
+        return teacherDao.findTeacherByPhone(teacher);
     }
 }

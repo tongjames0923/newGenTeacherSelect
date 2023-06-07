@@ -1,29 +1,32 @@
 package tbs.newgenteacherselect.service.impl;
 
 import cn.hutool.extra.spring.SpringUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import tbs.dao.ScoreConfigDao;
-import tbs.dao.StudentLevelDao;
+import tbs.newgenteacherselect.dao.StudentLevelDao;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentMoreDetail;
+import tbs.newgenteacherselect.service.MasterRelationService;
 import tbs.pojo.ScoreConfigTemplateItem;
-import tbs.pojo.StudentLevel;
 import tbs.pojo.dto.StudentUserDetail;
+import tbs.pojo.dto.TeacherDetail;
 import tbs.utils.Async.ThreadUtil;
 import tbs.utils.Async.interfaces.AsyncToDo;
 import tbs.utils.BatchUtil;
 import tbs.utils.EncryptionTool;
-import tbs.dao.BasicUserDao;
-import tbs.dao.StudentDao;
+import tbs.newgenteacherselect.dao.BasicUserDao;
+import tbs.newgenteacherselect.dao.StudentDao;
 import tbs.newgenteacherselect.model.StudentRegisterVO;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Student;
+import tbs.utils.sql.query.Page;
 
 import javax.annotation.Resource;
 import java.util.*;
 
 @Service
+@Slf4j
 public class StudentServiceImpl implements StudentService {
     @Resource
     ThreadUtil threadUtil;
@@ -35,7 +38,7 @@ public class StudentServiceImpl implements StudentService {
     StudentLevelDao studentLevelDao;
 
     @Resource
-    ScoreConfigDao scoreConfigDao;
+    MasterRelationService masterRelationService;
 
     @Override
     public void studentImport(List<StudentRegisterVO> vo) throws Exception {
@@ -58,7 +61,7 @@ public class StudentServiceImpl implements StudentService {
                     });
 
                 } catch (Exception e) {
-
+                    log.error(e.getMessage(),e);
                 }
             }
         });
@@ -76,7 +79,7 @@ public class StudentServiceImpl implements StudentService {
                         userBatch.getMapper(BasicUserDao.class).save(basicUser);
                     });
                 } catch (Exception e) {
-
+                    log.error(e.getMessage(),e);
                 }
             }
         });
@@ -90,7 +93,34 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public StudentMoreDetail findStudent(String phone) {
         StudentUserDetail detail= studentDao.findStudentByPhone(phone);
-        ScoreConfigTemplateItem level= studentLevelDao.findByPhone(phone);
-        return new StudentMoreDetail(detail,level);
+        return translate(detail);
+    }
+
+
+
+    StudentMoreDetail translate(StudentUserDetail detail)
+    {
+        if(detail==null)
+            return null;
+        ScoreConfigTemplateItem level= studentLevelDao.findByPhone(detail.getPhone());
+        StudentMoreDetail s=new StudentMoreDetail(detail,level);
+        TeacherDetail teacherDetail= masterRelationService.getMasterByStudent(detail.getPhone());
+        if(teacherDetail==null)
+            return s;
+        s.setMasterId(teacherDetail.getPhone());
+        s.setMasterName(teacherDetail.getName());
+        return s;
+    }
+
+    @Override
+    public List<StudentMoreDetail> listByDepartment(int department, Page page) {
+        int beg=(page.getPage()-1)* page.getCount();
+        List<StudentUserDetail> studentUserDetails= studentDao.findStudentByDepartment(department,beg,page.getCount());
+        List<StudentMoreDetail> res=new LinkedList<>();
+        for(StudentUserDetail studentUserDetail:studentUserDetails)
+        {
+            res.add(translate(studentUserDetail));
+        }
+        return res;
     }
 }

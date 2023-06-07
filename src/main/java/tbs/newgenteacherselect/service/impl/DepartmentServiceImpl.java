@@ -7,13 +7,12 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tbs.dao.BasicUserDao;
-import tbs.dao.DepartmentDao;
+import tbs.newgenteacherselect.dao.BasicUserDao;
+import tbs.newgenteacherselect.dao.DepartmentDao;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.DepartmentVO;
 import tbs.newgenteacherselect.service.DepartmentService;
 import tbs.pojo.Department;
-import tbs.utils.error.NetError;
 import tbs.utils.redis.IRedisService;
 
 import javax.annotation.Resource;

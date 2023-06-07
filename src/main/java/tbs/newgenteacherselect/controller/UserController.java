@@ -2,8 +2,6 @@ package tbs.newgenteacherselect.controller;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-import tbs.dao.BasicUserDao;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentRegisterVO;
 import tbs.newgenteacherselect.model.TeacherRegisterVO;
@@ -16,10 +14,7 @@ import tbs.pojo.Student;
 import tbs.utils.AOP.authorize.annotations.AccessRequire;
 import tbs.utils.AOP.authorize.model.BaseRoleModel;
 import tbs.utils.AOP.authorize.model.SystemExecutionData;
-import tbs.utils.AOP.controller.ApiProxy;
-import tbs.utils.AOP.controller.IAction;
 import tbs.utils.EncryptionTool;
-import tbs.utils.Results.NetResult;
 
 import javax.annotation.Resource;
 import java.util.List;

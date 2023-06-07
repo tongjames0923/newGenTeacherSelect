@@ -1,8 +1,8 @@
 package tbs.newgenteacherselect.service.impl;
 
 import org.springframework.stereotype.Component;
-import tbs.dao.*;
 import tbs.newgenteacherselect.NetErrorEnum;
+import tbs.newgenteacherselect.dao.*;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.service.UserService;
 import tbs.pojo.BasicUser;
@@ -12,7 +12,6 @@ import tbs.pojo.dto.AdminDetail;
 import tbs.utils.AOP.authorize.interfaces.IAccess;
 import tbs.utils.AOP.authorize.model.BaseRoleModel;
 import tbs.utils.EncryptionTool;
-import tbs.utils.Results.NetResult;
 import tbs.utils.socket.ISocketManager;
 
 import javax.annotation.Resource;

@@ -2,24 +2,16 @@ package tbs.newgenteacherselect;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import tbs.dao.*;
-import tbs.newgenteacherselect.model.ScoreTemplateVO;
+import tbs.newgenteacherselect.dao.MasterRelationDao;
 import tbs.newgenteacherselect.service.ScoreConfigService;
-import tbs.newgenteacherselect.service.StudentService;
-import tbs.newgenteacherselect.service.TeacherService;
-import tbs.pojo.MasterRelation;
-import tbs.utils.AOP.authorize.model.BaseRoleModel;
 import tbs.utils.Async.ThreadUtil;
 import tbs.utils.Async.interfaces.AsyncToDo;
 import tbs.utils.Async.interfaces.ILockProxy;
 import tbs.utils.Async.interfaces.ILocker;
-import tbs.utils.BatchUtil;
 import tbs.utils.Results.AsyncTaskResult;
 import tbs.utils.error.NetError;
 
 import javax.annotation.Resource;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.function.Function;
 
 @SpringBootTest

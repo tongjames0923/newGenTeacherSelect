@@ -10,6 +10,24 @@ public class StudentMoreDetail extends StudentUserDetail {
     Integer levelId;
     String levelName;
 
+    String masterName;
+    String masterId;
+
+    public String getMasterName() {
+        return masterName;
+    }
+
+    public void setMasterName(String masterName) {
+        this.masterName = masterName;
+    }
+
+    public String getMasterId() {
+        return masterId;
+    }
+
+    public void setMasterId(String masterId) {
+        this.masterId = masterId;
+    }
 
     public StudentMoreDetail()
     {

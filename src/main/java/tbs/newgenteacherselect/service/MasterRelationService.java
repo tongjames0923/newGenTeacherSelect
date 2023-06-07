@@ -3,6 +3,7 @@ package tbs.newgenteacherselect.service;
 import tbs.pojo.Student;
 import tbs.pojo.dto.MasterRelationVO;
 import tbs.pojo.dto.StudentUserDetail;
+import tbs.pojo.dto.TeacherDetail;
 import tbs.utils.error.NetError;
 
 import java.util.List;
@@ -15,6 +16,10 @@ public interface MasterRelationService {
 
 
     List<MasterRelationVO> listStatus(int config,String master);
+
+
+
+    TeacherDetail getMasterByStudent(String student);
 
 
     /**

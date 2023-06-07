@@ -1,10 +1,12 @@
 package tbs.newgenteacherselect.service;
 
 import tbs.newgenteacherselect.model.TeacherRegisterVO;
+import tbs.pojo.dto.TeacherDetail;
 import tbs.utils.BatchUtil;
 
 import java.util.List;
 
 public interface TeacherService {
     void saveTeacher(List<TeacherRegisterVO> teacherRegisterVOS) throws Exception;
+    TeacherDetail findTeacher(String teacher);
 }

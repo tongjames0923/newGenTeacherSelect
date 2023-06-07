@@ -7,16 +7,17 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import tbs.dao.MasterRelationDao;
-import tbs.dao.StudentLevelDao;
+import tbs.newgenteacherselect.dao.MasterRelationDao;
+import tbs.newgenteacherselect.dao.StudentDao;
+import tbs.newgenteacherselect.dao.StudentLevelDao;
 import tbs.newgenteacherselect.NetErrorEnum;
-import tbs.newgenteacherselect.model.DepartmentVO;
 import tbs.newgenteacherselect.service.MasterRelationService;
+import tbs.newgenteacherselect.service.TeacherService;
 import tbs.pojo.MasterRelation;
-import tbs.pojo.Student;
 import tbs.pojo.StudentLevel;
 import tbs.pojo.dto.MasterRelationVO;
 import tbs.pojo.dto.StudentUserDetail;
+import tbs.pojo.dto.TeacherDetail;
 import tbs.utils.Async.annotations.LockIt;
 import tbs.utils.error.NetError;
 import tbs.utils.redis.IRedisService;
@@ -34,19 +35,22 @@ import java.util.stream.Collectors;
 public class MasterRelationServiceImpl implements MasterRelationService {
 
 
-
     @Resource
     IRedisService redisService;
 
 
     @Resource
+    StudentDao studentDao;
+
+    @Resource
     StudentLevelDao studentLevelDao;
 
     @Resource
+    TeacherService teacherService;
+    @Resource
     MasterRelationDao masterRelationDao;
 
-    private static class RelationKey
-    {
+    private static class RelationKey {
         @Override
         public String toString() {
             return "RelationKey{" +
@@ -100,64 +104,73 @@ public class MasterRelationServiceImpl implements MasterRelationService {
         }
     }
 
-    private static final String RELATIONMAP="Relation_MAP";
+    private static final String RELATIONMAP = "Relation_MAP";
 
     @Override
     @Scheduled(fixedRate = 60, timeUnit = TimeUnit.SECONDS)
     @Async
     public void calLeftForMaster() {
         log.debug("定时任务-导师名额详情列表");
-        Map<String,List<MasterRelationVO>> hash=new HashMap();
-        for(Integer id: masterRelationDao.allTemplateItemIds())
-        {
-            List<MasterRelationVO> list= masterRelationDao.listMasterByHasStudent(id);
+        Map<String, List<MasterRelationVO>> hash = new HashMap();
+        for (Integer id : masterRelationDao.allTemplateItemIds()) {
+            List<MasterRelationVO> list = masterRelationDao.listMasterByHasStudent(id);
 
-            for(MasterRelationVO vo:list)
-            {
-                String key=new RelationKey(vo.getMaster(),id).toString();
-                if(!hash.containsKey(key))
-                {
-                    List<MasterRelationVO> ls=new LinkedList<>();
-                    hash.put(key.toString(),ls);
+            for (MasterRelationVO vo : list) {
+                String key = new RelationKey(vo.getMaster(), id).toString();
+                if (!hash.containsKey(key)) {
+                    List<MasterRelationVO> ls = new LinkedList<>();
+                    hash.put(key.toString(), ls);
                 }
                 hash.get(key).add(vo);
             }
         }
-        redisService.set(RELATIONMAP,hash);
+        redisService.set(RELATIONMAP, hash);
     }
 
     @Override
-    public List<MasterRelationVO> listStatus(int config,String master) {
-        Map mp= redisService.get(RELATIONMAP,Map.class);
-        RelationKey key=new RelationKey(master,config);
-        JSONArray object= (JSONArray) mp.get(key.toString());
-        List list= object.stream().collect(Collectors.toList());
-        List<MasterRelationVO> relationVOS=new LinkedList<>();
-        for(Object o:list)
-        {
-            JSONObject ob=(JSONObject) o;
-            relationVOS.add( JSON.toJavaObject(ob, MasterRelationVO.class));
+    public List<MasterRelationVO> listStatus(int config, String master) {
+        Map mp = redisService.get(RELATIONMAP, Map.class);
+        RelationKey key = new RelationKey(master, config);
+        JSONArray object = (JSONArray) mp.get(key.toString());
+        List list = object.stream().collect(Collectors.toList());
+        List<MasterRelationVO> relationVOS = new LinkedList<>();
+        for (Object o : list) {
+            JSONObject ob = (JSONObject) o;
+            relationVOS.add(JSON.toJavaObject(ob, MasterRelationVO.class));
         }
         return relationVOS;
     }
 
     @Override
+    public TeacherDetail getMasterByStudent(String student) {
+        MasterRelation relation = masterRelationDao.findByStudent(student);
+        if (relation == null)
+            return null;
+        return teacherService.findTeacher(relation.getMasterPhone());
+    }
+
+    @Override
     @LockIt("SELECT_MASTER")
     public int selectMaster(String student, String master) throws NetError {
-        StudentLevel studentmodel= studentLevelDao.selectById(student);
-        if(studentmodel==null)
-            throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND,"该学生 "+student+" 未分级");
-        return masterRelationDao.selectMaster(student,master,studentmodel.getLevelId());
+        StudentLevel studentmodel = studentLevelDao.selectById(student);
+        if (studentmodel == null)
+            throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND, "该学生 " + student + " 未分级");
+        return masterRelationDao.selectMaster(student, master, studentmodel.getLevelId());
     }
 
     @Override
     @LockIt("SELECT_MASTER")
     public int returnbackMaster(String student, String master) {
-        return masterRelationDao.unselectMaster(student,master);
+        return masterRelationDao.unselectMaster(student, master);
     }
 
     @Override
     public List<StudentUserDetail> listStudentByMasterAndConfig(String master, int config) {
-        return null;
+        List<MasterRelation> relations = masterRelationDao.findByMasterAndConfig(master, config);
+        List<StudentUserDetail> list = new LinkedList<>();
+        for (MasterRelation relation : relations) {
+            list.add(studentDao.findStudentByPhone(relation.getStudentPhone()));
+        }
+        return list;
     }
 }

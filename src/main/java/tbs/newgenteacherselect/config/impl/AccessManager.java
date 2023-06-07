@@ -1,11 +1,10 @@
 package tbs.newgenteacherselect.config.impl;
 
 import org.springframework.stereotype.Component;
-import tbs.dao.AdminDao;
-import tbs.dao.RoleDao;
+import tbs.newgenteacherselect.dao.AdminDao;
+import tbs.newgenteacherselect.dao.RoleDao;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.RoleVO;
-import tbs.pojo.Admin;
 import tbs.pojo.dto.AdminDetail;
 import tbs.utils.AOP.authorize.error.AuthorizationFailureException;
 import tbs.utils.AOP.authorize.interfaces.IAccess;
@@ -15,7 +14,6 @@ import tbs.utils.redis.IRedisService;
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
