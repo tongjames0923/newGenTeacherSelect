@@ -2,7 +2,13 @@ package tbs.newgenteacherselect.service.impl;
 
 import cn.hutool.extra.spring.SpringUtil;
 import org.springframework.stereotype.Service;
+import tbs.dao.ScoreConfigDao;
+import tbs.dao.StudentLevelDao;
 import tbs.newgenteacherselect.model.RoleVO;
+import tbs.newgenteacherselect.model.StudentMoreDetail;
+import tbs.pojo.ScoreConfigTemplateItem;
+import tbs.pojo.StudentLevel;
+import tbs.pojo.dto.StudentUserDetail;
 import tbs.utils.Async.ThreadUtil;
 import tbs.utils.Async.interfaces.AsyncToDo;
 import tbs.utils.BatchUtil;
@@ -22,6 +28,14 @@ public class StudentServiceImpl implements StudentService {
     @Resource
     ThreadUtil threadUtil;
 
+    @Resource
+    StudentDao studentDao;
+
+    @Resource
+    StudentLevelDao studentLevelDao;
+
+    @Resource
+    ScoreConfigDao scoreConfigDao;
 
     @Override
     public void studentImport(List<StudentRegisterVO> vo) throws Exception {
@@ -71,5 +85,12 @@ public class StudentServiceImpl implements StudentService {
                 waitForDone();
         userBatch.flush();
         studentBatch.flush();
+    }
+
+    @Override
+    public StudentMoreDetail findStudent(String phone) {
+        StudentUserDetail detail= studentDao.findStudentByPhone(phone);
+        ScoreConfigTemplateItem level= studentLevelDao.findByPhone(phone);
+        return new StudentMoreDetail(detail,level);
     }
 }
