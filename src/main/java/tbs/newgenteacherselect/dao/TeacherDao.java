@@ -1,6 +1,7 @@
 package tbs.newgenteacherselect.dao;
 
 import org.apache.ibatis.annotations.InsertProvider;
+import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.UpdateProvider;
 import org.springframework.cache.annotation.CacheEvict;
@@ -12,6 +13,7 @@ import tbs.utils.redis.RedisConfig;
 
 import java.util.List;
 
+@Mapper
 public interface TeacherDao {
     @InsertProvider(type = SqlUpdateImpl.class, method = "insert")
     void saveTeacher(Teacher teacher);

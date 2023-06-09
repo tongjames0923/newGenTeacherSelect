@@ -1,10 +1,12 @@
 package tbs.newgenteacherselect.model;
 
 import cn.hutool.core.bean.BeanUtil;
+import lombok.ToString;
 import tbs.pojo.ScoreConfigTemplateItem;
 import tbs.pojo.StudentLevel;
 import tbs.pojo.dto.StudentUserDetail;
 
+@ToString
 public class StudentMoreDetail extends StudentUserDetail {
 
     Integer levelId;

@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="tbs.newgenteacherselect.dao.StudentDao">
+  <sql id="StudentDetail">
+     bu.`name` AS `name`,bu.phone AS `phone`,bu.departmentId AS `departmentId`
+         ,st.studentNo AS `studentNo`,st.cla AS `clas`,st.grade AS `grade`
+         ,r.roleid AS `role`,r.rolename AS `roleName`,d.departname AS `department`
+         FROM basicuser bu JOIN student st ON st.phone=bu.phone
+         JOIN role r ON r.roleid=bu.role JOIN department d ON bu.departmentId=d.id
+  </sql>
+    <sql id="StudentMoreDetail">
+        select bu.`name`       AS `name`
+             , bu.phone        AS `phone`
+             , bu.departmentId AS `departmentId`
+             , stl.levelId     as levelId
+             , sci.configName  as levelName
+             , m.masterPhone   as masterId
+             , tch.name        as masterName
+             , st.studentNo    AS `studentNo`
+             , st.cla          AS `clas`
+             , st.grade        AS `grade`
+             , r.roleid        AS `role`
+             , r.rolename      AS `roleName`
+             , d.departname    AS `department`
+        FROM basicuser bu
+                inner JOIN student st ON st.phone = bu.phone
+                inner JOIN role r ON r.roleid = bu.role
+                inner JOIN department d ON bu.departmentId = d.id
+                left join studentlevel stl on stl.studentPhone = bu.phone
+                left join scoreconfigtemplateitem sci on sci.id = stl.levelId
+                left join masterrelation m on stl.studentPhone = m.studentPhone
+                left join basicuser tch on tch.phone = m.masterPhone
+    </sql>
+    <select id="findStudentByDepartment" resultType="tbs.pojo.dto.StudentUserDetail">
+     select <include refid="StudentDetail"/>
+        where bu.departmentId=#{param1} limit #{param2},#{param3}
+    </select>
+    <select id="listDepartmentNoMasterStudentOrderBySocre" resultType="tbs.pojo.Student">
+        SELECT st.* FROM student st LEFT JOIN basicuser bu ON bu.phone=st.phone LEFT JOIN masterrelation mr ON mr.studentPhone=st.phone WHERE mr.id IS NULL AND bu.departmentId=#{department} order by score desc
+    </select>
+    <select id="findStudentByPhone" resultType="tbs.pojo.dto.StudentUserDetail">
+        select <include refid="StudentDetail"></include> where bu.phone=#{phone}
+    </select>
+    <select id="findFullDetailByPhone" resultType="tbs.newgenteacherselect.model.StudentMoreDetail">
+         <include refid="StudentMoreDetail"></include> where bu.phone=#{phone}
+    </select>
+    <select id="findFullStudentInfosByDepartment" resultType="tbs.newgenteacherselect.model.StudentMoreDetail">
+        <include refid="StudentMoreDetail"/>
+        where d.id=#{param1}
+        <if test="param3!=null">
+             order by `${param3.field}` ${param3.dir}
+        </if>
+        <if test="param2!=null">
+            limit #{param2.offset},#{param2.count}
+        </if>
+    </select>
+</mapper>

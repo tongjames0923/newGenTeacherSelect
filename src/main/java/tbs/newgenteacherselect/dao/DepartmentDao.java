@@ -1,16 +1,13 @@
 package tbs.newgenteacherselect.dao;
 
-import org.apache.ibatis.annotations.Delete;
-import org.apache.ibatis.annotations.Insert;
-import org.apache.ibatis.annotations.Select;
-import org.apache.ibatis.annotations.Update;
+import org.apache.ibatis.annotations.*;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import tbs.pojo.Department;
 import tbs.utils.redis.RedisConfig;
 
 import java.util.List;
-
+@Mapper
 public interface DepartmentDao {
 
     @Select("select * from department where parentId=#{id}")

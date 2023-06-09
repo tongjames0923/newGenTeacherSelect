@@ -21,6 +21,7 @@ import tbs.newgenteacherselect.service.StudentService;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Student;
 import tbs.utils.sql.query.Page;
+import tbs.utils.sql.query.Sortable;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -114,13 +115,7 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public List<StudentMoreDetail> listByDepartment(int department, Page page) {
-        int beg=(page.getPage()-1)* page.getCount();
-        List<StudentUserDetail> studentUserDetails= studentDao.findStudentByDepartment(department,beg,page.getCount());
-        List<StudentMoreDetail> res=new LinkedList<>();
-        for(StudentUserDetail studentUserDetail:studentUserDetails)
-        {
-            res.add(translate(studentUserDetail));
-        }
-        return res;
+
+        return studentDao.findFullStudentInfosByDepartment(department,page,null);
     }
 }

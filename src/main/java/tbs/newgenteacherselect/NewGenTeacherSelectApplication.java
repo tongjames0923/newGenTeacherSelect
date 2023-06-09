@@ -29,7 +29,6 @@ import tbs.newgenteacherselect.config.RedisThreadLockerProperties;
 @EnableAspectJAutoProxy
 @EnableRabbit
 @ComponentScan("tbs")
-@MapperScan("tbs.dao")
 @EnableConfigurationProperties
 @EnableScheduling
 @EnableWebSocket
