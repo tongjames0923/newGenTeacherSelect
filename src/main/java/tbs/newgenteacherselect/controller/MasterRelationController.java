@@ -25,7 +25,7 @@ public class MasterRelationController {
         if (StringUtils.isEmpty(teacher) || StringUtils.isEmpty(student)) {
             throw NetErrorEnum.makeError(NetErrorEnum.BAD_ROLE, "学生/教师不能为空");
         }
-        if (invoker.getUserId().equals(teacher) || invoker.getUserId().equals(student))
+        if (invoker.getUserId().equals(teacher) || invoker.getUserId().equals(student)||invoker.getRoleCode()==RoleVO.ROLE_ADMIN)
             return;
         throw NetErrorEnum.makeError(NetErrorEnum.BAD_ROLE, "仅支持管理员或被选老师与学生支持此操作");
     }

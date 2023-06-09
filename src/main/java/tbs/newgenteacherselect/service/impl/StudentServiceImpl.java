@@ -3,13 +3,11 @@ package tbs.newgenteacherselect.service.impl;
 import cn.hutool.extra.spring.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import tbs.newgenteacherselect.dao.QO.StudentQO;
 import tbs.newgenteacherselect.dao.StudentLevelDao;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentMoreDetail;
 import tbs.newgenteacherselect.service.MasterRelationService;
-import tbs.pojo.ScoreConfigTemplateItem;
-import tbs.pojo.dto.StudentUserDetail;
-import tbs.pojo.dto.TeacherDetail;
 import tbs.utils.Async.ThreadUtil;
 import tbs.utils.Async.interfaces.AsyncToDo;
 import tbs.utils.BatchUtil;
@@ -93,29 +91,14 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentMoreDetail findStudent(String phone) {
-        StudentUserDetail detail= studentDao.findStudentByPhone(phone);
-        return translate(detail);
+        return studentDao.findFullDetailByPhone(phone);
     }
 
 
-
-    StudentMoreDetail translate(StudentUserDetail detail)
-    {
-        if(detail==null)
-            return null;
-        ScoreConfigTemplateItem level= studentLevelDao.findByPhone(detail.getPhone());
-        StudentMoreDetail s=new StudentMoreDetail(detail,level);
-        TeacherDetail teacherDetail= masterRelationService.getMasterByStudent(detail.getPhone());
-        if(teacherDetail==null)
-            return s;
-        s.setMasterId(teacherDetail.getPhone());
-        s.setMasterName(teacherDetail.getName());
-        return s;
-    }
 
     @Override
-    public List<StudentMoreDetail> listByDepartment(int department, Page page) {
+    public List<StudentMoreDetail> listStudent(StudentQO qo, Page page, Sortable sortable) {
 
-        return studentDao.findFullStudentInfosByDepartment(department,page,null);
+        return studentDao.listStudentsMoreDetails(qo,page,sortable);
     }
 }

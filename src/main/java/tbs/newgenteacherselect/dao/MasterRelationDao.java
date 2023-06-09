@@ -38,10 +38,10 @@ public interface MasterRelationDao extends BaseMapper<MasterRelation> {
             "JOIN (SELECT id FROM masterrelation WHERE studentPhone is NULL and masterPhone=#{master} and scoreConfigItemId=#{config} LIMIT 1) m2 " +
             "ON m1.id = m2.id " +
             "SET m1.studentPhone = #{student};")
-    int selectMaster(String student,String master,int config);
+    void selectMaster(String student,String master,int config);
 
     @Update("UPDATE masterrelation mr set studentPhone=null where mr.masterPhone=#{master} and mr.studentPhone=#{student}")
-    int unselectMaster(String student,String master);
+    void unselectMaster(String student,String master);
 
 
     @Select("select scoreConfigItemId from masterrelation group by scoreConfigItemId")

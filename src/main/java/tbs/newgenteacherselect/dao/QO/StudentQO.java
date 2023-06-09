@@ -1,40 +1,72 @@
 package tbs.newgenteacherselect.dao.QO;
 
+import org.springframework.util.StringUtils;
 import tbs.pojo.dto.StudentUserDetail;
 import tbs.utils.sql.annotations.Queryable;
 import tbs.utils.sql.annotations.SqlField;
 
-@Queryable(StudentUserDetail.BASIC_DATA_SQL)
+
 public class StudentQO {
-    @SqlField(field = "bu.phone",index = 0)
-    private String phone;
-    @SqlField(field = "bu.name",index = 1)
-    private String userName;
+    private String nameOrPhone;
+    private Integer department;
+    Integer level;
+    String Clas;
+    Integer grade;
+    String masterPhoneOrName;
 
-    @SqlField(field = "bu.departmentId",index = 2)
-    private String departId;
-
-    public String getPhone() {
-        return phone;
+    public String getNameOrPhone() {
+        return nameOrPhone;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setNameOrPhone(String nameOrPhone) {
+        if(StringUtils.isEmpty(nameOrPhone))
+            nameOrPhone=null;
+        this.nameOrPhone = nameOrPhone;
     }
 
-    public String getUserName() {
-        return userName;
+    public Integer getDepartment() {
+        return department;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setDepartment(Integer department) {
+
+        this.department = department;
     }
 
-    public String getDepartId() {
-        return departId;
+    public Integer getLevel() {
+        return level;
     }
 
-    public void setDepartId(String departId) {
-        this.departId = departId;
+    public void setLevel(Integer level) {
+        this.level = level;
     }
+
+    public String getClas() {
+        return Clas;
+    }
+
+    public void setClas(String clas) {
+        if(StringUtils.isEmpty(clas))
+            clas=null;
+        Clas = clas;
+    }
+
+    public Integer getGrade() {
+        return grade;
+    }
+
+    public String getMasterPhoneOrName() {
+        return masterPhoneOrName;
+    }
+
+    public void setMasterPhoneOrName(String masterPhoneOrName) {
+        if(StringUtils.isEmpty(masterPhoneOrName))
+            masterPhoneOrName=null;
+        this.masterPhoneOrName = masterPhoneOrName;
+    }
+
+    public void setGrade(Integer grade) {
+        this.grade = grade;
+    }
+
 }

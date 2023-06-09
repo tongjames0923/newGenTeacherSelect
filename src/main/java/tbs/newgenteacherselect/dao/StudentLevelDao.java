@@ -11,7 +11,5 @@ import tbs.utils.redis.RedisConfig;
 @Mapper
 public interface StudentLevelDao extends BaseMapper<StudentLevel> {
 
-    @Select("select item.* from studentLevel sl join scoreconfigtemplateitem item on item.id=sl.levelId where studentPhone=#{student} ")
-    ScoreConfigTemplateItem findByPhone(String student);
 
 }

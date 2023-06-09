@@ -4,6 +4,7 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -151,17 +152,24 @@ public class MasterRelationServiceImpl implements MasterRelationService {
 
     @Override
     @LockIt("SELECT_MASTER")
-    public int selectMaster(String student, String master) throws NetError {
+    public Integer selectMaster(String student, String master) throws NetError {
         StudentLevel studentmodel = studentLevelDao.selectById(student);
         if (studentmodel == null)
             throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND, "该学生 " + student + " 未分级");
-        return masterRelationDao.selectMaster(student, master, studentmodel.getLevelId());
+        try {
+            masterRelationDao.selectMaster(student, master, studentmodel.getLevelId());
+        }catch (DuplicateKeyException duplicateKeyException)
+        {
+            throw NetErrorEnum.makeError(NetErrorEnum.HAS_MORE_NODE,"该生已有导师");
+        }
+        return 1;
     }
 
     @Override
     @LockIt("SELECT_MASTER")
-    public int returnbackMaster(String student, String master) {
-        return masterRelationDao.unselectMaster(student, master);
+    public Integer returnbackMaster(String student, String master) {
+         masterRelationDao.unselectMaster(student, master);
+        return 1;
     }
 
     @Override
