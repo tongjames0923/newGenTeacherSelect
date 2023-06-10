@@ -5,8 +5,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import tbs.newgenteacherselect.dao.BasicUserDao;
+import tbs.newgenteacherselect.dao.QO.TeacherQO;
 import tbs.newgenteacherselect.dao.TeacherDao;
 import tbs.newgenteacherselect.model.RoleVO;
+import tbs.newgenteacherselect.model.TeacherMoreDetail;
 import tbs.newgenteacherselect.model.TeacherRegisterVO;
 import tbs.newgenteacherselect.service.TeacherService;
 import tbs.pojo.BasicUser;
@@ -18,6 +20,8 @@ import tbs.utils.BatchUtil;
 import tbs.utils.EncryptionTool;
 import tbs.utils.Results.AsyncTaskResult;
 import tbs.utils.Results.AsyncWaitter;
+import tbs.utils.sql.query.Page;
+import tbs.utils.sql.query.Sortable;
 
 import javax.annotation.Resource;
 import java.util.LinkedList;
@@ -88,5 +92,10 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public TeacherDetail findTeacher(String teacher) {
         return teacherDao.findTeacherByPhone(teacher);
+    }
+
+    @Override
+    public List<TeacherMoreDetail> findList(TeacherQO qo, Page page, Sortable... sortables) {
+        return teacherDao.findTeacherByQo(qo,page,sortables);
     }
 }

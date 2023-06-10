@@ -5,8 +5,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tbs.newgenteacherselect.dao.QO.StudentQO;
+import tbs.newgenteacherselect.dao.QO.TeacherQO;
+import tbs.newgenteacherselect.dao.TeacherQuery;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.service.StudentService;
+import tbs.newgenteacherselect.service.TeacherService;
 import tbs.utils.AOP.authorize.annotations.AccessRequire;
 import tbs.utils.sql.query.Page;
 import tbs.utils.sql.query.Sortable;
@@ -19,22 +22,20 @@ public class TeacherController {
 
 
     @Resource
-    StudentService studentService;
+    TeacherService teacherService;
 
-    @RequestMapping("listStudent")
-    @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
-    public Object listStudent(String nameOrPhone, Integer department, Integer level, String Clas, Integer grade,
-                              String masterPhone, Integer page, Integer cnt,
+    @RequestMapping("listTeacher")
+    @AccessRequire
+    public Object ListTeacher(String nameOrPhone,String positionOrTitle,Integer department,Integer scoreLevel, Integer page, Integer cnt,
                               String sord, String sidx) {
-        StudentQO studentQO = new StudentQO();
-        studentQO.setNameOrPhone(nameOrPhone);
-        studentQO.setClas(Clas);
-        studentQO.setDepartment(department);
-        studentQO.setLevel(level);
-        studentQO.setMasterPhoneOrName(masterPhone);
-        studentQO.setGrade(grade);
+
+        TeacherQO teacherQO=new TeacherQO();
+        teacherQO.setDepartment(department);
+        teacherQO.setNameOrPhone(nameOrPhone);
+        teacherQO.setScoreLevel(scoreLevel);
+        teacherQO.setPositionOrTitle(positionOrTitle);
         Page page1 = new Page(page, cnt);
         Sortable sortable = new Sortable(sord, sidx);
-        return studentService.listStudent(studentQO, page1, sortable);
+        return teacherService.findList(teacherQO,page1,sortable);
     }
 }
