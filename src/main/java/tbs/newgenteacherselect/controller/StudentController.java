@@ -51,7 +51,7 @@ public class StudentController extends BaseController {
         studentQO.setGrade(grade);
         Page page1 = new Page(page, cnt);
         Sortable sortable = new Sortable(sord, sidx);
-        return studentService.listStudent(studentQO, page1, sortable);
+        return success(studentService.listStudent(studentQO, page1, sortable)) ;
     }
 
 }

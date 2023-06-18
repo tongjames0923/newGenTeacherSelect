@@ -34,21 +34,21 @@ public class DepartmentController extends BaseController {
     @RequestMapping("newDepartment")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
     public Object newDepartment(String departmentName, int parent) throws Exception {
-        return success(departmentService.newDepartment(parent, departmentName)) ;
+        return refresh(departmentService.newDepartment(parent, departmentName)) ;
     }
 
     @RequestMapping("deleteDepartment")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
     public Object deleteDepartment(int id) throws Exception {
          departmentService.deleteDepartment(id);
-        return success();
+        return refresh();
     }
 
     @RequestMapping("changeDepartment")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
     public Object ChangeDepartment(String departmentName, int id) throws Exception {
         departmentService.rename(id, departmentName);
-        return success();
+        return refresh();
     }
 
 

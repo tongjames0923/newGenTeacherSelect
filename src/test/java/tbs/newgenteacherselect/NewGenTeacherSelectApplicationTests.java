@@ -2,6 +2,7 @@ package tbs.newgenteacherselect;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
+import tbs.framework.error.NetError;
 import tbs.newgenteacherselect.model.StudentMoreDetail;
 import tbs.newgenteacherselect.service.StudentService;
 

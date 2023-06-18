@@ -29,7 +29,7 @@ public class ScoreConfigController extends BaseController {
     public Object makeTemplate(@RequestBody ScoreTemplateVO data) throws NetError {
         SystemExecutionData executionData = getRuntime();
         scoreConfigService.makeTemplate(data, executionData.getInvokeRole());
-        return null;
+        return success();
     }
 
     @RequestMapping("deleteTemplates")
@@ -37,13 +37,13 @@ public class ScoreConfigController extends BaseController {
     public Object deleteTemplate(String template, SystemExecutionData data) throws NetError {
         if (scoreConfigService.hasRights(data.getInvokeRole(), template))
             scoreConfigService.removeTemplate(template);
-        return null;
+        return success();
     }
 
     @RequestMapping("listScoreConfigTemplates")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
     public Object listDepartmentConfig(int department) throws Exception {
-        return scoreConfigService.listTemplate(department);
+        return success(scoreConfigService.listTemplate(department));
     }
 
 
@@ -52,6 +52,6 @@ public class ScoreConfigController extends BaseController {
     @AsyncReturnFunction
     public Object applyConfig(String template, int department) throws Exception {
         scoreConfigService.applyConfig(department, template);
-        return null;
+        return success();
     }
 }

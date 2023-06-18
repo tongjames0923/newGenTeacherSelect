@@ -3,6 +3,7 @@ package tbs.newgenteacherselect.controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import tbs.framework.annotation.AccessRequire;
+import tbs.framework.controller.BaseController;
 import tbs.framework.model.BaseRoleModel;
 import tbs.framework.model.SystemExecutionData;
 import tbs.framework.utils.EncryptionTool;
@@ -21,7 +22,7 @@ import java.util.List;
 
 @RequestMapping("user")
 @RestController
-public class UserController {
+public class UserController extends BaseController {
 
     @Resource
     AdminService adminService;
@@ -35,16 +36,16 @@ public class UserController {
 
 
     @RequestMapping("login")
-    public Object login(String phone, String password) throws Exception {
-        return userService.login(phone, password);
+    public Object login(@RequestParam("username") String phone, String password) throws Exception {
+        return success(userService.login(phone, password)) ;
     }
 
     @RequestMapping("logout")
     @AccessRequire()
-    public Object logout(@RequestParam(required = false) SystemExecutionData data) throws Exception {
-
+    public Object logout() throws Exception {
+        SystemExecutionData data=getRuntime();
         userService.logout(data.getInvokeToken());
-        return null;
+        return success();
 
     }
 
@@ -58,7 +59,7 @@ public class UserController {
             basicUser.setPassword(EncryptionTool.encrypt(password));
             userService.updateBaiscInfo(basicUser);
         }
-        return null;
+        return success();
     }
 
 
@@ -66,23 +67,23 @@ public class UserController {
     @AccessRequire(manual = {RoleVO.ROLE_TEACHER, RoleVO.ROLE_ADMIN})
     public Object changeStudent(Student student) {
         userService.updateStudent(student);
-        return null;
+        return success();
     }
 
 
     @RequestMapping("renew")
     @AccessRequire()
-    public Object renew(@RequestParam(required = false) SystemExecutionData data) throws Exception {
-
+    public Object renew() throws Exception {
+        SystemExecutionData data=getRuntime();
         userService.renew(data.getInvokeToken());
-        return null;
+        return success();
     }
 
     @RequestMapping(value = "studentImport", method = RequestMethod.POST)
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
     public Object importStudent(@RequestBody List<StudentRegisterVO> list) throws Exception {
         studentService.studentImport(list);
-        return null;
+        return success();
     }
 
     @RequestMapping(value = "teacherImport", method = RequestMethod.POST)
@@ -90,8 +91,7 @@ public class UserController {
     public Object importTeacher(@RequestBody List<TeacherRegisterVO> list) throws Throwable {
 
         teacherService.saveTeacher(list);
-        return null;
-
+        return success();
     }
 
 

@@ -27,7 +27,7 @@ public class MasterRelationController extends BaseController {
         if (StringUtils.isEmpty(teacher) || StringUtils.isEmpty(student)) {
             throw NetErrorEnum.makeError(NetErrorEnum.BAD_ROLE, "学生/教师不能为空");
         }
-        if (invoker.getUserId().equals(teacher) || invoker.getUserId().equals(student)||invoker.getRoleCode()==RoleVO.ROLE_ADMIN)
+        if (invoker.getUserId().equals(teacher) || invoker.getUserId().equals(student) || invoker.getRoleCode() == RoleVO.ROLE_ADMIN)
             return;
         throw NetErrorEnum.makeError(NetErrorEnum.BAD_ROLE, "仅支持管理员或被选老师与学生支持此操作");
     }
@@ -38,22 +38,24 @@ public class MasterRelationController extends BaseController {
     @RequestMapping("select")
     @AccessRequire
     public Object select(String student, String master) throws NetError {
-        SystemExecutionData data=getRuntime();
+        SystemExecutionData data = getRuntime();
         checkRightsForSelectOrUnSelect(master, student, data.getInvokeRole());
-        return relationService.selectMaster(student, master);
+        relationService.selectMaster(student, master);
+        return refresh();
     }
 
     @RequestMapping("unselect")
     @AccessRequire
     public Object unselect(String student, String master) throws NetError {
-        SystemExecutionData data=getRuntime();
+        SystemExecutionData data = getRuntime();
         checkRightsForSelectOrUnSelect(master, student, data.getInvokeRole());
-        return relationService.returnbackMaster(student, master);
+        relationService.returnbackMaster(student, master);
+        return refresh();
     }
 
     @RequestMapping("listMasterRelationStatus")
     public Object listRelationStatus(int configItem, String master) {
-        return relationService.listStatus(configItem, master);
+        return success(relationService.listStatus(configItem, master));
     }
 
 }

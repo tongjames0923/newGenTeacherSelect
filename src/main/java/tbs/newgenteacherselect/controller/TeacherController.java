@@ -27,16 +27,16 @@ public class TeacherController extends BaseController {
 
     @RequestMapping("listTeacher")
     @AccessRequire
-    public Object ListTeacher(String nameOrPhone,String positionOrTitle,Integer department,Integer scoreLevel, Integer page, Integer cnt,
+    public Object ListTeacher(String nameOrPhone, String positionOrTitle, Integer department, Integer scoreLevel, Integer page, Integer cnt,
                               String sord, String sidx) {
 
-        TeacherQO teacherQO=new TeacherQO();
+        TeacherQO teacherQO = new TeacherQO();
         teacherQO.setDepartment(department);
         teacherQO.setNameOrPhone(nameOrPhone);
         teacherQO.setScoreLevel(scoreLevel);
         teacherQO.setPositionOrTitle(positionOrTitle);
         Page page1 = new Page(page, cnt);
         Sortable sortable = new Sortable(sord, sidx);
-        return teacherService.findList(teacherQO,page1,sortable);
+        return success(teacherService.findList(teacherQO, page1, sortable));
     }
 }
