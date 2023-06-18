@@ -2,6 +2,10 @@ package tbs.newgenteacherselect.controller;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import tbs.framework.annotation.AccessRequire;
+import tbs.framework.model.BaseRoleModel;
+import tbs.framework.model.SystemExecutionData;
+import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentRegisterVO;
 import tbs.newgenteacherselect.model.TeacherRegisterVO;
@@ -11,10 +15,6 @@ import tbs.newgenteacherselect.service.TeacherService;
 import tbs.newgenteacherselect.service.UserService;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Student;
-import tbs.utils.AOP.authorize.annotations.AccessRequire;
-import tbs.utils.AOP.authorize.model.BaseRoleModel;
-import tbs.utils.AOP.authorize.model.SystemExecutionData;
-import tbs.utils.EncryptionTool;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -87,7 +87,7 @@ public class UserController {
 
     @RequestMapping(value = "teacherImport", method = RequestMethod.POST)
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
-    public Object importTeacher(@RequestBody List<TeacherRegisterVO> list) throws Exception {
+    public Object importTeacher(@RequestBody List<TeacherRegisterVO> list) throws Throwable {
 
         teacherService.saveTeacher(list);
         return null;

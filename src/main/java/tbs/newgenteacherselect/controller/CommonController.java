@@ -3,10 +3,8 @@ package tbs.newgenteacherselect.controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tbs.utils.AOP.controller.ApiProxy;
-import tbs.utils.AOP.controller.IAction;
-import tbs.utils.Async.AsyncMethod;
-import tbs.utils.Results.NetResult;
+import tbs.framework.async.AsyncMethod;
+
 
 import javax.annotation.Resource;
 

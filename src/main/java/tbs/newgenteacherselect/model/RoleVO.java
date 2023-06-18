@@ -1,6 +1,7 @@
 package tbs.newgenteacherselect.model;
 
-import tbs.utils.AOP.authorize.model.BaseRoleModel;
+
+import tbs.framework.model.BaseRoleModel;
 
 /**
  * 登录基本数据

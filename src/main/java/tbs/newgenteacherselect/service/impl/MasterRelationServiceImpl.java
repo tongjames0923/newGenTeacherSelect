@@ -1,13 +1,17 @@
 package tbs.newgenteacherselect.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
-import com.alibaba.fastjson.JSONObject;
+
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONArray;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import tbs.framework.annotation.LockIt;
+import tbs.framework.error.NetError;
+import tbs.framework.redis.IRedisService;
 import tbs.newgenteacherselect.dao.MasterRelationDao;
 import tbs.newgenteacherselect.dao.StudentDao;
 import tbs.newgenteacherselect.dao.StudentLevelDao;
@@ -19,9 +23,7 @@ import tbs.pojo.StudentLevel;
 import tbs.pojo.dto.MasterRelationVO;
 import tbs.pojo.dto.StudentUserDetail;
 import tbs.pojo.dto.TeacherDetail;
-import tbs.utils.Async.annotations.LockIt;
-import tbs.utils.error.NetError;
-import tbs.utils.redis.IRedisService;
+
 
 import javax.annotation.Resource;
 import java.util.HashMap;

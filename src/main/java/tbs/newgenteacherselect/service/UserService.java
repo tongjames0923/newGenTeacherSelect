@@ -5,7 +5,6 @@ import tbs.newgenteacherselect.model.StudentRegisterVO;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Student;
 import tbs.pojo.Teacher;
-import tbs.utils.Results.NetResult;
 
 public interface UserService {
     RoleVO login(String phone,String password) throws Exception;

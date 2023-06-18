@@ -2,15 +2,16 @@ package tbs.newgenteacherselect.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tbs.framework.annotation.AccessRequire;
+import tbs.framework.controller.BaseController;
+import tbs.framework.error.NetError;
+import tbs.framework.model.SystemExecutionData;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.dao.QO.StudentQO;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.service.MasterRelationService;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.newgenteacherselect.service.TeacherService;
-import tbs.utils.AOP.authorize.annotations.AccessRequire;
-import tbs.utils.AOP.authorize.model.SystemExecutionData;
-import tbs.utils.error.NetError;
 import tbs.utils.sql.query.Page;
 import tbs.utils.sql.query.Sortable;
 
@@ -18,7 +19,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("student")
-public class StudentController {
+public class StudentController extends BaseController {
 
 
 
@@ -27,7 +28,8 @@ public class StudentController {
 
     @RequestMapping("myMaster")
     @AccessRequire(manual = {RoleVO.ROLE_STUDENT})
-    public Object myMaster(SystemExecutionData data) throws NetError {
+    public Object myMaster() throws NetError {
+        SystemExecutionData data=getRuntime();
         return relationService.getMasterByStudent(data.getInvokeRole().getUserId());
     }
 

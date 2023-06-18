@@ -2,10 +2,10 @@ package tbs.newgenteacherselect.dao;
 
 import org.apache.ibatis.annotations.*;
 import org.springframework.cache.annotation.Cacheable;
+import tbs.framework.config.RedisConfig;
 import tbs.utils.sql.impl.SqlUpdateImpl;
 import tbs.pojo.Admin;
 import tbs.pojo.dto.AdminDetail;
-import tbs.utils.redis.RedisConfig;
 
 import java.util.List;
 

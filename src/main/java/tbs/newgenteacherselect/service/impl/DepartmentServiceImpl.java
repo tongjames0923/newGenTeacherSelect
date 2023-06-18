@@ -1,19 +1,20 @@
 package tbs.newgenteacherselect.service.impl;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONObject;
+
+import com.alibaba.fastjson2.JSON;
+import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tbs.framework.redis.IRedisService;
 import tbs.newgenteacherselect.dao.BasicUserDao;
 import tbs.newgenteacherselect.dao.DepartmentDao;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.DepartmentVO;
 import tbs.newgenteacherselect.service.DepartmentService;
 import tbs.pojo.Department;
-import tbs.utils.redis.IRedisService;
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -110,7 +111,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             updateDepartmentFullName();
             throw new Exception("部门数据字典异常,稍后再试");
         }
-        JSONObject obj = (JSONObject) mp.get(String.valueOf(id));
+        JSONObject obj = (JSONObject) mp.get(id);
         if (obj == null)
         {
             throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND,"不存在"+id+"部门");

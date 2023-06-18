@@ -1,9 +1,10 @@
 package tbs.newgenteacherselect.service;
 
+import tbs.framework.error.NetError;
 import tbs.pojo.dto.MasterRelationVO;
 import tbs.pojo.dto.StudentUserDetail;
 import tbs.pojo.dto.TeacherDetail;
-import tbs.utils.error.NetError;
+
 
 import java.util.List;
 

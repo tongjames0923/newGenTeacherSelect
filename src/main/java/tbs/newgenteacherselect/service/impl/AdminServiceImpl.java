@@ -2,13 +2,13 @@ package tbs.newgenteacherselect.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.dao.AdminDao;
 import tbs.newgenteacherselect.dao.BasicUserDao;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.service.AdminService;
 import tbs.pojo.Admin;
 import tbs.pojo.BasicUser;
-import tbs.utils.EncryptionTool;
 
 import javax.annotation.Resource;
 

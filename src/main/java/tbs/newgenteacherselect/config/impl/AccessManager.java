@@ -1,16 +1,17 @@
 package tbs.newgenteacherselect.config.impl;
 
 import org.springframework.stereotype.Component;
+import tbs.framework.error.AuthorizationFailureException;
+import tbs.framework.interfaces.IAccess;
+import tbs.framework.interfaces.IPermissionVerification;
+import tbs.framework.model.BaseRoleModel;
+import tbs.framework.redis.IRedisService;
 import tbs.newgenteacherselect.dao.AdminDao;
 import tbs.newgenteacherselect.dao.RoleDao;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.pojo.dto.AdminDetail;
-import tbs.utils.AOP.authorize.error.AuthorizationFailureException;
-import tbs.utils.AOP.authorize.interfaces.IAccess;
-import tbs.utils.AOP.authorize.interfaces.IPermissionVerification;
-import tbs.utils.AOP.authorize.model.BaseRoleModel;
-import tbs.utils.redis.IRedisService;
+
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
@@ -23,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class AccessManager implements IAccess, IPermissionVerification {
 
     @Resource
-    IRedisService redisService;
+     IRedisService redisService;
 
     @Resource
     RoleDao roleDao;

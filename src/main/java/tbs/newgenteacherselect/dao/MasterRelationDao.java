@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import tbs.pojo.MasterRelation;
 import tbs.pojo.dto.MasterRelationVO;
-import tbs.utils.Async.annotations.LockIt;
 
 import java.util.List;
 

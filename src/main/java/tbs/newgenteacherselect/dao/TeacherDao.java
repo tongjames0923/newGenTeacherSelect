@@ -8,7 +8,7 @@ import tbs.newgenteacherselect.model.TeacherMoreDetail;
 import tbs.utils.sql.impl.SqlUpdateImpl;
 import tbs.pojo.Teacher;
 import tbs.pojo.dto.TeacherDetail;
-import tbs.utils.redis.RedisConfig;
+import tbs.framework.config.RedisConfig;
 import tbs.utils.sql.query.Page;
 import tbs.utils.sql.query.Sortable;
 

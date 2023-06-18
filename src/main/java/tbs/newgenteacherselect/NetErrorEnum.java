@@ -1,6 +1,7 @@
 package tbs.newgenteacherselect;
 
-import tbs.utils.error.NetError;
+
+import tbs.framework.error.NetError;
 
 public enum NetErrorEnum {
 

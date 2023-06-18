@@ -3,11 +3,12 @@ package tbs.newgenteacherselect.config;
 import cn.hutool.extra.spring.SpringUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import tbs.framework.async.AsyncTaskResult;
+import tbs.framework.async.ThreadUtil;
+import tbs.framework.interfaces.AsyncToDo;
+import tbs.framework.model.BaseRoleModel;
 import tbs.newgenteacherselect.model.RoleVO;
-import tbs.utils.AOP.authorize.model.BaseRoleModel;
-import tbs.utils.Async.ThreadUtil;
-import tbs.utils.Async.interfaces.AsyncToDo;
-import tbs.utils.Results.AsyncTaskResult;
+
 import tbs.utils.socket.ISocketClient;
 import tbs.utils.socket.ISocketManager;
 import tbs.utils.socket.ISocketWorker;

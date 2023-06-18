@@ -6,7 +6,7 @@ import org.springframework.cache.annotation.Cacheable;
 import tbs.utils.sql.impl.SqlUpdateImpl;
 import tbs.pojo.ScoreConfigTemplate;
 import tbs.pojo.ScoreConfigTemplateItem;
-import tbs.utils.redis.RedisConfig;
+import tbs.framework.config.RedisConfig;
 
 import java.util.List;
 

@@ -2,7 +2,6 @@ package tbs.newgenteacherselect.service;
 
 import tbs.newgenteacherselect.model.DepartmentVO;
 import tbs.pojo.Department;
-import tbs.utils.error.NetError;
 
 public interface DepartmentService {
     String fullName(int id) throws Exception;

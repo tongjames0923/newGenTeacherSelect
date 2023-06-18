@@ -10,7 +10,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
 import tbs.utils.sql.impl.SqlUpdateImpl;
 import tbs.pojo.BasicUser;
-import tbs.utils.redis.RedisConfig;
+import tbs.framework.config.RedisConfig;
 
 import java.util.List;
 

@@ -4,6 +4,12 @@ import cn.hutool.extra.spring.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import tbs.framework.async.AsyncTaskResult;
+import tbs.framework.async.AsyncWaitter;
+import tbs.framework.async.ThreadUtil;
+import tbs.framework.interfaces.AsyncToDo;
+import tbs.framework.sql.BatchUtil;
+import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.dao.BasicUserDao;
 import tbs.newgenteacherselect.dao.QO.TeacherQO;
 import tbs.newgenteacherselect.dao.TeacherDao;
@@ -14,12 +20,6 @@ import tbs.newgenteacherselect.service.TeacherService;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Teacher;
 import tbs.pojo.dto.TeacherDetail;
-import tbs.utils.Async.ThreadUtil;
-import tbs.utils.Async.interfaces.AsyncToDo;
-import tbs.utils.BatchUtil;
-import tbs.utils.EncryptionTool;
-import tbs.utils.Results.AsyncTaskResult;
-import tbs.utils.Results.AsyncWaitter;
 import tbs.utils.sql.query.Page;
 import tbs.utils.sql.query.Sortable;
 
@@ -38,7 +38,7 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     @Transactional
-    public void saveTeacher(List<TeacherRegisterVO> vo) throws Exception {
+    public void saveTeacher(List<TeacherRegisterVO> vo) throws Throwable {
         List<AsyncToDo> works = new LinkedList<>();
         int pertask = 200;
 

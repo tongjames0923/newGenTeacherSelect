@@ -4,7 +4,7 @@ import org.apache.ibatis.annotations.*;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import tbs.pojo.Department;
-import tbs.utils.redis.RedisConfig;
+import tbs.framework.config.RedisConfig;
 
 import java.util.List;
 @Mapper
