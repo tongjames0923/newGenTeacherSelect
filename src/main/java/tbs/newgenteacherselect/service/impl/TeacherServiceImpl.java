@@ -7,7 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tbs.framework.async.AsyncTaskResult;
 import tbs.framework.async.AsyncWaitter;
 import tbs.framework.async.ThreadUtil;
-import tbs.framework.interfaces.AsyncToDo;
+import tbs.framework.interfaces.async.AsyncToDo;
 import tbs.framework.sql.BatchUtil;
 import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.dao.BasicUserDao;

@@ -51,7 +51,8 @@ public class UserController extends BaseController {
 
     @RequestMapping("changePassword")
     @AccessRequire
-    public Object changePassword(@RequestParam(required = false) SystemExecutionData data, String password) {
+    public Object changePassword(  String password) {
+        SystemExecutionData data=getRuntime();
         BaseRoleModel roleModel = data.getInvokeRole();
         if (!StringUtils.isEmpty(roleModel.getUserId())) {
             BasicUser basicUser = new BasicUser();

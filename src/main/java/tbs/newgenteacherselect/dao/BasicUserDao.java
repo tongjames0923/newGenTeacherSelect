@@ -37,9 +37,6 @@ public interface BasicUserDao {
 
     @UpdateProvider(type = SqlUpdateImpl.class,method = "update")
     @Caching(evict = {
-            @CacheEvict(value = "dev_users",allEntries = true)},
-    put = {
-            @CachePut(value = "base_user",key = "#basicUser.phone",unless = "#basicUser==null||#u",cacheManager = RedisConfig.ShortTermCache)
-    })
+            @CacheEvict(value = "dev_users",allEntries = true)})
     void updateBaiscUser(BasicUser basicUser);
 }

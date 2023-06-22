@@ -4,7 +4,7 @@ import cn.hutool.extra.spring.SpringUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tbs.framework.async.ThreadUtil;
-import tbs.framework.interfaces.AsyncToDo;
+import tbs.framework.interfaces.async.AsyncToDo;
 import tbs.framework.sql.BatchUtil;
 import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.dao.QO.StudentQO;

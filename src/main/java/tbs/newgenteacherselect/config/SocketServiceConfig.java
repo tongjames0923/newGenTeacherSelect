@@ -5,7 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tbs.framework.async.AsyncTaskResult;
 import tbs.framework.async.ThreadUtil;
-import tbs.framework.interfaces.AsyncToDo;
+import tbs.framework.interfaces.async.AsyncToDo;
 import tbs.framework.model.BaseRoleModel;
 import tbs.newgenteacherselect.model.RoleVO;
 

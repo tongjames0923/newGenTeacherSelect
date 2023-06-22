@@ -1,13 +1,11 @@
 package tbs.newgenteacherselect.config.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Scope;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import tbs.framework.interfaces.IThreadLocker;
-import tbs.framework.interfaces.IThreadSign;
+import tbs.framework.interfaces.async.IThreadLocker;
+import tbs.framework.interfaces.async.IThreadSign;
 import tbs.framework.redis.IRedisService;
 import tbs.newgenteacherselect.config.RedisThreadLockerProperties;
 
