@@ -1,6 +1,7 @@
 package tbs.newgenteacherselect.service.impl;
 
 import org.springframework.stereotype.Component;
+import tbs.framework.config.BeanConfig;
 import tbs.framework.interfaces.IAccess;
 import tbs.framework.model.BaseRoleModel;
 import tbs.framework.utils.EncryptionTool;
@@ -31,15 +32,12 @@ public class UserServiceImpl implements UserService {
     @Resource
     AdminDao adminDao;
 
-    @Resource
-    IAccess access;
+    IAccess access= BeanConfig.getInstance().getAccessElement();
 
 
     @Resource
     BasicUserDao basicUserDao;
 
-    @Resource
-    ISocketManager socketManager;
 
     @Override
     public RoleVO login(String phone, String password) throws Exception {

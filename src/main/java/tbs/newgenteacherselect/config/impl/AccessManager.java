@@ -20,7 +20,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-@Component
+@Component("redisAccess")
 public class AccessManager implements IAccess, IPermissionVerification {
 
     @Resource
