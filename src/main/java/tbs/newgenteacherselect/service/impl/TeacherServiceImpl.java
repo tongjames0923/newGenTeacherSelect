@@ -5,7 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import tbs.framework.async.AsyncTaskResult;
-import tbs.framework.async.AsyncWaitter;
+import tbs.framework.async.ResultStatusor;
 import tbs.framework.async.ThreadUtil;
 import tbs.framework.interfaces.async.AsyncToDo;
 import tbs.framework.sql.BatchUtil;
@@ -78,7 +78,7 @@ public class TeacherServiceImpl implements TeacherService {
                 batchUtil.flush();
             }));
         }
-        AsyncWaitter.ResultStatusor change = threadUtil.doWithAsync(works).
+        ResultStatusor change = threadUtil.doWithAsync(works).
                 execute();
         change.waitForDone();
         if (change.getFailList().size() > 0) {

@@ -12,12 +12,10 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("")
 public class CommonController extends BaseController {
-    @Resource
-    AsyncMethod asyncMethod;
 
     @RequestMapping("result/{key}")
-    public Object getResult(@PathVariable String key) throws Exception {
-        return success(asyncMethod.get(key));
+    public Object getResult(@PathVariable String key) throws Throwable {
+        return success(getAsyncResult(key));
     }
 
 }
