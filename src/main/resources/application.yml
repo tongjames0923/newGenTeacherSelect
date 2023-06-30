@@ -33,6 +33,14 @@ spring:
     port: 5672
     username: root
     password: tongyi0923
+actable:
+  table:
+   auto: add
+  model:
+    pack: tbs
+  database:
+   type: mysql
+
 logging:
   file:
     path: /Users/abstergo/Downloads/log
@@ -42,6 +50,7 @@ logging:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
+  mapper-locations: classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080
