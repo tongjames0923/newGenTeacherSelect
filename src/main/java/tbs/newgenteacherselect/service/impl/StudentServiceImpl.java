@@ -19,8 +19,8 @@ import tbs.newgenteacherselect.model.StudentRegisterVO;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Student;
-import tbs.utils.sql.query.Page;
-import tbs.utils.sql.query.Sortable;
+import tbs.framework.sql.query.Page;
+import tbs.framework.sql.query.Sortable;
 
 import javax.annotation.Resource;
 import java.util.*;

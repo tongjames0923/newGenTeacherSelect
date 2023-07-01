@@ -9,8 +9,8 @@ import tbs.utils.sql.impl.SqlUpdateImpl;
 import tbs.pojo.Student;
 import tbs.pojo.dto.StudentUserDetail;
 import tbs.framework.config.RedisConfig;
-import tbs.utils.sql.query.Page;
-import tbs.utils.sql.query.Sortable;
+import tbs.framework.sql.query.Page;
+import tbs.framework.sql.query.Sortable;
 
 import java.util.List;
 
