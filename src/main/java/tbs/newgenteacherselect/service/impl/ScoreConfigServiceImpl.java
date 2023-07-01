@@ -73,6 +73,8 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
         return template1.getCreateUser().equals(model.getUserId());
     }
 
+    @Resource
+    ScoreConfigItemDao scoreConfigItemDao;
     @Override
     @Transactional
     public void makeTemplate(ScoreTemplateVO vo, BaseRoleModel invoker) throws NetError {
@@ -83,14 +85,14 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
         template.setCreateUser(invoker.getUserId());
         template.setDepartmentId(vo.getDepartment());
         template.setId(EncryptionTool.encrypt(String.format("%s-%d-%d", vo.getTemplateName(), vo.getDepartment(), System.currentTimeMillis())));
-        scoreConfigDao.insertTemplate(template);
+        scoreConfigDao.insert(template);
         for (ScoreTemplateVO.Item i : vo.getItems()) {
             ScoreConfigTemplateItem item = new ScoreConfigTemplateItem();
             item.setTemplateId(template.getId());
             item.setPercent(i.getPercent());
             item.setSortCode(i.getIndex());
             item.setConfigName(i.getName());
-            scoreConfigDao.insertTemplateItem(item);
+            scoreConfigItemDao.insert(item);
         }
     }
 

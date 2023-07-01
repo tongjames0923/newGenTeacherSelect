@@ -1,5 +1,6 @@
 package tbs.newgenteacherselect.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.stereotype.Component;
 import tbs.framework.config.BeanConfig;
 import tbs.framework.interfaces.IAccess;
@@ -13,7 +14,6 @@ import tbs.pojo.BasicUser;
 import tbs.pojo.Student;
 import tbs.pojo.Teacher;
 import tbs.pojo.dto.AdminDetail;
-import tbs.utils.socket.ISocketManager;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -87,16 +87,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateBaiscInfo(BasicUser basicUser) {
-        basicUserDao.updateBaiscUser(basicUser);
+        basicUserDao.save(basicUser);
     }
 
     @Override
     public void updateStudent(Student student) {
-        studentDao.updateStudent(student);
+        UpdateWrapper<Student> wrapper=new UpdateWrapper<>();
+        wrapper.eq("phone",student.getPhone());
+        studentDao.update(student,wrapper);
     }
 
     @Override
     public void updateTeacher(Teacher teacher) {
-        teacherDao.updateTeacher(teacher);
+        UpdateWrapper<Teacher> wrapper=new UpdateWrapper<>();
+        wrapper.eq("phone",teacher.getPhone());
+        teacherDao.update(teacher,wrapper);
     }
 }

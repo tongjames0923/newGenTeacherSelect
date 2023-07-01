@@ -35,6 +35,6 @@ public class AdminServiceImpl implements AdminService {
         Admin admin = new Admin();
         admin.setPhone(phone);
         admin.setAdminToken(token);
-        adminDao.saveAdmin(admin);
+        adminDao.insert(admin);
     }
 }

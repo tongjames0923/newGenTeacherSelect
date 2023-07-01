@@ -20,8 +20,6 @@ import tbs.newgenteacherselect.service.TeacherService;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Teacher;
 import tbs.pojo.dto.TeacherDetail;
-import tbs.utils.sql.query.Page;
-import tbs.utils.sql.query.Sortable;
 
 import javax.annotation.Resource;
 import java.util.LinkedList;
@@ -61,7 +59,7 @@ public class TeacherServiceImpl implements TeacherService {
                         s.setPosition(s1.getPosition());
                         s.setPro_title(s1.getPro_title());
                         s.setWorkNo(s1.getWorkNo());
-                        batchUtil.getMapper(TeacherDao.class).saveTeacher(s);
+                        batchUtil.getMapper(TeacherDao.class).insert(s);
                     });
                     batchUtil.batchUpdate(pertask, () -> {
                         BasicUser basicUser = new BasicUser();
@@ -94,8 +92,8 @@ public class TeacherServiceImpl implements TeacherService {
         return teacherDao.findTeacherByPhone(teacher);
     }
 
-    @Override
-    public List<TeacherMoreDetail> findList(TeacherQO qo, Page page, Sortable... sortables) {
-        return teacherDao.findTeacherByQo(qo,page,sortables);
-    }
+//    @Override
+//    public List<TeacherMoreDetail> findList(TeacherQO qo, Page page, Sortable... sortables) {
+//        return teacherDao.findTeacherByQo(qo,page,sortables);
+//    }
 }

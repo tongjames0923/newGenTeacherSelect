@@ -1,5 +1,6 @@
 package tbs.newgenteacherselect.config.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Component;
 import tbs.framework.error.AuthorizationFailureException;
 import tbs.framework.interfaces.IAccess;
@@ -10,11 +11,13 @@ import tbs.newgenteacherselect.dao.AdminDao;
 import tbs.newgenteacherselect.dao.RoleDao;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.RoleVO;
+import tbs.pojo.Role;
 import tbs.pojo.dto.AdminDetail;
 
 
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -57,11 +60,23 @@ public class AccessManager implements IAccess, IPermissionVerification {
 
     @Override
     public List<BaseRoleModel> grandedManual(int[] manuals) {
-        List<Integer> l = new LinkedList<>();
-        for (int i : manuals) {
-            l.add(i);
+        QueryWrapper<Role> roleQueryWrapper=new QueryWrapper<>();
+        List<Integer> arr=new LinkedList<>();
+        for(int i:manuals)
+        {
+            arr.add(i);
         }
-        return roleDao.roleInList(l);
+        List<Role> roles= roleDao.selectBatchIds(arr);
+        List<BaseRoleModel> roleModels=new LinkedList<>();
+
+        for(Role r:roles)
+        {
+            BaseRoleModel b=new BaseRoleModel();
+            b.setRoleCode(r.getRoleid());
+            b.setRoleName(r.getRolename());
+            roleModels.add(b);
+        }
+        return roleModels;
     }
 
     @Override

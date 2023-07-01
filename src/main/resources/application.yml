@@ -50,7 +50,8 @@ logging:
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.slf4j.Slf4jImpl
-  mapper-locations: classpath*:com/gitee/sunchenbin/mybatis/actable/mapping/*/*.xml
+    map-underscore-to-camel-case: false
+  mapper-locations: classpath*:mapper/*/*.xml
 # 开发环境配置
 server:
   # 服务器的HTTP端口，默认为8080

@@ -19,8 +19,6 @@ import tbs.newgenteacherselect.model.StudentRegisterVO;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Student;
-import tbs.utils.sql.query.Page;
-import tbs.utils.sql.query.Sortable;
 
 import javax.annotation.Resource;
 import java.util.*;
@@ -57,7 +55,7 @@ public class StudentServiceImpl implements StudentService {
                         student.setStudentNo(s.getNumber());
                         student.setCla(s.getClas());
                         student.setScore(s.getScore());
-                        studentBatch.getMapper(StudentDao.class).saveStudent(student);
+                        studentBatch.getMapper(StudentDao.class).insert(student);
                     });
 
                 } catch (Exception e) {
@@ -97,9 +95,9 @@ public class StudentServiceImpl implements StudentService {
 
 
 
-    @Override
-    public List<StudentMoreDetail> listStudent(StudentQO qo, Page page, Sortable sortable) {
-
-        return studentDao.listStudentsMoreDetails(qo,page,sortable);
-    }
+//    @Override
+//    public List<StudentMoreDetail> listStudent(StudentQO qo, Page page, Sortable sortable) {
+//
+//        return studentDao.listStudentsMoreDetails(qo,page,sortable);
+//    }
 }

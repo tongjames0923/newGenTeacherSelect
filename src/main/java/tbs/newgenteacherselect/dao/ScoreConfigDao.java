@@ -1,9 +1,9 @@
 package tbs.newgenteacherselect.dao;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import tbs.utils.sql.impl.SqlUpdateImpl;
 import tbs.pojo.ScoreConfigTemplate;
 import tbs.pojo.ScoreConfigTemplateItem;
 import tbs.framework.config.RedisConfig;
@@ -11,14 +11,14 @@ import tbs.framework.config.RedisConfig;
 import java.util.List;
 
 @Mapper
-public interface ScoreConfigDao {
+public interface ScoreConfigDao extends BaseMapper<ScoreConfigTemplate> {
 
 
-    @UpdateProvider(type = SqlUpdateImpl.class, method = "insert")
-    void insertTemplate(ScoreConfigTemplate template);
-
-    @UpdateProvider(type = SqlUpdateImpl.class, method = "insert")
-    void insertTemplateItem(ScoreConfigTemplateItem item);
+//    @UpdateProvider(type = SqlUpdateImpl.class, method = "insert")
+//    void insertTemplate(ScoreConfigTemplate template);
+//
+//    @UpdateProvider(type = SqlUpdateImpl.class, method = "insert")
+//    void insertTemplateItem(ScoreConfigTemplateItem item);
 
     @Select("select * from scoreconfigtemplate where departmentId=#{department};")
     List<ScoreConfigTemplate> listTemplateByDepartment(int department);
@@ -36,9 +36,9 @@ public interface ScoreConfigDao {
     int deleteTemplate(String id);
 
 
-    @UpdateProvider(type = SqlUpdateImpl.class,method = SqlUpdateImpl.UPDATE)
-    @CacheEvict(value = "scoreTemplate",key = "#item.id")
-    void updateTemplate(ScoreConfigTemplate item);
+//    @UpdateProvider(type = SqlUpdateImpl.class,method = SqlUpdateImpl.UPDATE)
+//    @CacheEvict(value = "scoreTemplate",key = "#item.id")
+//    void updateTemplate(ScoreConfigTemplate item);
 
     @Delete("delete from scoreconfigtemplateitem where templateId=#{templateId}")
     int deleteTemplateItems(String templateId);

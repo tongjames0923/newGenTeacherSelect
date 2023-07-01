@@ -12,8 +12,6 @@ import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.service.MasterRelationService;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.newgenteacherselect.service.TeacherService;
-import tbs.utils.sql.query.Page;
-import tbs.utils.sql.query.Sortable;
 
 import javax.annotation.Resource;
 
@@ -25,17 +23,16 @@ public class StudentController extends BaseController {
 
     @Resource
     MasterRelationService relationService;
+    @Resource
+    StudentService studentService;
 
     @RequestMapping("myMaster")
     @AccessRequire(manual = {RoleVO.ROLE_STUDENT})
     public Object myMaster() throws NetError {
         SystemExecutionData data=getRuntime();
-        return relationService.getMasterByStudent(data.getInvokeRole().getUserId());
+        return success(relationService.getMasterByStudent(data.getInvokeRole().getUserId()));
     }
 
-
-    @Resource
-    StudentService studentService;
 
     @RequestMapping("listStudent")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
@@ -49,9 +46,10 @@ public class StudentController extends BaseController {
         studentQO.setLevel(level);
         studentQO.setMasterPhoneOrName(masterPhone);
         studentQO.setGrade(grade);
-        Page page1 = new Page(page, cnt);
-        Sortable sortable = new Sortable(sord, sidx);
-        return success(studentService.listStudent(studentQO, page1, sortable)) ;
+//        Page page1 = new Page(page, cnt);
+//        Sortable sortable = new Sortable(sord, sidx);
+//        return success(studentService.listStudent(studentQO, page1, sortable)) ;
+        return null;
     }
 
 }
