@@ -1,19 +1,14 @@
 package tbs.newgenteacherselect.controller;
 
 
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tbs.framework.annotation.AccessRequire;
 import tbs.framework.controller.BaseController;
-import tbs.newgenteacherselect.dao.QO.StudentQO;
 import tbs.newgenteacherselect.dao.QO.TeacherQO;
-import tbs.newgenteacherselect.dao.TeacherQuery;
-import tbs.newgenteacherselect.model.RoleVO;
-import tbs.newgenteacherselect.service.StudentService;
 import tbs.newgenteacherselect.service.TeacherService;
-import tbs.utils.sql.query.Page;
-import tbs.utils.sql.query.Sortable;
+import tbs.framework.sql.query.Page;
+import tbs.framework.sql.query.Sortable;
 
 import javax.annotation.Resource;
 

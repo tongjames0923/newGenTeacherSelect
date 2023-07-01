@@ -1,5 +1,6 @@
 package tbs.newgenteacherselect.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -108,6 +109,8 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
     @Override
     public List<ScoreTemplateVO2> listTemplate(int dep) throws Exception {
         List<ScoreTemplateVO2> list = new LinkedList<>();
+        QueryWrapper<BasicUser> basicUserQueryWrapper=new QueryWrapper<>();
+        basicUserQueryWrapper.eq("departmentid",dep);
         for (ScoreConfigTemplate template : scoreConfigDao.listTemplateByDepartment(dep)) {
             ScoreTemplateVO2 vo = new ScoreTemplateVO2();
             vo.setItems(new LinkedList<>());
@@ -115,7 +118,7 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
             vo.setTemplateName(template.getTemplateName());
             vo.setCreateDate(template.getCreateTime());
             vo.setCreatorPhone(template.getCreateUser());
-            BasicUser basicUser= basicUserDao.findOneByPhone(template.getCreateUser());
+            BasicUser basicUser= basicUserDao.selectOne(basicUserQueryWrapper);
             vo.setCreatorName(basicUser!=null?basicUser.getName():"");
             vo.setTemplateId(template.getId());
             for (ScoreConfigTemplateItem item : scoreConfigDao.listTemplateItems(template.getId())) {
