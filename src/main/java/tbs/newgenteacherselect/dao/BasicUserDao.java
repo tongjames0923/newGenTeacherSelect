@@ -1,6 +1,5 @@
 package tbs.newgenteacherselect.dao;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
@@ -9,14 +8,14 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.cache.annotation.Caching;
-import tbs.framework.sql.SqlUpdateImpl;
+import tbs.utils.sql.impl.SqlUpdateImpl;
 import tbs.pojo.BasicUser;
 import tbs.framework.config.RedisConfig;
 
 import java.util.List;
 
 @Mapper
-public interface BasicUserDao extends BaseMapper<BasicUser> {
+public interface BasicUserDao {
     @Insert("insert into basicuser(uid, name, password, phone, role, departmentId) " +
             "VALUES (#{uid},#{name},#{password},#{phone},#{role},#{departmentId})")
     @Caching(put = {

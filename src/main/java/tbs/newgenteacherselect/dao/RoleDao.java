@@ -7,7 +7,7 @@ import org.springframework.cache.annotation.Cacheable;
 
 import tbs.framework.config.RedisConfig;
 import tbs.framework.model.BaseRoleModel;
-import tbs.framework.sql.SQL_Tool;
+import tbs.utils.sql.SQL_Tool;
 
 import java.util.List;
 

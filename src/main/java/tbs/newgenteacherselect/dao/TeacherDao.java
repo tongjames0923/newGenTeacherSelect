@@ -5,12 +5,12 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import tbs.newgenteacherselect.dao.QO.TeacherQO;
 import tbs.newgenteacherselect.model.TeacherMoreDetail;
-import tbs.framework.sql.SqlUpdateImpl;
+import tbs.utils.sql.impl.SqlUpdateImpl;
 import tbs.pojo.Teacher;
 import tbs.pojo.dto.TeacherDetail;
 import tbs.framework.config.RedisConfig;
-import tbs.framework.sql.query.Page;
-import tbs.framework.sql.query.Sortable;
+import tbs.utils.sql.query.Page;
+import tbs.utils.sql.query.Sortable;
 
 import java.util.List;
 

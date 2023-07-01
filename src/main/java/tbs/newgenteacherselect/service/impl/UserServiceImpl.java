@@ -1,6 +1,5 @@
 package tbs.newgenteacherselect.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.stereotype.Component;
 import tbs.framework.config.BeanConfig;
 import tbs.framework.interfaces.IAccess;
@@ -14,6 +13,7 @@ import tbs.pojo.BasicUser;
 import tbs.pojo.Student;
 import tbs.pojo.Teacher;
 import tbs.pojo.dto.AdminDetail;
+import tbs.utils.socket.ISocketManager;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
     @Resource
     AdminDao adminDao;
 
-    IAccess access = BeanConfig.getInstance().getAccessElement();
+    IAccess access= BeanConfig.getInstance().getAccessElement();
 
 
     @Resource
@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
                 for (AdminDetail detail : ls) {
                     if (detail.getPhone().equals(phone)) {
                         uuid = detail.getAdminToken();
-                        obj = detail;
+                        obj=detail;
                         break;
                     }
                 }
@@ -87,9 +87,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateBaiscInfo(BasicUser basicUser) {
-        UpdateWrapper<BasicUser> basicUserUpdateWrapper = new UpdateWrapper<>();
-        basicUserUpdateWrapper.eq("phone", basicUser.getPhone());
-        basicUserDao.update(basicUser, basicUserUpdateWrapper);
+        basicUserDao.updateBaiscUser(basicUser);
     }
 
     @Override

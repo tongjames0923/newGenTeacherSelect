@@ -3,7 +3,7 @@ package tbs.newgenteacherselect.dao;
 import org.apache.ibatis.annotations.*;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
-import tbs.framework.sql.SqlUpdateImpl;
+import tbs.utils.sql.impl.SqlUpdateImpl;
 import tbs.pojo.ScoreConfigTemplate;
 import tbs.pojo.ScoreConfigTemplateItem;
 import tbs.framework.config.RedisConfig;
