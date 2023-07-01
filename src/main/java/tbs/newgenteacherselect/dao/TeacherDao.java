@@ -1,6 +1,10 @@
 package tbs.newgenteacherselect.dao;
 
+import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Constants;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.apache.ibatis.annotations.*;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
@@ -32,6 +36,5 @@ public interface TeacherDao extends BaseMapper<Teacher> {
     List<Teacher> listTeacherByDepartment(Integer department);
 
 
-//    @SelectProvider(type = TeacherQuery.class,method = TeacherQuery.SELECT)
-//    List<TeacherMoreDetail> findTeacherByQo(TeacherQO qo, Page page, Sortable... sortable);
+
 }

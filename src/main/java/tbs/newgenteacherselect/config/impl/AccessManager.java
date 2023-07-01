@@ -2,6 +2,7 @@ package tbs.newgenteacherselect.config.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Component;
+import org.springframework.util.CollectionUtils;
 import tbs.framework.error.AuthorizationFailureException;
 import tbs.framework.interfaces.IAccess;
 import tbs.framework.interfaces.IPermissionVerification;
@@ -66,6 +67,8 @@ public class AccessManager implements IAccess, IPermissionVerification {
         {
             arr.add(i);
         }
+        if(CollectionUtils.isEmpty(arr))
+            return new LinkedList<>();
         List<Role> roles= roleDao.selectBatchIds(arr);
         List<BaseRoleModel> roleModels=new LinkedList<>();
 

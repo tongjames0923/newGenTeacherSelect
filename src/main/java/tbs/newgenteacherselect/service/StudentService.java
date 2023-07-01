@@ -1,5 +1,7 @@
 package tbs.newgenteacherselect.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import tbs.newgenteacherselect.dao.QO.StudentQO;
 import tbs.newgenteacherselect.model.StudentMoreDetail;
 import tbs.newgenteacherselect.model.StudentRegisterVO;
@@ -11,5 +13,5 @@ public interface StudentService {
 
     StudentMoreDetail findStudent(String phone);
 
-//    List<StudentMoreDetail> listStudent(StudentQO qo, Page page, Sortable sortable);
+   IPage<StudentMoreDetail> listStudent(StudentQO qo, Page page);
 }

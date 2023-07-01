@@ -1,14 +1,19 @@
 package tbs.newgenteacherselect.service.impl;
 
 import cn.hutool.extra.spring.SpringUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tbs.framework.async.ThreadUtil;
 import tbs.framework.interfaces.async.AsyncToDo;
 import tbs.framework.sql.BatchUtil;
 import tbs.framework.utils.EncryptionTool;
+import tbs.framework.utils.StringUtils;
 import tbs.newgenteacherselect.dao.QO.StudentQO;
 import tbs.newgenteacherselect.dao.StudentLevelDao;
+import tbs.newgenteacherselect.dao.StudentMoreDetailDao;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentMoreDetail;
 import tbs.newgenteacherselect.service.MasterRelationService;
@@ -59,7 +64,7 @@ public class StudentServiceImpl implements StudentService {
                     });
 
                 } catch (Exception e) {
-                    log.error(e.getMessage(),e);
+                    log.error(e.getMessage(), e);
                 }
             }
         });
@@ -77,7 +82,7 @@ public class StudentServiceImpl implements StudentService {
                         userBatch.getMapper(BasicUserDao.class).save(basicUser);
                     });
                 } catch (Exception e) {
-                    log.error(e.getMessage(),e);
+                    log.error(e.getMessage(), e);
                 }
             }
         });
@@ -93,11 +98,46 @@ public class StudentServiceImpl implements StudentService {
         return studentDao.findFullDetailByPhone(phone);
     }
 
+    @Resource
+    StudentMoreDetailDao studentMoreDetailDao;
 
+    @Override
+    public IPage<StudentMoreDetail> listStudent(StudentQO qo, Page page) {
+        LambdaQueryWrapper<StudentMoreDetail> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (!StringUtils.isEmpty(qo.getMasterPhoneOrName())) {
+            lambdaQueryWrapper.and((c) -> {
+                c.likeRight(StudentMoreDetail::getMasterName, qo.getMasterPhoneOrName())
+                        .or().likeRight(StudentMoreDetail::getMasterId, qo.getMasterPhoneOrName());
+            });
+        }
+        if (!StringUtils.isEmpty(qo.getNameOrPhone())) {
+            lambdaQueryWrapper.and((c) -> {
+                c.likeRight(StudentMoreDetail::getName, qo.getNameOrPhone()).
+                        or().likeRight(StudentMoreDetail::getPhone, qo.getNameOrPhone());
+            });
+        }
+        if (!StringUtils.isEmpty(qo.getDepartment())) {
+            lambdaQueryWrapper.and((c) -> {
+                c.like(StudentMoreDetail::getDepartment, qo.getDepartment());
+            });
+        }
+        if (!StringUtils.isEmpty(qo.getClas())) {
+            lambdaQueryWrapper.and((c) -> {
+                c.like(StudentMoreDetail::getClas, qo.getClas());
+            });
+        }
 
-//    @Override
-//    public List<StudentMoreDetail> listStudent(StudentQO qo, Page page, Sortable sortable) {
-//
-//        return studentDao.listStudentsMoreDetails(qo,page,sortable);
-//    }
+        if (!StringUtils.isNull(qo.getLevel())) {
+            lambdaQueryWrapper.and((c) -> {
+                c.eq(StudentMoreDetail::getLevelId, qo.getLevel());
+            });
+        }
+        if (!StringUtils.isNull(qo.getGrade())) {
+            lambdaQueryWrapper.and((c) -> {
+                c.eq(StudentMoreDetail::getGrade, qo.getGrade());
+            });
+        }
+        return studentMoreDetailDao.pageStudent(page, lambdaQueryWrapper);
+    }
+
 }

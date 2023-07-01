@@ -1,14 +1,17 @@
 package tbs.newgenteacherselect.controller;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import tbs.framework.annotation.AccessRequire;
 import tbs.framework.controller.BaseController;
 import tbs.framework.error.NetError;
 import tbs.framework.model.SystemExecutionData;
+import tbs.framework.sql.OrderUtils;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.dao.QO.StudentQO;
 import tbs.newgenteacherselect.model.RoleVO;
+import tbs.newgenteacherselect.model.StudentMoreDetail;
 import tbs.newgenteacherselect.service.MasterRelationService;
 import tbs.newgenteacherselect.service.StudentService;
 import tbs.newgenteacherselect.service.TeacherService;
@@ -36,7 +39,7 @@ public class StudentController extends BaseController {
 
     @RequestMapping("listStudent")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
-    public Object listStudent(String nameOrPhone, Integer department, Integer level, String Clas, Integer grade,
+    public Object listStudent(String nameOrPhone, String department, Integer level, String Clas, Integer grade,
                               String masterPhone, Integer page, Integer cnt,
                               String sord, String sidx) {
         StudentQO studentQO = new StudentQO();
@@ -46,10 +49,9 @@ public class StudentController extends BaseController {
         studentQO.setLevel(level);
         studentQO.setMasterPhoneOrName(masterPhone);
         studentQO.setGrade(grade);
-//        Page page1 = new Page(page, cnt);
-//        Sortable sortable = new Sortable(sord, sidx);
-//        return success(studentService.listStudent(studentQO, page1, sortable)) ;
-        return null;
+        Page<StudentMoreDetail> page1=new Page<>(page,cnt);
+        page1.addOrder(OrderUtils.getOrder(sidx,sord));
+        return success(studentService.listStudent(studentQO,page1));
     }
 
 }

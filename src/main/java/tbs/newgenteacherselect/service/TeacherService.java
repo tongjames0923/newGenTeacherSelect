@@ -1,5 +1,7 @@
 package tbs.newgenteacherselect.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import tbs.newgenteacherselect.dao.QO.TeacherQO;
 import tbs.newgenteacherselect.model.TeacherMoreDetail;
 import tbs.newgenteacherselect.model.TeacherRegisterVO;
@@ -12,5 +14,5 @@ public interface TeacherService {
     void saveTeacher(List<TeacherRegisterVO> teacherRegisterVOS) throws Throwable;
     TeacherDetail findTeacher(String teacher);
 
-//    List<TeacherMoreDetail> findList(TeacherQO qo, Page page, Sortable... sortables);
+    IPage<TeacherMoreDetail> findList(TeacherQO qo, Page page);
 }

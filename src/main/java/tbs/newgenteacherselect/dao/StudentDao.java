@@ -19,7 +19,7 @@ public interface StudentDao extends BaseMapper<Student> {
 //    @InsertProvider(type = SqlUpdateImpl.class,method = SqlUpdateImpl.INSERT)
 //    void saveStudent(Student item);
 
-//    @Select(StudentUserDetail.BASIC_DATA_SQL + "where bu.phone=#{phone}")
+   @Select(StudentUserDetail.BASIC_DATA_SQL + "where bu.phone=#{phone}")
     @Cacheable(cacheManager = RedisConfig.ShortTermCache, key = "#phone", value = "studentInfo")
     StudentUserDetail findStudentByPhone(String phone);
 

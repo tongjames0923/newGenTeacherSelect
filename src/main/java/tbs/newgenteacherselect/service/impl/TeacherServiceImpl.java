@@ -1,6 +1,9 @@
 package tbs.newgenteacherselect.service.impl;
 
 import cn.hutool.extra.spring.SpringUtil;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -10,9 +13,11 @@ import tbs.framework.async.ThreadUtil;
 import tbs.framework.interfaces.async.AsyncToDo;
 import tbs.framework.sql.BatchUtil;
 import tbs.framework.utils.EncryptionTool;
+import tbs.framework.utils.StringUtils;
 import tbs.newgenteacherselect.dao.BasicUserDao;
 import tbs.newgenteacherselect.dao.QO.TeacherQO;
 import tbs.newgenteacherselect.dao.TeacherDao;
+import tbs.newgenteacherselect.dao.TeacherMoredetailDao;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.TeacherMoreDetail;
 import tbs.newgenteacherselect.model.TeacherRegisterVO;
@@ -90,6 +95,36 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     public TeacherDetail findTeacher(String teacher) {
         return teacherDao.findTeacherByPhone(teacher);
+    }
+
+    @Resource
+    TeacherMoredetailDao teacherMoredetailDao;
+
+    @Override
+    public IPage<TeacherMoreDetail> findList(TeacherQO qo, Page page) {
+        LambdaQueryWrapper<TeacherMoreDetail> teacherMoreDetailLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        if (!StringUtils.isEmpty(qo.getNameOrPhone()))
+            teacherMoreDetailLambdaQueryWrapper.and((c) -> {
+                c.likeRight(TeacherMoreDetail::getName, qo.getNameOrPhone())
+                        .or().likeRight(TeacherMoreDetail::getPhone, qo.getNameOrPhone());
+            });
+        if (!StringUtils.isEmpty(qo.getPositionOrTitle())) {
+            teacherMoreDetailLambdaQueryWrapper.and((c) -> {
+                c.likeRight(TeacherMoreDetail::getPosition, qo.getPositionOrTitle())
+                        .or().likeRight(TeacherMoreDetail::getPro_title, qo.getPositionOrTitle());
+            });
+        }
+        if (!StringUtils.isEmpty(qo.getDepartment())) {
+            teacherMoreDetailLambdaQueryWrapper.and((c) -> {
+                c.likeRight(TeacherMoreDetail::getDepartment, qo.getDepartment());
+            });
+        }
+        if (!StringUtils.isNull(qo.getScoreLevel())) {
+            teacherMoreDetailLambdaQueryWrapper.and((c) -> {
+                c.eq(TeacherMoreDetail::getCnt, qo.getScoreLevel());
+            });
+        }
+        return teacherMoredetailDao.findTeacherByQo(page, teacherMoreDetailLambdaQueryWrapper, qo.getScoreLevel());
     }
 
 //    @Override
