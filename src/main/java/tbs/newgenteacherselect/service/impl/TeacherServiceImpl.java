@@ -20,8 +20,8 @@ import tbs.newgenteacherselect.service.TeacherService;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Teacher;
 import tbs.pojo.dto.TeacherDetail;
-import tbs.framework.sql.query.Page;
-import tbs.framework.sql.query.Sortable;
+import tbs.utils.sql.query.Page;
+import tbs.utils.sql.query.Sortable;
 
 import javax.annotation.Resource;
 import java.util.LinkedList;

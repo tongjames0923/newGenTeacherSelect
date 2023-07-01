@@ -4,8 +4,8 @@ import org.springframework.util.StringUtils;
 import tbs.newgenteacherselect.dao.QO.TeacherQO;
 import tbs.pojo.dto.TeacherDetail;
 import tbs.utils.sql.impl.SQL_QueryImpl;
-import tbs.framework.sql.query.Page;
-import tbs.framework.sql.query.Sortable;
+import tbs.utils.sql.query.Page;
+import tbs.utils.sql.query.Sortable;
 
 import java.util.LinkedList;
 import java.util.List;

@@ -28,8 +28,7 @@ import tbs.newgenteacherselect.config.RedisThreadLockerProperties;
 @EnableSpringUtil
 @EnableAspectJAutoProxy
 @EnableRabbit
-@MapperScan({"com.gitee.sunchenbin.mybatis.actable.dao.*","tbs.newgenteacherselect.dao"})
-@ComponentScan(basePackages = {"com.gitee.sunchenbin.mybatis.actable.manager.*","tbs"})
+@ComponentScan("tbs")
 @EnableConfigurationProperties
 @EnableScheduling
 @EnableWebSocket

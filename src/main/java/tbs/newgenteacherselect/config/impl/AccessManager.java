@@ -1,6 +1,5 @@
 package tbs.newgenteacherselect.config.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Component;
 import tbs.framework.error.AuthorizationFailureException;
 import tbs.framework.interfaces.IAccess;
@@ -11,7 +10,6 @@ import tbs.newgenteacherselect.dao.AdminDao;
 import tbs.newgenteacherselect.dao.RoleDao;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.RoleVO;
-import tbs.pojo.Role;
 import tbs.pojo.dto.AdminDetail;
 
 
@@ -26,7 +24,7 @@ import java.util.concurrent.TimeUnit;
 public class AccessManager implements IAccess, IPermissionVerification {
 
     @Resource
-    IRedisService redisService;
+     IRedisService redisService;
 
     @Resource
     RoleDao roleDao;
@@ -59,14 +57,11 @@ public class AccessManager implements IAccess, IPermissionVerification {
 
     @Override
     public List<BaseRoleModel> grandedManual(int[] manuals) {
-        QueryWrapper<Role> wrapper = new QueryWrapper<>();
-        wrapper.in("roleid", manuals);
-        List<Role> roles = roleDao.selectList(wrapper);
-        List<BaseRoleModel> baseRoleModels = new LinkedList<>();
-        for (Role r : roles) {
-            baseRoleModels.add(new BaseRoleModel(r.getRoleid(), r.getRolename(), null));
+        List<Integer> l = new LinkedList<>();
+        for (int i : manuals) {
+            l.add(i);
         }
-        return baseRoleModels;
+        return roleDao.roleInList(l);
     }
 
     @Override

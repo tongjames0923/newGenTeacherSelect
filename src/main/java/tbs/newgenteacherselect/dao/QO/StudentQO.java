@@ -1,6 +1,9 @@
 package tbs.newgenteacherselect.dao.QO;
 
 import org.springframework.util.StringUtils;
+import tbs.pojo.dto.StudentUserDetail;
+import tbs.utils.sql.annotations.Queryable;
+import tbs.utils.sql.annotations.SqlField;
 
 
 public class StudentQO {

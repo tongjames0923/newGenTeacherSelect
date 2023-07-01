@@ -4,8 +4,8 @@ import tbs.newgenteacherselect.dao.QO.TeacherQO;
 import tbs.newgenteacherselect.model.TeacherMoreDetail;
 import tbs.newgenteacherselect.model.TeacherRegisterVO;
 import tbs.pojo.dto.TeacherDetail;
-import tbs.framework.sql.query.Page;
-import tbs.framework.sql.query.Sortable;
+import tbs.utils.sql.query.Page;
+import tbs.utils.sql.query.Sortable;
 
 import java.util.List;
 
