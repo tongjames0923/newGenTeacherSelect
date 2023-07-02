@@ -81,7 +81,6 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
         checkInputVO(vo);
         ScoreConfigTemplate template = new ScoreConfigTemplate();
         template.setTemplateName(vo.getTemplateName());
-        template.setCreateTime(new Date());
         template.setCreateUser(invoker.getUserId());
         template.setDepartmentId(vo.getDepartment());
         template.setId(EncryptionTool.encrypt(String.format("%s-%d-%d", vo.getTemplateName(), vo.getDepartment(), System.currentTimeMillis())));
@@ -115,7 +114,7 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
             vo.setItems(new LinkedList<>());
             vo.setDepartment(departmentService.departmentFullNamesMap(dep));
             vo.setTemplateName(template.getTemplateName());
-            vo.setCreateDate(template.getCreateTime());
+            vo.setCreateDate(template.getCreateDate());
             vo.setCreatorPhone(template.getCreateUser());
             BasicUser basicUser= basicUserDao.findOneByPhone(template.getCreateUser());
             vo.setCreatorName(basicUser!=null?basicUser.getName():"");

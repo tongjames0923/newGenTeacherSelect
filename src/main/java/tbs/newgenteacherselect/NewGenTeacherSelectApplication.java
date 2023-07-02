@@ -31,7 +31,7 @@ import tbs.newgenteacherselect.config.RedisThreadLockerProperties;
 @ComponentScan("tbs")
 @EnableConfigurationProperties
 @EnableScheduling
-//@MapperScan({"tbs.newgenteacherselect.dao"})
+@MapperScan({"tbs.newgenteacherselect.dao"})
 //@EnableWebSocket
 public class NewGenTeacherSelectApplication {
 
