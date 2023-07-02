@@ -13,7 +13,7 @@ import static tbs.framework.constant.Constants.WRAPPER_SQL;
 
 @Mapper
 public interface StudentMoreDetailDao extends BaseMapper<StudentMoreDetail> {
-    public static final String BASE_SQL="        bu.`name` AS `name`\n" +
+    public static final String BASE_SQL = "        bu.`name` AS `name`\n" +
             "        , bu.phone AS `phone`\n" +
             "        , bu.departmentId AS `departmentId`\n" +
             "        , stl.levelId as `levelId`\n" +
@@ -27,6 +27,7 @@ public interface StudentMoreDetailDao extends BaseMapper<StudentMoreDetail> {
             "        , r.rolename AS `roleName`\n" +
             "        , d.departname AS `department`\n" +
             "        , st.score as `score`\n" +
+            ",if(m.masterPhone is null,0,1) as hasMaster " +
             "        FROM basicuser bu\n" +
             "        inner JOIN student st ON st.phone = bu.phone\n" +
             "        inner JOIN role r ON r.roleid = bu.role\n" +
@@ -36,6 +37,6 @@ public interface StudentMoreDetailDao extends BaseMapper<StudentMoreDetail> {
             "        left join masterrelation m on stl.studentPhone = m.studentPhone\n" +
             "        left join basicuser tch on tch.phone = m.masterPhone ";
 
-    @Select("select * from( select "+BASE_SQL+")T "+WRAPPER_SQL)
-    IPage<StudentMoreDetail> pageStudent(IPage<StudentMoreDetail> page,@Param(Constants.WRAPPER) Wrapper<StudentMoreDetail> wrapper);
+    @Select("select * from( select " + BASE_SQL + ")T " + WRAPPER_SQL)
+    IPage<StudentMoreDetail> pageStudent(IPage<StudentMoreDetail> page, @Param(Constants.WRAPPER) Wrapper<StudentMoreDetail> wrapper);
 }

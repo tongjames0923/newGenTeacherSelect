@@ -8,20 +8,17 @@ import tbs.framework.controller.BaseController;
 import tbs.framework.error.NetError;
 import tbs.framework.model.SystemExecutionData;
 import tbs.framework.sql.OrderUtils;
-import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.dao.QO.StudentQO;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentMoreDetail;
 import tbs.newgenteacherselect.service.MasterRelationService;
 import tbs.newgenteacherselect.service.StudentService;
-import tbs.newgenteacherselect.service.TeacherService;
 
 import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("student")
 public class StudentController extends BaseController {
-
 
 
     @Resource
@@ -32,7 +29,7 @@ public class StudentController extends BaseController {
     @RequestMapping("myMaster")
     @AccessRequire(manual = {RoleVO.ROLE_STUDENT})
     public Object myMaster() throws NetError {
-        SystemExecutionData data=getRuntime();
+        SystemExecutionData data = getRuntime();
         return success(relationService.getMasterByStudent(data.getInvokeRole().getUserId()));
     }
 
@@ -40,7 +37,7 @@ public class StudentController extends BaseController {
     @RequestMapping("listStudent")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
     public Object listStudent(String nameOrPhone, String department, Integer level, String Clas, Integer grade,
-                              String masterPhone, Integer page, Integer cnt,
+                              String masterPhone, Integer hasMaster, Integer page, Integer cnt,
                               String sord, String sidx) {
         StudentQO studentQO = new StudentQO();
         studentQO.setNameOrPhone(nameOrPhone);
@@ -49,9 +46,10 @@ public class StudentController extends BaseController {
         studentQO.setLevel(level);
         studentQO.setMasterPhoneOrName(masterPhone);
         studentQO.setGrade(grade);
-        Page<StudentMoreDetail> page1=new Page<>(page,cnt);
-        page1.addOrder(OrderUtils.getOrder(sidx,sord));
-        return success(studentService.listStudent(studentQO,page1));
+        studentQO.setHasMaster(hasMaster);
+        Page<StudentMoreDetail> page1 = new Page<>(page, cnt);
+        page1.addOrder(OrderUtils.getOrder(sidx, sord));
+        return success(studentService.listStudent(studentQO, page1));
     }
 
 }

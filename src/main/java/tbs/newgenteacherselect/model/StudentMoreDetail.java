@@ -1,12 +1,14 @@
 package tbs.newgenteacherselect.model;
 
 import cn.hutool.core.bean.BeanUtil;
+import lombok.Data;
 import lombok.ToString;
 import tbs.pojo.ScoreConfigTemplateItem;
 import tbs.pojo.StudentLevel;
 import tbs.pojo.dto.StudentUserDetail;
 
 @ToString
+@Data
 public class StudentMoreDetail extends StudentUserDetail {
 
     Integer levelId;
@@ -14,22 +16,8 @@ public class StudentMoreDetail extends StudentUserDetail {
 
     String masterName;
     String masterId;
+    Integer hasMaster;
 
-    public String getMasterName() {
-        return masterName;
-    }
-
-    public void setMasterName(String masterName) {
-        this.masterName = masterName;
-    }
-
-    public String getMasterId() {
-        return masterId;
-    }
-
-    public void setMasterId(String masterId) {
-        this.masterId = masterId;
-    }
 
     public StudentMoreDetail()
     {
@@ -39,21 +27,5 @@ public class StudentMoreDetail extends StudentUserDetail {
         BeanUtil.copyProperties(userDetail,this);
         this.levelId=item.getId();
         this.levelName=item.getConfigName();
-    }
-
-    public Integer getLevelId() {
-        return levelId;
-    }
-
-    public void setLevelId(Integer levelId) {
-        this.levelId = levelId;
-    }
-
-    public String getLevelName() {
-        return levelName;
-    }
-
-    public void setLevelName(String levelName) {
-        this.levelName = levelName;
     }
 }

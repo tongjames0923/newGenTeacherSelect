@@ -12,10 +12,10 @@ import org.springframework.stereotype.Service;
 import tbs.framework.annotation.LockIt;
 import tbs.framework.error.NetError;
 import tbs.framework.redis.IRedisService;
+import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.dao.MasterRelationDao;
 import tbs.newgenteacherselect.dao.StudentDao;
 import tbs.newgenteacherselect.dao.StudentLevelDao;
-import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.service.MasterRelationService;
 import tbs.newgenteacherselect.service.TeacherService;
 import tbs.pojo.MasterRelation;
@@ -23,7 +23,6 @@ import tbs.pojo.StudentLevel;
 import tbs.pojo.dto.MasterRelationVO;
 import tbs.pojo.dto.StudentUserDetail;
 import tbs.pojo.dto.TeacherDetail;
-
 
 import javax.annotation.Resource;
 import java.util.HashMap;
@@ -159,10 +158,11 @@ public class MasterRelationServiceImpl implements MasterRelationService {
         if (studentmodel == null)
             throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND, "该学生 " + student + " 未分级");
         try {
-            masterRelationDao.selectMaster(student, master, studentmodel.getLevelId());
-        }catch (DuplicateKeyException duplicateKeyException)
-        {
-            throw NetErrorEnum.makeError(NetErrorEnum.HAS_MORE_NODE,"该生已有导师");
+            int result = masterRelationDao.selectMaster(student, master, studentmodel.getLevelId());
+            if (result < 1)
+                throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND, String.format("针对学生%s级别的，导师%s名额没有了", student, master));
+        } catch (DuplicateKeyException duplicateKeyException) {
+            throw NetErrorEnum.makeError(NetErrorEnum.HAS_MORE_NODE, "该生已有导师");
         }
         return 1;
     }
@@ -170,7 +170,7 @@ public class MasterRelationServiceImpl implements MasterRelationService {
     @Override
     @LockIt("SELECT_MASTER")
     public Integer returnbackMaster(String student, String master) {
-         masterRelationDao.unselectMaster(student, master);
+        masterRelationDao.unselectMaster(student, master);
         return 1;
     }
 

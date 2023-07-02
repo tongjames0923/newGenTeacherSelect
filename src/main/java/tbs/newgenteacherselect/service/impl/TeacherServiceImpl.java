@@ -119,11 +119,6 @@ public class TeacherServiceImpl implements TeacherService {
                 c.likeRight(TeacherMoreDetail::getDepartment, qo.getDepartment());
             });
         }
-        if (!StringUtils.isNull(qo.getScoreLevel())) {
-            teacherMoreDetailLambdaQueryWrapper.and((c) -> {
-                c.eq(TeacherMoreDetail::getCnt, qo.getScoreLevel());
-            });
-        }
         return teacherMoredetailDao.findTeacherByQo(page, teacherMoreDetailLambdaQueryWrapper, qo.getScoreLevel());
     }
 

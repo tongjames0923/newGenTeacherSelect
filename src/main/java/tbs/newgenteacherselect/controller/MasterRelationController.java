@@ -40,8 +40,7 @@ public class MasterRelationController extends BaseController {
     public Object select(String student, String master) throws NetError {
         SystemExecutionData data = getRuntime();
         checkRightsForSelectOrUnSelect(master, student, data.getInvokeRole());
-        relationService.selectMaster(student, master);
-        return refresh();
+        return refresh(relationService.selectMaster(student, master));
     }
 
     @RequestMapping("unselect")
