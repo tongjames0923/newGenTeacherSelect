@@ -7,7 +7,7 @@ import tbs.framework.annotation.AccessRequire;
 import tbs.framework.controller.BaseController;
 import tbs.framework.error.NetError;
 import tbs.framework.model.SystemExecutionData;
-import tbs.framework.sql.OrderUtils;
+import tbs.framework.sql.QueryUtils;
 import tbs.newgenteacherselect.dao.QO.StudentQO;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentMoreDetail;
@@ -48,7 +48,7 @@ public class StudentController extends BaseController {
         studentQO.setGrade(grade);
         studentQO.setHasMaster(hasMaster);
         Page<StudentMoreDetail> page1 = new Page<>(page, cnt);
-        page1.addOrder(OrderUtils.getOrder(sidx, sord));
+        page1.addOrder(QueryUtils.getOrder(sidx, sord));
         return success(studentService.listStudent(studentQO, page1));
     }
 
