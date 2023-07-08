@@ -1,6 +1,5 @@
 package tbs.newgenteacherselect.config.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import tbs.framework.error.AuthorizationFailureException;
@@ -8,17 +7,15 @@ import tbs.framework.interfaces.IAccess;
 import tbs.framework.interfaces.IPermissionVerification;
 import tbs.framework.model.BaseRoleModel;
 import tbs.framework.redis.IRedisService;
+import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.dao.AdminDao;
 import tbs.newgenteacherselect.dao.RoleDao;
-import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.pojo.Role;
 import tbs.pojo.dto.AdminDetail;
 
-
 import javax.annotation.Resource;
 import java.lang.reflect.Method;
-import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +25,7 @@ import java.util.concurrent.TimeUnit;
 public class AccessManager implements IAccess, IPermissionVerification {
 
     @Resource
-     IRedisService redisService;
+    IRedisService redisService;
 
     @Resource
     RoleDao roleDao;
@@ -61,20 +58,22 @@ public class AccessManager implements IAccess, IPermissionVerification {
 
     @Override
     public List<BaseRoleModel> grandedManual(int[] manuals) {
-        QueryWrapper<Role> roleQueryWrapper=new QueryWrapper<>();
-        List<Integer> arr=new LinkedList<>();
-        for(int i:manuals)
-        {
+        List<Integer> arr = new LinkedList<>();
+        for (int i : manuals) {
             arr.add(i);
         }
-        if(CollectionUtils.isEmpty(arr))
+        if (arr.isEmpty()) {
+            arr.add(RoleVO.ROLE_ADMIN);
+            arr.add(RoleVO.ROLE_TEACHER);
+            arr.add(RoleVO.ROLE_STUDENT);
+        }
+        if (CollectionUtils.isEmpty(arr))
             return new LinkedList<>();
-        List<Role> roles= roleDao.selectBatchIds(arr);
-        List<BaseRoleModel> roleModels=new LinkedList<>();
+        List<Role> roles = roleDao.selectBatchIds(arr);
+        List<BaseRoleModel> roleModels = new LinkedList<>();
 
-        for(Role r:roles)
-        {
-            BaseRoleModel b=new BaseRoleModel();
+        for (Role r : roles) {
+            BaseRoleModel b = new BaseRoleModel();
             b.setRoleCode(r.getRoleid());
             b.setRoleName(r.getRolename());
             roleModels.add(b);

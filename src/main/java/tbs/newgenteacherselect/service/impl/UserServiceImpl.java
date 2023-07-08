@@ -3,8 +3,10 @@ package tbs.newgenteacherselect.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.stereotype.Component;
 import tbs.framework.config.BeanConfig;
+import tbs.framework.error.NetError;
 import tbs.framework.interfaces.IAccess;
 import tbs.framework.model.BaseRoleModel;
+import tbs.framework.model.SystemExecutionData;
 import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.dao.*;
@@ -16,6 +18,9 @@ import tbs.pojo.Teacher;
 import tbs.pojo.dto.AdminDetail;
 
 import javax.annotation.Resource;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.UUID;
 
@@ -34,9 +39,44 @@ public class UserServiceImpl implements UserService {
 
     IAccess access= BeanConfig.getInstance().getAccessElement();
 
+    @Resource
+    HttpServletResponse response;
 
     @Resource
     BasicUserDao basicUserDao;
+
+    @Resource
+    SystemExecutionData executionData;
+
+    @Resource
+    HttpServletRequest request;
+
+    @Override
+    public Object getMyInfo(BaseRoleModel baseRole) throws NetError {
+        Object obj=null;
+        switch (baseRole.getRoleCode()) {
+            case 0:
+                obj = studentDao.findStudentByPhone(baseRole.getUserId());
+                break;
+            case 1:
+                List<AdminDetail> ls = adminDao.listSu();
+                for (AdminDetail detail : ls) {
+                    if (detail.getPhone().equals(baseRole.getUserId())) {
+                        obj=detail;
+                        break;
+                    }
+                }
+                break;
+            case 2:
+                obj = teacherDao.findTeacherByPhone(baseRole.getUserId());
+                break;
+
+            default:
+                throw NetErrorEnum.makeError(NetErrorEnum.BAD_ROLE);
+        }
+        return obj;
+    }
+
 
 
     @Override
@@ -45,33 +85,16 @@ public class UserServiceImpl implements UserService {
         BaseRoleModel baseRole = roleDao.loginRole(phone, password);
         if (baseRole == null)
             throw NetErrorEnum.makeError(NetErrorEnum.LOGIN_FAIL);
-        Object obj = null;
         String uuid = phone + "_" + UUID.randomUUID();
-        switch (baseRole.getRoleCode()) {
-            case 0:
-                obj = studentDao.findStudentByPhone(phone);
-                break;
-            case 1:
-                List<AdminDetail> ls = adminDao.listSu();
-                for (AdminDetail detail : ls) {
-                    if (detail.getPhone().equals(phone)) {
-                        uuid = detail.getAdminToken();
-                        obj=detail;
-                        break;
-                    }
-                }
-                break;
-            case 2:
-                obj = teacherDao.findTeacherByPhone(phone);
-                break;
-
-            default:
-                throw NetErrorEnum.makeError(NetErrorEnum.BAD_ROLE);
-        }
+        RoleVO roleVO=new RoleVO();
+        roleVO.setRole(baseRole);
+        roleVO.setToken(uuid);
         baseRole.setUserId(phone);
         access.put(uuid, baseRole);
-
-        return new RoleVO(obj, baseRole, uuid);
+        Cookie cookie=new Cookie(executionData.getTokenFrom(),uuid);
+        cookie.setPath(request.getContextPath()+"/");
+        response.addCookie(cookie);
+        return roleVO;
 
     }
 

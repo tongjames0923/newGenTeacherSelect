@@ -4,6 +4,7 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import tbs.framework.annotation.AccessRequire;
 import tbs.framework.controller.BaseController;
+import tbs.framework.error.NetError;
 import tbs.framework.model.BaseRoleModel;
 import tbs.framework.model.SystemExecutionData;
 import tbs.framework.utils.EncryptionTool;
@@ -36,23 +37,30 @@ public class UserController extends BaseController {
 
 
     @RequestMapping("login")
+    @AccessRequire(limit = false)
     public Object login(@RequestParam("username") String phone, String password) throws Exception {
-        return success(userService.login(phone, password)) ;
+        return success(userService.login(phone, password));
     }
 
     @RequestMapping("logout")
     @AccessRequire()
     public Object logout() throws Exception {
-        SystemExecutionData data=getRuntime();
+        SystemExecutionData data = getRuntime();
         userService.logout(data.getInvokeToken());
         return success();
+    }
 
+
+    @RequestMapping("getInfo")
+    @AccessRequire
+    public Object getMyInfo() throws NetError {
+        return success(userService.getMyInfo(getRuntime().getInvokeRole()));
     }
 
     @RequestMapping("changePassword")
     @AccessRequire
-    public Object changePassword(  String password) {
-        SystemExecutionData data=getRuntime();
+    public Object changePassword(String password) {
+        SystemExecutionData data = getRuntime();
         BaseRoleModel roleModel = data.getInvokeRole();
         if (!StringUtils.isEmpty(roleModel.getUserId())) {
             BasicUser basicUser = new BasicUser();
@@ -75,7 +83,7 @@ public class UserController extends BaseController {
     @RequestMapping("renew")
     @AccessRequire()
     public Object renew() throws Exception {
-        SystemExecutionData data=getRuntime();
+        SystemExecutionData data = getRuntime();
         userService.renew(data.getInvokeToken());
         return success();
     }
