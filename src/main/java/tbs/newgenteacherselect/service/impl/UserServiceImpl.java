@@ -9,6 +9,7 @@ import tbs.framework.model.BaseRoleModel;
 import tbs.framework.model.SystemExecutionData;
 import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.NetErrorEnum;
+import tbs.newgenteacherselect.config.impl.AccessManager;
 import tbs.newgenteacherselect.dao.*;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.service.UserService;
@@ -37,7 +38,7 @@ public class UserServiceImpl implements UserService {
     @Resource
     AdminDao adminDao;
 
-    IAccess access= BeanConfig.getInstance().getAccessElement();
+    IAccess access = BeanConfig.getInstance().getAccessElement();
 
     @Resource
     HttpServletResponse response;
@@ -53,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Object getMyInfo(BaseRoleModel baseRole) throws NetError {
-        Object obj=null;
+        Object obj = null;
         switch (baseRole.getRoleCode()) {
             case 0:
                 obj = studentDao.findStudentByPhone(baseRole.getUserId());
@@ -62,7 +63,7 @@ public class UserServiceImpl implements UserService {
                 List<AdminDetail> ls = adminDao.listSu();
                 for (AdminDetail detail : ls) {
                     if (detail.getPhone().equals(baseRole.getUserId())) {
-                        obj=detail;
+                        obj = detail;
                         break;
                     }
                 }
@@ -78,7 +79,6 @@ public class UserServiceImpl implements UserService {
     }
 
 
-
     @Override
     public RoleVO login(String phone, String password) throws Exception {
         password = EncryptionTool.encrypt(password);
@@ -86,14 +86,17 @@ public class UserServiceImpl implements UserService {
         if (baseRole == null)
             throw NetErrorEnum.makeError(NetErrorEnum.LOGIN_FAIL);
         String uuid = phone + "_" + UUID.randomUUID();
-        RoleVO roleVO=new RoleVO();
+        RoleVO roleVO = new RoleVO();
         roleVO.setRole(baseRole);
         roleVO.setToken(uuid);
         baseRole.setUserId(phone);
-        access.put(uuid, baseRole);
-        Cookie cookie=new Cookie(executionData.getTokenFrom(),uuid);
-        cookie.setPath(request.getContextPath()+"/");
+        Cookie cookie = new Cookie(executionData.getTokenFrom(), uuid);
+        cookie.setPath(request.getContextPath() + "/");
+        int exp = AccessManager.getInstance().getLoginActive();
+        cookie.setMaxAge(exp);
         response.addCookie(cookie);
+        access.put(uuid, baseRole);
+
         return roleVO;
 
     }
@@ -115,15 +118,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void updateStudent(Student student) {
-        UpdateWrapper<Student> wrapper=new UpdateWrapper<>();
-        wrapper.eq("phone",student.getPhone());
-        studentDao.update(student,wrapper);
+        UpdateWrapper<Student> wrapper = new UpdateWrapper<>();
+        wrapper.eq("phone", student.getPhone());
+        studentDao.update(student, wrapper);
     }
 
     @Override
     public void updateTeacher(Teacher teacher) {
-        UpdateWrapper<Teacher> wrapper=new UpdateWrapper<>();
-        wrapper.eq("phone",teacher.getPhone());
-        teacherDao.update(teacher,wrapper);
+        UpdateWrapper<Teacher> wrapper = new UpdateWrapper<>();
+        wrapper.eq("phone", teacher.getPhone());
+        teacherDao.update(teacher, wrapper);
     }
 }

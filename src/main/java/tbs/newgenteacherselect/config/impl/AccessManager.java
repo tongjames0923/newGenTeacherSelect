@@ -33,6 +33,21 @@ public class AccessManager implements IAccess, IPermissionVerification {
     long login_timeout = 30;
     TimeUnit login_timeout_unit = TimeUnit.MINUTES;
 
+
+    private static AccessManager accessManager;
+
+    public static AccessManager getInstance() {
+        return accessManager;
+    }
+
+    public AccessManager() {
+        AccessManager.accessManager = this;
+    }
+
+    public int getLoginActive() {
+        return (int) TimeUnit.SECONDS.convert(login_timeout, login_timeout_unit);
+    }
+
     @Resource
     AdminDao adminDao;
 
