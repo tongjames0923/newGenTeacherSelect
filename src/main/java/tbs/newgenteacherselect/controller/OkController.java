@@ -16,7 +16,7 @@ public class OkController {
     @AsyncReturnFunction
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
     public Object ok() throws Exception {
-        Thread.currentThread().join(2000);
+        Thread.currentThread().join(1000*60);
         return "hello world";
     }
 }
