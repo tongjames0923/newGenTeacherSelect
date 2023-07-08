@@ -7,10 +7,9 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
-import tbs.framework.async.AsyncTaskResult;
-import tbs.framework.async.ResultStatusor;
 import tbs.framework.async.ThreadUtil;
-import tbs.framework.interfaces.async.AsyncToDo;
+import tbs.framework.error.handler.IErrorHandler;
+import tbs.framework.interfaces.base.IEmptyParamReturner;
 import tbs.framework.sql.BatchUtil;
 import tbs.framework.utils.EncryptionTool;
 import tbs.framework.utils.StringUtils;
@@ -27,6 +26,7 @@ import tbs.pojo.Teacher;
 import tbs.pojo.dto.TeacherDetail;
 
 import javax.annotation.Resource;
+import java.lang.reflect.Method;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -42,7 +42,7 @@ public class TeacherServiceImpl implements TeacherService {
     @Override
     @Transactional
     public void saveTeacher(List<TeacherRegisterVO> vo) throws Throwable {
-        List<AsyncToDo> works = new LinkedList<>();
+        List<IEmptyParamReturner<Object>> works = new LinkedList<>();
         int pertask = 200;
 
         int group = vo.size() / pertask + 1;
@@ -55,41 +55,47 @@ public class TeacherServiceImpl implements TeacherService {
                 cnt++;
             }
             final int i1 = i;
-            works.add((st -> {
-                BatchUtil batchUtil = SpringUtil.getBean(BatchUtil.class);
-                for (TeacherRegisterVO s1 : groupDatas[i1]) {
-                    batchUtil.batchUpdate(pertask, () -> {
-                        Teacher s = new Teacher();
-                        s.setPhone(s1.getPhone());
-                        s.setPosition(s1.getPosition());
-                        s.setPro_title(s1.getPro_title());
-                        s.setWorkNo(s1.getWorkNo());
-                        batchUtil.getMapper(TeacherDao.class).insert(s);
-                    });
-                    batchUtil.batchUpdate(pertask, () -> {
-                        BasicUser basicUser = new BasicUser();
-                        basicUser.setUid(EncryptionTool.encrypt(s1.getPhone() + "TEACHER!"));
-                        basicUser.setName(s1.getName());
-                        basicUser.setPassword(EncryptionTool.encrypt(s1.getPassword()));
-                        basicUser.setDepartmentId(s1.getDepartment());
-                        basicUser.setRole(RoleVO.ROLE_TEACHER);
-                        basicUser.setPhone(s1.getPhone());
-                        batchUtil.getMapper(BasicUserDao.class).save(basicUser);
-                    });
 
+            works.add(new IEmptyParamReturner() {
+                @Override
+                public Object action() throws Throwable {
+                    BatchUtil batchUtil = SpringUtil.getBean(BatchUtil.class);
+                    for (TeacherRegisterVO s1 : groupDatas[i1]) {
+                        batchUtil.batchUpdate(pertask, () -> {
+                            Teacher s = new Teacher();
+                            s.setPhone(s1.getPhone());
+                            s.setPosition(s1.getPosition());
+                            s.setPro_title(s1.getPro_title());
+                            s.setWorkNo(s1.getWorkNo());
+                            batchUtil.getMapper(TeacherDao.class).insert(s);
+                        });
+                        batchUtil.batchUpdate(pertask, () -> {
+                            BasicUser basicUser = new BasicUser();
+                            basicUser.setUid(EncryptionTool.encrypt(s1.getPhone() + "TEACHER!"));
+                            basicUser.setName(s1.getName());
+                            basicUser.setPassword(EncryptionTool.encrypt(s1.getPassword()));
+                            basicUser.setDepartmentId(s1.getDepartment());
+                            basicUser.setRole(RoleVO.ROLE_TEACHER);
+                            basicUser.setPhone(s1.getPhone());
+                            batchUtil.getMapper(BasicUserDao.class).save(basicUser);
+                        });
+
+                    }
+                    batchUtil.flush();
+                    return null;
                 }
-                batchUtil.flush();
-            }));
+            });
         }
-        ResultStatusor change = threadUtil.doWithAsync(works).
-                execute();
-        change.waitForDone();
-        if (change.getFailList().size() > 0) {
-            for (AsyncTaskResult asyncResult : change.getFailList()) {
-                log.error(asyncResult.getException().getMessage(), asyncResult.getException());
+        Throwable[] err = new Throwable[1];
+        threadUtil.awaitDo(works, new IErrorHandler() {
+            @Override
+            public ErrorInfo onError(Method method, ErrorInfo errorInfo) {
+                err[0] = errorInfo.getError();
+                return null;
             }
-            throw change.getFailList().get(0).getException();
-        }
+        });
+        if (err[0] != null)
+            throw err[0];
     }
 
     @Override
