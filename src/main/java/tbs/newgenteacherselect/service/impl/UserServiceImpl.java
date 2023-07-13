@@ -89,6 +89,7 @@ public class UserServiceImpl implements UserService {
         RoleVO roleVO = new RoleVO();
         roleVO.setRole(baseRole);
         roleVO.setToken(uuid);
+        roleVO.setRoleNameByLang("ROLE."+baseRole.getRoleName());
         baseRole.setUserId(phone);
         Cookie cookie = new Cookie(executionData.getTokenFrom(), uuid);
         cookie.setPath(request.getContextPath() + "/");

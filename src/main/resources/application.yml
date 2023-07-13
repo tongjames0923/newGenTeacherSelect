@@ -1,4 +1,6 @@
 spring:
+  messages:
+    basename: static/localFile/text
   servlet:
     multipart:
       max-file-size: 512MB
