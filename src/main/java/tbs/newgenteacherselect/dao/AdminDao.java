@@ -1,9 +1,9 @@
 package tbs.newgenteacherselect.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import org.apache.ibatis.annotations.*;
-import org.springframework.cache.annotation.Cacheable;
-import tbs.framework.config.RedisConfig;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import tbs.framework.annotation.LongTermCache;
 import tbs.pojo.Admin;
 import tbs.pojo.dto.AdminDetail;
 
@@ -13,14 +13,11 @@ import java.util.List;
 public interface AdminDao extends BaseMapper<Admin> {
 
     @Select(AdminDetail.BASIC_DATA_SQL)
-    @Cacheable(value = "ADMIN_KEY",unless = "#result==null",cacheManager = RedisConfig.LongTermCache)
+    @LongTermCache(value = "ADMIN_KEY")
     List<AdminDetail> listSu();
 
 
-
-
-
-    @Select(AdminDetail.BASIC_DATA_SQL+" where adminToken=#{token}")
-    @Cacheable(value = "admin_profile",key = "#token",unless = "#result==null",cacheManager = RedisConfig.LongTermCache)
+    @Select(AdminDetail.BASIC_DATA_SQL + " where adminToken=#{token}")
+    @LongTermCache(value = "admin_profile", key = "#token")
     AdminDetail find(String token);
 }
