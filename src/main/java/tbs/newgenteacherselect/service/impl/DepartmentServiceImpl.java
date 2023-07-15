@@ -37,8 +37,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     private static final String DEPARTMENT_MAP = "department_map";
 
     @Override
-    @Scheduled(fixedRate = 30, timeUnit = TimeUnit.MINUTES)
-    @Async
+//    @Async
     public void updateDepartmentFullName() {
         log.debug("定时更新部门全称启动");
         DepartmentVO dv = new DepartmentVO();

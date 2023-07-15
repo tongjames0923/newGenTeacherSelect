@@ -109,8 +109,8 @@ public class MasterRelationServiceImpl implements MasterRelationService {
     private static final String RELATIONMAP = "Relation_MAP";
 
     @Override
-    @Scheduled(fixedRate = 60, timeUnit = TimeUnit.SECONDS)
-    @Async
+//    @Scheduled(fixedRate = 60, timeUnit = TimeUnit.SECONDS)
+//    @Async
     public void calLeftForMaster() {
         log.debug("定时任务-导师名额详情列表");
         Map<String, List<MasterRelationVO>> hash = new HashMap();
