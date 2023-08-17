@@ -19,8 +19,7 @@ public interface StudentDao extends BaseMapper<Student> {
 //    @InsertProvider(type = SqlUpdateImpl.class,method = SqlUpdateImpl.INSERT)
 //    void saveStudent(Student item);
 
-   @Select(StudentUserDetail.BASIC_DATA_SQL + "where bu.phone=#{phone}")
-    @Cacheable(cacheManager = RedisConfig.ShortTermCache, key = "#phone", value = "studentInfo")
+    @Select(StudentUserDetail.BASIC_DATA_SQL + "where bu.phone=#{phone}")
     StudentUserDetail findStudentByPhone(String phone);
 
 //    @UpdateProvider(type = SqlUpdateImpl.class, method = "update")
@@ -30,6 +29,7 @@ public interface StudentDao extends BaseMapper<Student> {
     List<Student> listDepartmentNoMasterStudentOrderBySocre(int department);
 
     List<StudentUserDetail> findStudentByDepartment(int department, int beg, int end);
+
     StudentMoreDetail findFullDetailByPhone(String phone);
 
 //    List<StudentMoreDetail> listStudentsMoreDetails(StudentQO qo, Page page, Sortable sortable);

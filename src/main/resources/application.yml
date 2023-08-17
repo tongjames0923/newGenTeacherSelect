@@ -7,7 +7,6 @@ spring:
       max-request-size: 1000MB
   datasource:
     druid:
-      default-auto-commit: false
       initial-size: 20
       max-active: 100
       min-idle: 10
@@ -35,13 +34,13 @@ spring:
     port: 5672
     username: root
     password: tongyi0923
-actable:
-  table:
-   auto: add
-  model:
-    pack: tbs
-  database:
-   type: mysql
+#actable:
+#  table:
+#   auto: add
+#  model:
+#    pack: tbs
+#  database:
+#   type: mysql
 
 logging:
   file:
@@ -71,7 +70,7 @@ server:
     accept-count: 1000
     threads:
       # tomcat最大线程数，默认为200
-      max: 800
+      max: 500
       # Tomcat启动初始化的线程数，默认值10
       min-spare: 100
 tbs:

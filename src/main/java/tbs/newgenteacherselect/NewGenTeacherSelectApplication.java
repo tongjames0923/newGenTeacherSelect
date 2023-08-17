@@ -26,7 +26,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 //@EnableRabbit
 @ComponentScan("tbs")
 @EnableConfigurationProperties
-@EnableScheduling
 @MapperScan({"tbs.newgenteacherselect.dao"})
 //@EnableWebSocket
 public class NewGenTeacherSelectApplication {

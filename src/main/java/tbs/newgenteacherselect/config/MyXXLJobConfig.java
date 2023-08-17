@@ -7,7 +7,7 @@ import tbs.framework.interfaces.IXXLJobsConfig;
 public class MyXXLJobConfig implements IXXLJobsConfig {
     @Override
     public String adminAddress() {
-        return "http://127.0.0.1:9090/xxl-job-admin";
+        return "http://127.0.0.1:8888/xxl-job-admin";
     }
 
     @Override

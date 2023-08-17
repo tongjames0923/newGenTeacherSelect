@@ -1,13 +1,17 @@
 package tbs.newgenteacherselect.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
+import tbs.framework.annotation.ShortTermCache;
 import tbs.framework.config.BeanConfig;
 import tbs.framework.error.NetError;
 import tbs.framework.interfaces.IAccess;
 import tbs.framework.model.BaseRoleModel;
 import tbs.framework.model.SystemExecutionData;
 import tbs.framework.utils.EncryptionTool;
+import tbs.newgenteacherselect.CacheConstants;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.config.impl.AccessManager;
 import tbs.newgenteacherselect.dao.*;
@@ -53,6 +57,7 @@ public class UserServiceImpl implements UserService {
     HttpServletRequest request;
 
     @Override
+    @ShortTermCache(value = CacheConstants.USER_INFO, key = "#baseRole.userId", unless = "#baseRole.userId==null or #result==null")
     public Object getMyInfo(BaseRoleModel baseRole) throws NetError {
         Object obj = null;
         switch (baseRole.getRoleCode()) {
@@ -89,7 +94,7 @@ public class UserServiceImpl implements UserService {
         RoleVO roleVO = new RoleVO();
         roleVO.setRole(baseRole);
         roleVO.setToken(uuid);
-        roleVO.setRoleNameByLang("ROLE."+baseRole.getRoleName());
+        roleVO.setRoleNameByLang("ROLE." + baseRole.getRoleName());
         baseRole.setUserId(phone);
         Cookie cookie = new Cookie(executionData.getTokenFrom(), uuid);
         cookie.setPath(request.getContextPath() + "/");
@@ -113,11 +118,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = CacheConstants.USER_INFO)
     public void updateBaiscInfo(BasicUser basicUser) {
         basicUserDao.save(basicUser);
     }
 
     @Override
+    @CacheEvict(value = CacheConstants.USER_INFO)
     public void updateStudent(Student student) {
         UpdateWrapper<Student> wrapper = new UpdateWrapper<>();
         wrapper.eq("phone", student.getPhone());
@@ -125,6 +132,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @CacheEvict(value = CacheConstants.USER_INFO)
     public void updateTeacher(Teacher teacher) {
         UpdateWrapper<Teacher> wrapper = new UpdateWrapper<>();
         wrapper.eq("phone", teacher.getPhone());
