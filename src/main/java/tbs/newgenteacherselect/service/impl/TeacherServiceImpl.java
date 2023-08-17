@@ -89,9 +89,8 @@ public class TeacherServiceImpl implements TeacherService {
         Throwable[] err = new Throwable[1];
         threadUtil.awaitDo(works, new IErrorHandler() {
             @Override
-            public ErrorInfo onError(Method method, ErrorInfo errorInfo) {
+            public void onError(Method method, ErrorInfo errorInfo) {
                 err[0] = errorInfo.getError();
-                return null;
             }
         });
         if (err[0] != null)

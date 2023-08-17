@@ -4,8 +4,11 @@ import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import tbs.framework.annotation.AccessRequire;
 import tbs.framework.controller.BaseController;
+import tbs.framework.controller.BaseNetResultController;
+import tbs.framework.controller.annotation.EnhanceMethod;
 import tbs.framework.error.NetError;
 import tbs.framework.model.BaseRoleModel;
+import tbs.framework.model.NetResult;
 import tbs.framework.model.SystemExecutionData;
 import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.model.RoleVO;
@@ -23,7 +26,7 @@ import java.util.List;
 
 @RequestMapping("user")
 @RestController
-public class UserController extends BaseController {
+public class UserController extends BaseNetResultController {
 
     @Resource
     AdminService adminService;
@@ -38,13 +41,15 @@ public class UserController extends BaseController {
 
     @RequestMapping("login")
     @AccessRequire(limit = false)
-    public Object login(@RequestParam("username") String phone, String password) throws Exception {
+    @EnhanceMethod
+    public NetResult login(@RequestParam("username") String phone, String password) throws Exception {
         return success(userService.login(phone, password));
     }
 
     @RequestMapping("logout")
     @AccessRequire()
-    public Object logout() throws Exception {
+    @EnhanceMethod
+    public NetResult logout() throws Exception {
         SystemExecutionData data = getRuntime();
         userService.logout(data.getInvokeToken());
         return success();
@@ -53,13 +58,14 @@ public class UserController extends BaseController {
 
     @RequestMapping("getInfo")
     @AccessRequire
-    public Object getMyInfo() throws NetError {
+    @EnhanceMethod
+    public NetResult getMyInfo() throws NetError {
         return success(userService.getMyInfo(getRuntime().getInvokeRole()));
     }
 
     @RequestMapping("changePassword")
     @AccessRequire
-    public Object changePassword(String password) {
+    public NetResult changePassword(String password) {
         SystemExecutionData data = getRuntime();
         BaseRoleModel roleModel = data.getInvokeRole();
         if (!StringUtils.isEmpty(roleModel.getUserId())) {
@@ -74,7 +80,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "changeStudentInfo", method = RequestMethod.POST)
     @AccessRequire(manual = {RoleVO.ROLE_TEACHER, RoleVO.ROLE_ADMIN})
-    public Object changeStudent(Student student) {
+    public NetResult changeStudent(Student student) {
         userService.updateStudent(student);
         return success();
     }
@@ -82,7 +88,7 @@ public class UserController extends BaseController {
 
     @RequestMapping("renew")
     @AccessRequire()
-    public Object renew() throws Exception {
+    public NetResult renew() throws Exception {
         SystemExecutionData data = getRuntime();
         userService.renew(data.getInvokeToken());
         return success();
@@ -90,14 +96,14 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "studentImport", method = RequestMethod.POST)
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
-    public Object importStudent(@RequestBody List<StudentRegisterVO> list) throws Exception {
+    public NetResult importStudent(@RequestBody List<StudentRegisterVO> list) throws Exception {
         studentService.studentImport(list);
         return success();
     }
 
     @RequestMapping(value = "teacherImport", method = RequestMethod.POST)
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
-    public Object importTeacher(@RequestBody List<TeacherRegisterVO> list) throws Throwable {
+    public NetResult importTeacher(@RequestBody List<TeacherRegisterVO> list) throws Throwable {
 
         teacherService.saveTeacher(list);
         return success();
@@ -106,7 +112,7 @@ public class UserController extends BaseController {
 
     @RequestMapping(value = "adminNew", method = RequestMethod.POST)
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
-    public Object importAdmin(String token, String name, String password, String phone, int department) {
+    public NetResult importAdmin(String token, String name, String password, String phone, int department) {
         adminService.saveAdmin(token, name, password, phone, department);
         return null;
 
