@@ -5,14 +5,17 @@ import javax.annotation.Resource;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tbs.framework.annotation.AccessRequire;
+
 import tbs.framework.controller.BaseController;
+import tbs.framework.controller.BaseNetResultController;
+import tbs.framework.controller.annotation.AccessRequire;
+import tbs.framework.controller.model.NetResult;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.service.DepartmentService;
 
 @RestController
 @RequestMapping("department")
-public class DepartmentController extends BaseController {
+public class DepartmentController extends BaseNetResultController {
 
 
     @Resource
@@ -20,33 +23,33 @@ public class DepartmentController extends BaseController {
 
     @RequestMapping("fullName")
     @AccessRequire
-    public Object fulldepartmentName(int id) throws Exception {
+    public NetResult fulldepartmentName(int id) throws Exception {
         return success(departmentService.fullName(id));
     }
 
     @RequestMapping("listDepartment")
     @AccessRequire
-    public Object list(int id) throws Exception {
+    public NetResult list(int id) throws Exception {
         return success(departmentService.listAll(id));
     }
 
 
     @RequestMapping("newDepartment")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
-    public Object newDepartment(String departmentName, int parent) throws Exception {
-        return refresh(departmentService.newDepartment(parent, departmentName)) ;
+    public NetResult newDepartment(String departmentName, int parent) throws Exception {
+        return refresh(departmentService.newDepartment(parent, departmentName));
     }
 
     @RequestMapping("deleteDepartment")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
-    public Object deleteDepartment(int id) throws Exception {
-         departmentService.deleteDepartment(id);
+    public NetResult deleteDepartment(int id) throws Exception {
+        departmentService.deleteDepartment(id);
         return refresh();
     }
 
     @RequestMapping("changeDepartment")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN})
-    public Object ChangeDepartment(String departmentName, int id) throws Exception {
+    public NetResult ChangeDepartment(String departmentName, int id) throws Exception {
         departmentService.rename(id, departmentName);
         return refresh();
     }

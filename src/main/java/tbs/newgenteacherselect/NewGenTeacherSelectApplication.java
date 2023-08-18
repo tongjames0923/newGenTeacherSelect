@@ -23,11 +23,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableCaching
 @EnableSpringUtil
 @EnableAspectJAutoProxy
-//@EnableRabbit
+
 @ComponentScan("tbs")
 @EnableConfigurationProperties
 @MapperScan({"tbs.newgenteacherselect.dao"})
-//@EnableWebSocket
 public class NewGenTeacherSelectApplication {
 
 //    @Bean

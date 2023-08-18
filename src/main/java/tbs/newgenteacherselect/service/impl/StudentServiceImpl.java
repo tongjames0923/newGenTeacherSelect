@@ -6,9 +6,10 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import tbs.framework.async.ThreadUtil;
-import tbs.framework.interfaces.base.IEmptyParamReturner;
-import tbs.framework.sql.BatchUtil;
-import tbs.framework.sql.QueryUtils;
+import tbs.framework.base.IEmptyParamReturner;
+
+import tbs.framework.db.BatchUtil;
+import tbs.framework.db.QueryUtils;
 import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.dao.BasicUserDao;
 import tbs.newgenteacherselect.dao.QO.StudentQO;

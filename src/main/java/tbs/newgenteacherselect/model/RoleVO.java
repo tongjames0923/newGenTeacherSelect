@@ -3,9 +3,10 @@ package tbs.newgenteacherselect.model;
 
 import lombok.Data;
 import lombok.ToString;
-import tbs.framework.annotation.TranlateField;
-import tbs.framework.config.impl.LocalStringTranslateImpl;
+
 import tbs.framework.model.BaseRoleModel;
+import tbs.framework.translate.annotation.TranlateField;
+import tbs.framework.translate.interfaces.impl.LocalStringTranslateImpl;
 
 /**
  * 登录基本数据

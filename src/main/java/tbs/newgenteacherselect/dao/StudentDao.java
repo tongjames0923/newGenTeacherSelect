@@ -2,14 +2,11 @@ package tbs.newgenteacherselect.dao;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
-import tbs.newgenteacherselect.dao.QO.StudentQO;
 import tbs.newgenteacherselect.model.StudentMoreDetail;
 
 import tbs.pojo.Student;
 import tbs.pojo.dto.StudentUserDetail;
-import tbs.framework.config.RedisConfig;
+
 
 import java.util.List;
 

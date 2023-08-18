@@ -8,9 +8,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import tbs.framework.async.ThreadUtil;
-import tbs.framework.error.handler.IErrorHandler;
-import tbs.framework.interfaces.base.IEmptyParamReturner;
-import tbs.framework.sql.BatchUtil;
+
+import tbs.framework.base.IEmptyParamReturner;
+import tbs.framework.db.BatchUtil;
+import tbs.framework.error.interfaces.IErrorHandler;
 import tbs.framework.utils.EncryptionTool;
 import tbs.framework.utils.StringUtils;
 import tbs.newgenteacherselect.dao.BasicUserDao;

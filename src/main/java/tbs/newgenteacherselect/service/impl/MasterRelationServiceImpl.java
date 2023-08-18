@@ -6,10 +6,9 @@ import com.alibaba.fastjson2.JSONArray;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
-import tbs.framework.annotation.LockIt;
+
+import tbs.framework.async.annotations.LockIt;
 import tbs.framework.error.NetError;
 import tbs.framework.redis.IRedisService;
 import tbs.newgenteacherselect.NetErrorEnum;
@@ -29,7 +28,6 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 @Service

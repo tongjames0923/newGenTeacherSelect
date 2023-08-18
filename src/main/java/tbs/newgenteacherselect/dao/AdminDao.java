@@ -3,7 +3,8 @@ package tbs.newgenteacherselect.dao;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import tbs.framework.annotation.LongTermCache;
+
+import tbs.framework.redis.annotations.LongTermCache;
 import tbs.pojo.Admin;
 import tbs.pojo.dto.AdminDetail;
 

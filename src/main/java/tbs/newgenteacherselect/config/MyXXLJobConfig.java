@@ -1,7 +1,8 @@
 package tbs.newgenteacherselect.config;
 
 import org.springframework.stereotype.Component;
-import tbs.framework.interfaces.IXXLJobsConfig;
+import tbs.framework.xxl.interfaces.IXXLJobsConfig;
+
 
 @Component
 public class MyXXLJobConfig implements IXXLJobsConfig {

@@ -4,9 +4,9 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
+import tbs.framework.redis.constants.RedisConstants;
 import tbs.pojo.ScoreConfigTemplate;
 import tbs.pojo.ScoreConfigTemplateItem;
-import tbs.framework.config.RedisConfig;
 
 import java.util.List;
 
@@ -28,7 +28,7 @@ public interface ScoreConfigDao extends BaseMapper<ScoreConfigTemplate> {
 
 
     @Select("select * from scoreconfigtemplate where id=#{id}")
-    @Cacheable(value = "scoreTemplate",key = "#id",unless = "#result==null" ,cacheManager = RedisConfig.ShortTermCache)
+    @Cacheable(value = "scoreTemplate",key = "#id",unless = "#result==null" ,cacheManager = RedisConstants.ShortTermCache)
     ScoreConfigTemplate findById(String id);
 
     @Delete("delete from scoreconfigtemplate where id=#{id}")

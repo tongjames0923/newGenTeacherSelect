@@ -1,7 +1,8 @@
 package tbs.newgenteacherselect.config.impl;
 
 import org.springframework.stereotype.Component;
-import tbs.framework.interfaces.IJsonJobHandler;
+
+import tbs.framework.xxl.interfaces.IJsonJobHandler;
 import tbs.newgenteacherselect.service.DepartmentService;
 
 import javax.annotation.Resource;

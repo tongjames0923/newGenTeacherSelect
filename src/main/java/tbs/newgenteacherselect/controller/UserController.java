@@ -2,14 +2,14 @@ package tbs.newgenteacherselect.controller;
 
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
-import tbs.framework.annotation.AccessRequire;
-import tbs.framework.controller.BaseController;
+
 import tbs.framework.controller.BaseNetResultController;
+import tbs.framework.controller.annotation.AccessRequire;
 import tbs.framework.controller.annotation.EnhanceMethod;
+import tbs.framework.controller.model.NetResult;
+import tbs.framework.controller.model.SystemExecutionData;
 import tbs.framework.error.NetError;
 import tbs.framework.model.BaseRoleModel;
-import tbs.framework.model.NetResult;
-import tbs.framework.model.SystemExecutionData;
 import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentRegisterVO;

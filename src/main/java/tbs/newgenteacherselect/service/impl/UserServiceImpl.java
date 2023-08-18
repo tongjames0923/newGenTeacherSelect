@@ -2,14 +2,14 @@ package tbs.newgenteacherselect.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
-import tbs.framework.annotation.ShortTermCache;
-import tbs.framework.config.BeanConfig;
+
+import tbs.framework.controller.ControllerBeans;
+import tbs.framework.controller.interfaces.IAccess;
+import tbs.framework.controller.model.SystemExecutionData;
 import tbs.framework.error.NetError;
-import tbs.framework.interfaces.IAccess;
 import tbs.framework.model.BaseRoleModel;
-import tbs.framework.model.SystemExecutionData;
+import tbs.framework.redis.annotations.ShortTermCache;
 import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.CacheConstants;
 import tbs.newgenteacherselect.NetErrorEnum;
@@ -42,7 +42,8 @@ public class UserServiceImpl implements UserService {
     @Resource
     AdminDao adminDao;
 
-    IAccess access = BeanConfig.getInstance().getAccessElement();
+    @Resource
+    ControllerBeans controllerBeans;
 
     @Resource
     HttpServletResponse response;
@@ -101,7 +102,7 @@ public class UserServiceImpl implements UserService {
         int exp = AccessManager.getInstance().getLoginActive();
         cookie.setMaxAge(exp);
         response.addCookie(cookie);
-        access.put(uuid, baseRole);
+        controllerBeans.getAccess().put(uuid, baseRole);
 
         return roleVO;
 
@@ -109,12 +110,12 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void logout(String token) throws Exception {
-        access.deleteToken(token);
+        controllerBeans.getAccess().deleteToken(token);
     }
 
     @Override
     public void renew(String token) throws Exception {
-        access.put(token, null);
+        controllerBeans.getAccess().put(token, null);
     }
 
     @Override

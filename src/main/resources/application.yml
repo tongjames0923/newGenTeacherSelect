@@ -75,9 +75,9 @@ server:
       min-spare: 100
 tbs:
   framework:
-    access: redisAccess
-  thread:
-    locker:
-      redis:
-        enable: true
-        timeout: 60
+    async:
+      locker: REDIS_LOCKER
+      result-holder: tbs.framework.redis.impl.RedisAsyncResultHolder
+    controller:
+      access-element: tbs.newgenteacherselect.config.impl.AccessManager
+      access-inputer: tbs.newgenteacherselect.config.impl.CookiesAccessInputer

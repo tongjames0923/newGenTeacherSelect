@@ -1,9 +1,10 @@
 package tbs.newgenteacherselect.dao.QO;
 
 import lombok.Data;
-import tbs.framework.annotation.SqlQueryField;
+import tbs.framework.db.annotations.SqlQueryField;
 
-import static tbs.framework.annotation.SqlQueryField.*;
+import static tbs.framework.db.annotations.SqlQueryField.*;
+
 
 @Data
 public class StudentQO {

@@ -3,11 +3,14 @@ package tbs.newgenteacherselect.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tbs.framework.annotation.AccessRequire;
+
 import tbs.framework.controller.BaseController;
+import tbs.framework.controller.BaseNetResultController;
+import tbs.framework.controller.annotation.AccessRequire;
+import tbs.framework.controller.model.NetResult;
+import tbs.framework.controller.model.SystemExecutionData;
+import tbs.framework.db.QueryUtils;
 import tbs.framework.error.NetError;
-import tbs.framework.model.SystemExecutionData;
-import tbs.framework.sql.QueryUtils;
 import tbs.newgenteacherselect.dao.QO.StudentQO;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.StudentMoreDetail;
@@ -18,7 +21,7 @@ import javax.annotation.Resource;
 
 @RestController
 @RequestMapping("student")
-public class StudentController extends BaseController {
+public class StudentController extends BaseNetResultController {
 
 
     @Resource
@@ -28,7 +31,7 @@ public class StudentController extends BaseController {
 
     @RequestMapping("myMaster")
     @AccessRequire(manual = {RoleVO.ROLE_STUDENT})
-    public Object myMaster() throws NetError {
+    public NetResult myMaster() throws NetError {
         SystemExecutionData data = getRuntime();
         return success(relationService.getMasterByStudent(data.getInvokeRole().getUserId()));
     }
@@ -36,7 +39,7 @@ public class StudentController extends BaseController {
 
     @RequestMapping("listStudent")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
-    public Object listStudent(String nameOrPhone, String department, Integer level, String Clas, Integer grade,
+    public NetResult listStudent(String nameOrPhone, String department, Integer level, String Clas, Integer grade,
                               String masterPhone, Integer hasMaster, Integer page, Integer cnt,
                               String sord, String sidx) {
         StudentQO studentQO = new StudentQO();

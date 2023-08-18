@@ -2,12 +2,13 @@ package tbs.newgenteacherselect.config.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import tbs.framework.interfaces.IAccessInput;
+import tbs.framework.controller.interfaces.IAccessInput;
+
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 
-@Component
+@Component("cookiesInputer")
 @Slf4j
 public class CookiesAccessInputer implements IAccessInput {
     @Override

@@ -4,9 +4,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
+import tbs.framework.db.BatchUtil;
 import tbs.framework.error.NetError;
 import tbs.framework.model.BaseRoleModel;
-import tbs.framework.sql.BatchUtil;
+
 import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.dao.*;
@@ -18,7 +19,6 @@ import tbs.newgenteacherselect.service.ScoreConfigService;
 import tbs.pojo.*;
 
 import javax.annotation.Resource;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 

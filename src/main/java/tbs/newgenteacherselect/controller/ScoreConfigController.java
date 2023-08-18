@@ -4,18 +4,19 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import tbs.framework.annotation.AccessRequire;
-import tbs.framework.annotation.AsyncReturnFunction;
+
+import tbs.framework.async.annotations.AsyncReturnFunction;
 import tbs.framework.controller.BaseController;
+import tbs.framework.controller.annotation.AccessRequire;
+import tbs.framework.controller.model.SystemExecutionData;
 import tbs.framework.error.NetError;
-import tbs.framework.model.SystemExecutionData;
+
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.ScoreTemplateVO;
 import tbs.newgenteacherselect.service.ScoreConfigService;
 
 
 import javax.annotation.Resource;
-import java.util.Arrays;
 
 @RestController()
 @RequestMapping("scoreConfig")

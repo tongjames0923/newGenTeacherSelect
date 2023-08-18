@@ -2,9 +2,11 @@ package tbs.newgenteacherselect.config.impl;
 
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import tbs.framework.controller.enums.VerificationConclusion;
+import tbs.framework.controller.interfaces.IAccess;
+import tbs.framework.controller.interfaces.IPermissionVerification;
 import tbs.framework.error.AuthorizationFailureException;
-import tbs.framework.interfaces.IAccess;
-import tbs.framework.interfaces.IPermissionVerification;
+
 import tbs.framework.model.BaseRoleModel;
 import tbs.framework.redis.IRedisService;
 import tbs.newgenteacherselect.NetErrorEnum;

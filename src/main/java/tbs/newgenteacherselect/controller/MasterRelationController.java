@@ -3,22 +3,25 @@ package tbs.newgenteacherselect.controller;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tbs.framework.annotation.AccessRequire;
-import tbs.framework.controller.BaseController;
+
+
+import tbs.framework.controller.BaseNetResultController;
+import tbs.framework.controller.annotation.AccessRequire;
+import tbs.framework.controller.model.NetResult;
+import tbs.framework.controller.model.SystemExecutionData;
 import tbs.framework.error.NetError;
 import tbs.framework.model.BaseRoleModel;
-import tbs.framework.model.SystemExecutionData;
+
 import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.service.MasterRelationService;
-import tbs.newgenteacherselect.service.StudentService;
 
 
 import javax.annotation.Resource;
 
 @RequestMapping("coreService")
 @RestController
-public class MasterRelationController extends BaseController {
+public class MasterRelationController extends BaseNetResultController {
 
 
     void checkRightsForSelectOrUnSelect(String teacher, String student, BaseRoleModel invoker) throws NetError {
@@ -37,7 +40,7 @@ public class MasterRelationController extends BaseController {
 
     @RequestMapping("select")
     @AccessRequire
-    public Object select(String student, String master) throws NetError {
+    public NetResult select(String student, String master) throws NetError {
         SystemExecutionData data = getRuntime();
         checkRightsForSelectOrUnSelect(master, student, data.getInvokeRole());
         return refresh(relationService.selectMaster(student, master));
@@ -45,7 +48,7 @@ public class MasterRelationController extends BaseController {
 
     @RequestMapping("unselect")
     @AccessRequire
-    public Object unselect(String student, String master) throws NetError {
+    public NetResult unselect(String student, String master) throws NetError {
         SystemExecutionData data = getRuntime();
         checkRightsForSelectOrUnSelect(master, student, data.getInvokeRole());
         relationService.returnbackMaster(student, master);
@@ -53,7 +56,7 @@ public class MasterRelationController extends BaseController {
     }
 
     @RequestMapping("listMasterRelationStatus")
-    public Object listRelationStatus(int configItem, String master) {
+    public NetResult listRelationStatus(int configItem, String master) {
         return success(relationService.listStatus(configItem, master));
     }
 
