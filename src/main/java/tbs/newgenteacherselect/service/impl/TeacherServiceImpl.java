@@ -42,7 +42,10 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     @Transactional
-    public void saveTeacher(List<TeacherRegisterVO> vo) throws Throwable {
+    public void
+
+
+    saveTeacher(List<TeacherRegisterVO> vo) throws Throwable {
         List<IEmptyParamReturner<Object>> works = new LinkedList<>();
         int pertask = 200;
 

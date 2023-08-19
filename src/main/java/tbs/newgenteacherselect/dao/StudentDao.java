@@ -23,9 +23,9 @@ public interface StudentDao extends BaseMapper<Student> {
 //    @CacheEvict(key = "#student.phone", value = "studentInfo")
 //    void updateStudent(Student student);
 
-    List<Student> listDepartmentNoMasterStudentOrderBySocre(int department);
+    List<Student> listDepartmentNoMasterStudentOrderBySocre(long department);
 
-    List<StudentUserDetail> findStudentByDepartment(int department, int beg, int end);
+    List<StudentUserDetail> findStudentByDepartment(long department, int beg, int end);
 
     StudentMoreDetail findFullDetailByPhone(String phone);
 

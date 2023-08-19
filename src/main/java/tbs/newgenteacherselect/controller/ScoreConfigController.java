@@ -7,7 +7,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import tbs.framework.async.annotations.AsyncReturnFunction;
 import tbs.framework.controller.BaseController;
+import tbs.framework.controller.BaseNetResultController;
 import tbs.framework.controller.annotation.AccessRequire;
+import tbs.framework.controller.annotation.EnhanceMethod;
+import tbs.framework.controller.model.NetResult;
 import tbs.framework.controller.model.SystemExecutionData;
 import tbs.framework.error.NetError;
 
@@ -18,16 +21,17 @@ import tbs.newgenteacherselect.service.ScoreConfigService;
 
 import javax.annotation.Resource;
 
-@RestController()
-@RequestMapping("scoreConfig")
-public class ScoreConfigController extends BaseController {
+@RestController
+@RequestMapping("/scoreConfig/*")
+public class ScoreConfigController extends BaseNetResultController {
 
     @Resource
     ScoreConfigService scoreConfigService;
 
     @RequestMapping(value = "addTemplate", method = RequestMethod.POST)
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
-    public Object makeTemplate(@RequestBody ScoreTemplateVO data) throws NetError {
+    @EnhanceMethod
+    public NetResult makeTemplate(@RequestBody ScoreTemplateVO data) throws NetError {
         SystemExecutionData executionData = getRuntime();
         scoreConfigService.makeTemplate(data, executionData.getInvokeRole());
         return success();
@@ -35,7 +39,7 @@ public class ScoreConfigController extends BaseController {
 
     @RequestMapping("deleteTemplates")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
-    public Object deleteTemplate(String template, SystemExecutionData data) throws NetError {
+    public NetResult deleteTemplate(String template, SystemExecutionData data) throws NetError {
         if (scoreConfigService.hasRights(data.getInvokeRole(), template))
             scoreConfigService.removeTemplate(template);
         return success();
@@ -43,7 +47,7 @@ public class ScoreConfigController extends BaseController {
 
     @RequestMapping("listScoreConfigTemplates")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
-    public Object listDepartmentConfig(int department) throws Exception {
+    public NetResult listDepartmentConfig(long department) throws Exception {
         return success(scoreConfigService.listTemplate(department));
     }
 
@@ -51,7 +55,7 @@ public class ScoreConfigController extends BaseController {
     @RequestMapping("applyConfig")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
     @AsyncReturnFunction
-    public Object applyConfig(String template, int department) throws Exception {
+    public NetResult applyConfig(String template, int department) throws Exception {
         scoreConfigService.applyConfig(department, template);
         return success();
     }

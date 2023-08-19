@@ -21,10 +21,10 @@ public interface ScoreConfigDao extends BaseMapper<ScoreConfigTemplate> {
 //    void insertTemplateItem(ScoreConfigTemplateItem item);
 
     @Select("select * from scoreconfigtemplate where departmentId=#{department};")
-    List<ScoreConfigTemplate> listTemplateByDepartment(int department);
+    List<ScoreConfigTemplate> listTemplateByDepartment(long department);
 
     @Select("select * from scoreconfigtemplate where templateName=#{templateName} and departmentId=#{department} limit 1;")
-    ScoreConfigTemplate findOneByDepartmentAndName(int department, String templateName);
+    ScoreConfigTemplate findOneByDepartmentAndName(long department, String templateName);
 
 
     @Select("select * from scoreconfigtemplate where id=#{id}")

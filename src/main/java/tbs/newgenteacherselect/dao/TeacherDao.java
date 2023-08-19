@@ -26,7 +26,7 @@ public interface TeacherDao extends BaseMapper<Teacher> {
 
 
     @Select("select * from teacher t join basicuser b on t.phone = b.phone where departmentId=#{department}")
-    List<Teacher> listTeacherByDepartment(Integer department);
+    List<Teacher> listTeacherByDepartment(Long department);
 
 
 

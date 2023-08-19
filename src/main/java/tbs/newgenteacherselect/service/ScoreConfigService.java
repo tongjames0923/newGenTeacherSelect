@@ -15,9 +15,9 @@ public interface ScoreConfigService {
     void makeTemplate(ScoreTemplateVO vo, BaseRoleModel roleModel) throws NetError;
 
     void removeTemplate(String template) throws NetError;
-    List<ScoreTemplateVO2> listTemplate(int dep)throws Exception;
+    List<ScoreTemplateVO2> listTemplate(long dep)throws Exception;
 
 
-    void applyConfig(int department,String template) throws Exception;
+    void applyConfig(long department,String template) throws Exception;
 
 }

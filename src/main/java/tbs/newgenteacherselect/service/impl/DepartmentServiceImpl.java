@@ -1,17 +1,16 @@
 package tbs.newgenteacherselect.service.impl;
 
 
+import cn.hutool.core.collection.CollUtil;
 import com.alibaba.fastjson2.JSON;
 import com.alibaba.fastjson2.JSONObject;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tbs.framework.redis.IRedisService;
+import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.dao.BasicUserDao;
 import tbs.newgenteacherselect.dao.DepartmentDao;
-import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.model.DepartmentVO;
 import tbs.newgenteacherselect.service.DepartmentService;
 import tbs.pojo.Department;
@@ -21,7 +20,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
 
 @Service
 @Slf4j
@@ -43,7 +42,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         DepartmentVO dv = new DepartmentVO();
         dv.setFullName("");
         dv.setDepartmentId(0);
-        Map<Long, DepartmentVO> map = new HashMap<>();
+        Map<String, DepartmentVO> map = new HashMap<>();
         putAllDepartment(map, dv);
         redisService.set(DEPARTMENT_MAP, map);
 
@@ -51,7 +50,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public Department newDepartment(int parent, String name) throws Exception {
+    public Department newDepartment(long parent, String name) throws Exception {
         if (parent != 0) {
             if (departmentDao.getById(parent) == null) {
                 throw NetErrorEnum.makeError(NetErrorEnum.NO_PARENT);
@@ -60,7 +59,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = new Department();
         department.setParentId(parent);
         department.setDepartname(name);
-        department.setId( (UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE));
+        department.setId((UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE));
         departmentDao.save(department.getId(), department.getDepartname(), department.getParentId());
         updateDepartmentFullName();
         return department;
@@ -68,7 +67,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void deleteDepartment(int id) throws Exception {
+    public void deleteDepartment(long id) throws Exception {
         if (depHasUser(id))
             throw NetErrorEnum.makeError(NetErrorEnum.HAS_MORE_NODE);
         updateDepartmentFullName();
@@ -92,7 +91,7 @@ public class DepartmentServiceImpl implements DepartmentService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public Department rename(int id, String name) throws Exception {
+    public Department rename(long id, String name) throws Exception {
         departmentDao.changeDepartmentName(id, name);
         updateDepartmentFullName();
         return departmentDao.getById(id);
@@ -100,20 +99,19 @@ public class DepartmentServiceImpl implements DepartmentService {
 
 
     @Override
-    public DepartmentVO listAll(int parent) throws Exception {
+    public DepartmentVO listAll(long parent) throws Exception {
         return departmentFullNamesMap(parent);
     }
 
-    public DepartmentVO departmentFullNamesMap(int id) throws Exception {
+    public DepartmentVO departmentFullNamesMap(long id) throws Exception {
         Map mp = redisService.get(DEPARTMENT_MAP, Map.class);
         if (mp == null) {
             updateDepartmentFullName();
             throw new Exception("部门数据字典异常,稍后再试");
         }
-        JSONObject obj = (JSONObject) mp.get(id);
-        if (obj == null)
-        {
-            throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND,"不存在"+id+"部门");
+        JSONObject obj = (JSONObject) mp.get(String.valueOf(id));
+        if (obj == null) {
+            throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND, "不存在" + id + "部门");
         }
 
         return JSON.toJavaObject(obj, DepartmentVO.class);
@@ -130,7 +128,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return m_fullName(d.getParentId()) + "-" + d.getDepartname();
     }
 
-    void putAllDepartment(Map<Long, DepartmentVO> src, DepartmentVO vo) {
+    void putAllDepartment(Map<String, DepartmentVO> src, DepartmentVO vo) {
         List<Department> childs = departmentDao.findAllByParent(vo.getDepartmentId());
         for (Department d : childs) {
             DepartmentVO dv = new DepartmentVO();
@@ -140,7 +138,7 @@ public class DepartmentServiceImpl implements DepartmentService {
             putAllDepartment(src, dv);
             vo.getChilds().add(dv);
         }
-        src.put(vo.getDepartmentId(), vo);
+        src.put(String.valueOf(vo.getDepartmentId()), vo);
     }
 
     @Override
@@ -148,4 +146,15 @@ public class DepartmentServiceImpl implements DepartmentService {
         return departmentFullNamesMap(id).getFullName();
     }
 
+    @Override
+    public <T> void listAllStudentInDepartment(List<T> ls, long dep, Function<Long, List<T>> function) throws Exception {
+        DepartmentVO departmentVO = this.listAll(dep);
+        ls.addAll(function.apply(dep));
+        if (CollUtil.isEmpty(departmentVO.getChilds())) {
+            return;
+        }
+        for (DepartmentVO vo : departmentVO.getChilds()) {
+            listAllStudentInDepartment(ls, vo.getDepartmentId(), function);
+        }
+    }
 }
