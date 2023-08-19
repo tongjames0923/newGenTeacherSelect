@@ -23,7 +23,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     @Transactional(rollbackFor = {Exception.class})
-    public void saveAdmin(String token, String name, String password, String phone, int department) {
+    public void saveAdmin(String token, String name, String password, String phone, long department) {
         BasicUser basicUser = new BasicUser();
         basicUser.setUid(EncryptionTool.encrypt(phone + "STUDENT!"));
         basicUser.setName(name);

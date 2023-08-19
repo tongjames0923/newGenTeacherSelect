@@ -26,7 +26,7 @@ public interface BasicUserDao extends BaseMapper<BasicUser> {
 
     @Select("select * from basicuser where departmentId=#{dep} ")
     @Cacheable(value = "dev_users",key = "#dep",cacheManager = RedisConstants.ShortTermCache,unless = "#result==null")
-    List<BasicUser> findByDepartment(int dep);
+    List<BasicUser> findByDepartment(long dep);
 
 
     @Select("select * from basicuser where phone=#{phone} ")

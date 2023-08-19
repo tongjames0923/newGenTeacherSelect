@@ -1,66 +1,33 @@
 package tbs.newgenteacherselect.model;
 
-import tbs.pojo.BasicUser;
-import tbs.pojo.Teacher;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import lombok.Data;
+
+@Data
 public class TeacherRegisterVO {
 
-    private String name,workNo,phone,password,pro_title,position;
-    private Integer department;
+    @ExcelProperty("姓名")
+    @ColumnWidth(20)
+    private String name;
+    @ExcelProperty("工号")
+    @ColumnWidth(20)
+    private String workNo;
+    @ExcelProperty("手机号")
+    @ColumnWidth(20)
+    private String phone;
+    @ExcelProperty("密码")
+    @ColumnWidth(20)
+    private String password;
+    @ExcelProperty("职称")
+    @ColumnWidth(20)
+    private String pro_title;
+    @ExcelProperty("职务")
+    @ColumnWidth(20)
+    private String position;
+    @ExcelProperty("部门编号")
+    @ColumnWidth(20)
+    private Long department;
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getWorkNo() {
-        return workNo;
-    }
-
-    public void setWorkNo(String workNo) {
-        this.workNo = workNo;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getPro_title() {
-        return pro_title;
-    }
-
-    public void setPro_title(String pro_title) {
-        this.pro_title = pro_title;
-    }
-
-    public String getPosition() {
-        return position;
-    }
-
-    public void setPosition(String position) {
-        this.position = position;
-    }
-
-    public Integer getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Integer department) {
-        this.department = department;
-    }
 }

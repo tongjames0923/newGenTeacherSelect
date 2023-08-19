@@ -43,7 +43,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         DepartmentVO dv = new DepartmentVO();
         dv.setFullName("");
         dv.setDepartmentId(0);
-        Map<Integer, DepartmentVO> map = new HashMap<>();
+        Map<Long, DepartmentVO> map = new HashMap<>();
         putAllDepartment(map, dv);
         redisService.set(DEPARTMENT_MAP, map);
 
@@ -60,7 +60,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         Department department = new Department();
         department.setParentId(parent);
         department.setDepartname(name);
-        department.setId((int) (UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE));
+        department.setId( (UUID.randomUUID().getMostSignificantBits() & Long.MAX_VALUE));
         departmentDao.save(department.getId(), department.getDepartname(), department.getParentId());
         updateDepartmentFullName();
         return department;
@@ -74,7 +74,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         updateDepartmentFullName();
     }
 
-    boolean depHasUser(int id) {
+    boolean depHasUser(long id) {
         boolean s = basicUserDao.findByDepartment(id).size() > 0;
         if (!s) {
             List<Department> child = departmentDao.findAllByParent(id);
@@ -119,7 +119,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return JSON.toJavaObject(obj, DepartmentVO.class);
     }
 
-    String m_fullName(int id) {
+    String m_fullName(long id) {
         Department d = departmentDao.getById(id);
         if (d == null) {
             return "";
@@ -130,7 +130,7 @@ public class DepartmentServiceImpl implements DepartmentService {
         return m_fullName(d.getParentId()) + "-" + d.getDepartname();
     }
 
-    void putAllDepartment(Map<Integer, DepartmentVO> src, DepartmentVO vo) {
+    void putAllDepartment(Map<Long, DepartmentVO> src, DepartmentVO vo) {
         List<Department> childs = departmentDao.findAllByParent(vo.getDepartmentId());
         for (Department d : childs) {
             DepartmentVO dv = new DepartmentVO();

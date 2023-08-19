@@ -1,71 +1,37 @@
 package tbs.newgenteacherselect.model;
 
+import com.alibaba.excel.annotation.ExcelProperty;
+import com.alibaba.excel.annotation.write.style.ColumnWidth;
+import lombok.Data;
+import lombok.ToString;
+
+@Data
+@ToString
+
 public class StudentRegisterVO {
-    String name,number,phone,password,clas;
-    Integer grade,department;
+    @ExcelProperty("姓名")
+    @ColumnWidth(20)
+    String name;
+    @ExcelProperty("学号")
+    @ColumnWidth(20)
+    String number;
+    @ExcelProperty("手机号")
+    @ColumnWidth(20)
+    String phone;
+    @ExcelProperty("密码")
+    @ColumnWidth(20)
+    String password;
+    @ExcelProperty("班级")
+    @ColumnWidth(20)
+    String clas;
+    @ExcelProperty("年级")
+    @ColumnWidth(20)
+    Integer grade;
+    @ExcelProperty("部门编号")
+    @ColumnWidth(20)
+    Long department;
+    @ExcelProperty("入学成绩")
+    @ColumnWidth(20)
     Double score;
 
-    public Double getScore() {
-        return score;
-    }
-
-    public void setScore(Double score) {
-        this.score = score;
-    }
-
-    public String getClas() {
-        return clas;
-    }
-
-    public void setClas(String clas) {
-        this.clas = clas;
-    }
-
-    public Integer getDepartment() {
-        return department;
-    }
-
-    public void setDepartment(Integer department) {
-        this.department = department;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getNumber() {
-        return number;
-    }
-
-    public void setNumber(String number) {
-        this.number = number;
-    }
-
-    public String getPhone() {
-        return phone;
-    }
-
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public Integer getGrade() {
-        return grade;
-    }
-
-    public void setGrade(Integer grade) {
-        this.grade = grade;
-    }
 }
