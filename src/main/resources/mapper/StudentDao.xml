@@ -37,15 +37,6 @@
         <include refid="StudentDetail"/>
         where bu.departmentId=#{param1} limit #{param2},#{param3}
     </select>
-    <select id="listDepartmentNoMasterStudentOrderBySocre" resultType="tbs.pojo.Student">
-        SELECT st.*
-        FROM student st
-                 LEFT JOIN basicuser bu ON bu.phone = st.phone
-                 LEFT JOIN masterrelation mr ON mr.studentPhone = st.phone
-        WHERE mr.id IS NULL
-          AND bu.departmentId = #{department}
-        order by score desc
-    </select>
     <select id="findStudentByPhone" resultType="tbs.pojo.dto.StudentUserDetail">
         select
         <include refid="StudentDetail"/>

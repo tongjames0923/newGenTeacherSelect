@@ -1,5 +1,6 @@
 package tbs.newgenteacherselect.controller;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,10 +38,13 @@ public class ScoreConfigController extends BaseNetResultController {
         return success();
     }
 
+    @Resource
+    SystemExecutionData executionData;
+
     @RequestMapping("deleteTemplates")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
-    public NetResult deleteTemplate(String template, SystemExecutionData data) throws NetError {
-        if (scoreConfigService.hasRights(data.getInvokeRole(), template))
+    public NetResult deleteTemplate(String template) throws NetError {
+        if (scoreConfigService.hasRights(executionData.getInvokeRole(), template))
             scoreConfigService.removeTemplate(template);
         return success();
     }
@@ -55,8 +59,8 @@ public class ScoreConfigController extends BaseNetResultController {
     @RequestMapping("applyConfig")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
     @AsyncReturnFunction
-    public NetResult applyConfig(String template, int department) throws Exception {
-        scoreConfigService.applyConfig(department, template);
+    public NetResult applyConfig(String template) throws Exception {
+        scoreConfigService.applyConfig( template);
         return success();
     }
 }

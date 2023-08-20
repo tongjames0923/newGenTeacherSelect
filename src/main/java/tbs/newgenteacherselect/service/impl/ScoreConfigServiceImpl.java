@@ -139,14 +139,15 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
 
     @Override
     @Transactional
-    public void applyConfig(long department, String template) throws Exception {
-        int inserted = 0;
-        List<Student> students = studentDao.listDepartmentNoMasterStudentOrderBySocre(department);
-        List<Teacher> teachers = teacherDao.listTeacherByDepartment(department);
-        int total = students.size();
+    public void applyConfig(String template) throws Exception {
         ScoreConfigTemplate template1 = scoreConfigDao.findById(template);
-        if (template1 == null || template1.getDepartmentId() != department)
+
+        if (template1 == null || template1.getDepartmentId() ==null)
             throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND, "不存在模板id");
+        List<Student> students = studentDao.listDepartmentNoMasterStudentOrderBySocre(template1.getDepartmentId());
+        List<Teacher> teachers = teacherDao.listTeacherByDepartment(template1.getDepartmentId());
+        int total = students.size();
+
         List<ScoreConfigTemplateItem> templateItems = scoreConfigDao.listTemplateItems(template);
         List<Integer> limits = new LinkedList<>();
         for (ScoreConfigTemplateItem item : templateItems) {

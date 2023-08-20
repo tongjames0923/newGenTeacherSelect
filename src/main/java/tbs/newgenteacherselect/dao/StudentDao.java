@@ -23,6 +23,13 @@ public interface StudentDao extends BaseMapper<Student> {
 //    @CacheEvict(key = "#student.phone", value = "studentInfo")
 //    void updateStudent(Student student);
 
+    @Select("        SELECT st.* " +
+            "        FROM student st " +
+            "                 LEFT JOIN basicuser bu ON bu.phone = st.phone " +
+            "                 LEFT JOIN masterrelation mr ON mr.studentPhone = st.phone " +
+            "        WHERE mr.id IS NULL " +
+            "          AND bu.departmentId = #{param1} " +
+            "        order by score desc")
     List<Student> listDepartmentNoMasterStudentOrderBySocre(long department);
 
     List<StudentUserDetail> findStudentByDepartment(long department, int beg, int end);

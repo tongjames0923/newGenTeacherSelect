@@ -18,6 +18,6 @@ public interface ScoreConfigService {
     List<ScoreTemplateVO2> listTemplate(long dep)throws Exception;
 
 
-    void applyConfig(long department,String template) throws Exception;
+    void applyConfig(String template) throws Exception;
 
 }
