@@ -1,24 +1,20 @@
 package tbs.newgenteacherselect.controller;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import tbs.framework.async.annotations.AsyncReturnFunction;
-import tbs.framework.controller.BaseController;
 import tbs.framework.controller.BaseNetResultController;
 import tbs.framework.controller.annotation.AccessRequire;
 import tbs.framework.controller.annotation.EnhanceMethod;
 import tbs.framework.controller.model.NetResult;
 import tbs.framework.controller.model.SystemExecutionData;
 import tbs.framework.error.NetError;
-
+import tbs.framework.model.AsyncDelayResult;
 import tbs.newgenteacherselect.model.RoleVO;
 import tbs.newgenteacherselect.model.ScoreTemplateVO;
 import tbs.newgenteacherselect.service.ScoreConfigService;
-
 
 import javax.annotation.Resource;
 
@@ -60,7 +56,7 @@ public class ScoreConfigController extends BaseNetResultController {
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
     @AsyncReturnFunction
     public NetResult applyConfig(String template) throws Exception {
-        scoreConfigService.applyConfig( template);
+        scoreConfigService.applyConfig(template);
         return success();
     }
 }

@@ -25,7 +25,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableAspectJAutoProxy
 
 @ComponentScan("tbs")
-@EnableConfigurationProperties
 @MapperScan({"tbs.newgenteacherselect.dao"})
 public class NewGenTeacherSelectApplication {
 
