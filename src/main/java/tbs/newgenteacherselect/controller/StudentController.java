@@ -1,10 +1,9 @@
 package tbs.newgenteacherselect.controller;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import tbs.framework.controller.BaseController;
 import tbs.framework.controller.BaseNetResultController;
 import tbs.framework.controller.annotation.AccessRequire;
 import tbs.framework.controller.model.NetResult;
@@ -40,8 +39,8 @@ public class StudentController extends BaseNetResultController {
     @RequestMapping("listStudent")
     @AccessRequire(manual = {RoleVO.ROLE_ADMIN, RoleVO.ROLE_TEACHER})
     public NetResult listStudent(String nameOrPhone, String department, Integer level, String Clas, Integer grade,
-                              String masterPhone, Integer hasMaster, Integer page, Integer cnt,
-                              String sord, String sidx) {
+                                 String masterPhone, Integer hasMaster, Integer page, Integer cnt,
+                                 String sord, String sidx) {
         StudentQO studentQO = new StudentQO();
         studentQO.setNameOrPhone(nameOrPhone);
         studentQO.setClas(Clas);

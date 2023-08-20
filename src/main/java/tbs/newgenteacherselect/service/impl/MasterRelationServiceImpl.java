@@ -127,19 +127,6 @@ public class MasterRelationServiceImpl implements MasterRelationService {
         redisService.set(RELATIONMAP, hash);
     }
 
-    @Override
-    public List<MasterRelationVO> listStatus(int config, String master) {
-        Map mp = redisService.get(RELATIONMAP, Map.class);
-        RelationKey key = new RelationKey(master, config);
-        JSONArray object = (JSONArray) mp.get(key.toString());
-        List list = object.stream().collect(Collectors.toList());
-        List<MasterRelationVO> relationVOS = new LinkedList<>();
-        for (Object o : list) {
-            JSONObject ob = (JSONObject) o;
-            relationVOS.add(JSON.toJavaObject(ob, MasterRelationVO.class));
-        }
-        return relationVOS;
-    }
 
     @Override
     public TeacherDetail getMasterByStudent(String student) {

@@ -15,7 +15,6 @@ public interface MasterRelationService {
     void calLeftForMaster();
 
 
-    List<MasterRelationVO> listStatus(int config,String master);
 
 
 

@@ -16,6 +16,7 @@ import tbs.newgenteacherselect.NetErrorEnum;
 import tbs.newgenteacherselect.config.impl.AccessManager;
 import tbs.newgenteacherselect.dao.*;
 import tbs.newgenteacherselect.model.RoleVO;
+import tbs.newgenteacherselect.service.StudentService;
 import tbs.newgenteacherselect.service.UserService;
 import tbs.pojo.BasicUser;
 import tbs.pojo.Student;
@@ -55,15 +56,16 @@ public class UserServiceImpl implements UserService {
     SystemExecutionData executionData;
 
     @Resource
+    StudentService studentService;
+    @Resource
     HttpServletRequest request;
 
     @Override
-    @ShortTermCache(value = CacheConstants.USER_INFO, key = "#baseRole.userId", unless = "#baseRole.userId==null or #result==null")
     public Object getMyInfo(BaseRoleModel baseRole) throws NetError {
         Object obj = null;
         switch (baseRole.getRoleCode()) {
             case 0:
-                obj = studentDao.findStudentByPhone(baseRole.getUserId());
+                obj = studentService.findStudent(baseRole.getUserId());
                 break;
             case 1:
                 List<AdminDetail> ls = adminDao.listSu();

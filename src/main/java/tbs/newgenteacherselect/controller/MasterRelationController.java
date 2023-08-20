@@ -42,6 +42,9 @@ public class MasterRelationController extends BaseNetResultController {
     @AccessRequire
     public NetResult select(String student, String master) throws NetError {
         SystemExecutionData data = getRuntime();
+        if (tbs.framework.utils.StringUtils.isEmpty(student)) {
+            student = data.getInvokeRole().getUserId();
+        }
         checkRightsForSelectOrUnSelect(master, student, data.getInvokeRole());
         return refresh(relationService.selectMaster(student, master));
     }
@@ -50,14 +53,12 @@ public class MasterRelationController extends BaseNetResultController {
     @AccessRequire
     public NetResult unselect(String student, String master) throws NetError {
         SystemExecutionData data = getRuntime();
+        if (tbs.framework.utils.StringUtils.isEmpty(student)) {
+            student = data.getInvokeRole().getUserId();
+        }
         checkRightsForSelectOrUnSelect(master, student, data.getInvokeRole());
         relationService.returnbackMaster(student, master);
         return refresh();
-    }
-
-    @RequestMapping("listMasterRelationStatus")
-    public NetResult listRelationStatus(int configItem, String master) {
-        return success(relationService.listStatus(configItem, master));
     }
 
 }

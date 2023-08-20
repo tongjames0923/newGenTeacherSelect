@@ -14,4 +14,6 @@ public interface StudentService {
     StudentMoreDetail findStudent(String phone);
 
    IPage<StudentMoreDetail> listStudent(StudentQO qo, Page page);
+
+
 }

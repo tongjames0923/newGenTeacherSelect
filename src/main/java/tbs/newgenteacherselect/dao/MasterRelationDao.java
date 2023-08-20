@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
+import org.springframework.cache.annotation.CacheEvict;
+import tbs.newgenteacherselect.CacheConstants;
 import tbs.pojo.MasterRelation;
 import tbs.pojo.dto.MasterRelationVO;
 

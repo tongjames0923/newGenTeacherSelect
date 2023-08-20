@@ -40,11 +40,11 @@
     <select id="findStudentByPhone" resultType="tbs.pojo.dto.StudentUserDetail">
         select
         <include refid="StudentDetail"/>
-        where bu.phone=#{phone}
+        where bu.phone=#{param1}
     </select>
     <select id="findFullDetailByPhone" resultType="tbs.newgenteacherselect.model.StudentMoreDetail">
        select <include refid="StudentMoreDetail"/>
-        where bu.phone=#{phone}
+        where bu.phone=#{param1}
     </select>
     <select id="listStudentsMoreDetails" resultType="tbs.newgenteacherselect.model.StudentMoreDetail">
         select <include refid="StudentMoreDetail"/>

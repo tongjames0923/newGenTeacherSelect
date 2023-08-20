@@ -32,8 +32,8 @@ public interface StudentDao extends BaseMapper<Student> {
             "        order by score desc")
     List<Student> listDepartmentNoMasterStudentOrderBySocre(long department);
 
-    List<StudentUserDetail> findStudentByDepartment(long department, int beg, int end);
 
+    @Select("select "+StudentMoreDetail.BASE_SQL+"where bu.phone=#{param1}")
     StudentMoreDetail findFullDetailByPhone(String phone);
 
 //    List<StudentMoreDetail> listStudentsMoreDetails(StudentQO qo, Page page, Sortable sortable);
