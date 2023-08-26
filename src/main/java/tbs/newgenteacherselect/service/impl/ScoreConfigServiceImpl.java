@@ -16,6 +16,7 @@ import tbs.newgenteacherselect.model.ScoreTemplateVO2;
 import tbs.newgenteacherselect.model.TemplateItem;
 import tbs.newgenteacherselect.service.DepartmentService;
 import tbs.newgenteacherselect.service.ScoreConfigService;
+import tbs.newgenteacherselect.utils.CollUtils;
 import tbs.pojo.*;
 
 import javax.annotation.Resource;
@@ -54,7 +55,7 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
         }
         if (total != 100)
             throw NetErrorEnum.makeError(NetErrorEnum.NOT_ALLOW, "分数配置子项百分比之和必须为100");
-        Department department = departmentDao.getById(v.getDepartment());
+        Department department = CollUtils.topOrDefault(departmentDao.getById(v.getDepartment()), null);
         if (department == null) {
             throw NetErrorEnum.makeError(NetErrorEnum.NOT_ALLOW, "不存在部门Id");
         }
@@ -142,7 +143,7 @@ public class ScoreConfigServiceImpl implements ScoreConfigService {
     public void applyConfig(String template) throws Exception {
         ScoreConfigTemplate template1 = scoreConfigDao.findById(template);
 
-        if (template1 == null || template1.getDepartmentId() ==null)
+        if (template1 == null || template1.getDepartmentId() == null)
             throw NetErrorEnum.makeError(NetErrorEnum.NOT_FOUND, "不存在模板id");
         List<Student> students = studentDao.listDepartmentNoMasterStudentOrderBySocre(template1.getDepartmentId());
         List<Teacher> teachers = teacherDao.listTeacherByDepartment(template1.getDepartmentId());

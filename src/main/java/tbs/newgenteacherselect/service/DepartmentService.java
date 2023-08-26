@@ -9,9 +9,11 @@ import java.util.function.Function;
 public interface DepartmentService {
     String fullName(int id) throws Exception;
 
+    Department findOne(int id);
+
     void updateDepartmentFullName();
 
-    public DepartmentVO departmentFullNamesMap(long id) throws Exception;
+    DepartmentVO departmentFullNamesMap(long id) throws Exception;
 
     Department newDepartment(long parent, String name) throws Exception;
 

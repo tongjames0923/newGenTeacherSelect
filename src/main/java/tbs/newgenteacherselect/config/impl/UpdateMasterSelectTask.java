@@ -1,7 +1,6 @@
 package tbs.newgenteacherselect.config.impl;
 
 import org.springframework.stereotype.Component;
-
 import tbs.framework.xxl.interfaces.IJsonJobHandler;
 import tbs.newgenteacherselect.service.MasterRelationService;
 
@@ -9,14 +8,24 @@ import javax.annotation.Resource;
 import java.util.Map;
 
 @Component("updateMasterSelect")
-public class UpdateMasterSelectTask implements IJsonJobHandler {
+public class UpdateMasterSelectTask implements IJsonJobHandler<Void> {
     @Resource
     MasterRelationService masterRelationService;
 
 
     @Override
-    public String handle(Map params) throws Exception {
+    public String handle(Void params) throws Exception {
         masterRelationService.calLeftForMaster();
         return "success";
+    }
+
+    @Override
+    public Class<? extends Void> classType() {
+        return null;
+    }
+
+    @Override
+    public Void paramConvert(Map mp) {
+        return null;
     }
 }

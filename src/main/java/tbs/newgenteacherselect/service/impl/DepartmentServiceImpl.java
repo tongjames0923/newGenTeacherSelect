@@ -13,6 +13,7 @@ import tbs.newgenteacherselect.dao.BasicUserDao;
 import tbs.newgenteacherselect.dao.DepartmentDao;
 import tbs.newgenteacherselect.model.DepartmentVO;
 import tbs.newgenteacherselect.service.DepartmentService;
+import tbs.newgenteacherselect.utils.CollUtils;
 import tbs.pojo.Department;
 
 import javax.annotation.Resource;
@@ -94,7 +95,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     public Department rename(long id, String name) throws Exception {
         departmentDao.changeDepartmentName(id, name);
         updateDepartmentFullName();
-        return departmentDao.getById(id);
+        return CollUtils.topOrDefault(departmentDao.getById(id), null);
     }
 
 
@@ -118,7 +119,7 @@ public class DepartmentServiceImpl implements DepartmentService {
     }
 
     String m_fullName(long id) {
-        Department d = departmentDao.getById(id);
+        Department d = CollUtils.topOrDefault(departmentDao.getById(id), null);
         if (d == null) {
             return "";
         }
@@ -144,6 +145,11 @@ public class DepartmentServiceImpl implements DepartmentService {
     @Override
     public String fullName(int id) throws Exception {
         return departmentFullNamesMap(id).getFullName();
+    }
+
+    @Override
+    public Department findOne(int id) {
+        return CollUtils.topOrDefault(departmentDao.getById(id), null);
     }
 
     @Override
