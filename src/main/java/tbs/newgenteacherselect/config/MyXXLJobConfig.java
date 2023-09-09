@@ -4,7 +4,7 @@ import org.springframework.stereotype.Component;
 import tbs.framework.xxl.interfaces.IXXLJobsConfig;
 
 
-@Component
+//@Component
 public class MyXXLJobConfig implements IXXLJobsConfig {
     @Override
     public String adminAddress() {
