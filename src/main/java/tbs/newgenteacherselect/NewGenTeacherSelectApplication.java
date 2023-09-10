@@ -2,6 +2,7 @@ package tbs.newgenteacherselect;
 
 import cn.hutool.extra.spring.EnableSpringUtil;
 
+import com.github.xiaoymin.knife4j.spring.annotations.EnableKnife4j;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,18 +24,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableCaching
 @EnableSpringUtil
 @EnableAspectJAutoProxy
-
+@EnableKnife4j
 @ComponentScan("tbs")
 @MapperScan({"tbs.newgenteacherselect.dao","tbs.framework.dao"})
 public class NewGenTeacherSelectApplication {
-
-//    @Bean
-//    @ConfigurationProperties(prefix = "tbs.thread.locker.redis")
-//    RedisThreadLockerProperties redisThreadLockerProperties()
-//    {
-//        return new RedisThreadLockerProperties();
-//    }
-
 
     public static void main(String[] args) {
 
