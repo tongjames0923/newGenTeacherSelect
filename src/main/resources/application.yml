@@ -98,4 +98,4 @@ tbs:
       access-element: tbs.newgenteacherselect.config.impl.AccessManager
       access-inputer: tbs.newgenteacherselect.config.impl.CookiesAccessInputer
     redis:
-      serializaer:
+      serializaer: org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer
