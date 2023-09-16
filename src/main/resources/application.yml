@@ -93,7 +93,9 @@ tbs:
   framework:
     async:
       locker: REDIS_LOCKER
-      result-holder: tbs.framework.redis.impl.RedisAsyncResultHolder
+      result-holder: tbs.framework.redis.impls.RedisAsyncResultHolder
     controller:
       access-element: tbs.newgenteacherselect.config.impl.AccessManager
       access-inputer: tbs.newgenteacherselect.config.impl.CookiesAccessInputer
+    redis:
+      serializaer:

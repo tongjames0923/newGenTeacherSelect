@@ -38,7 +38,7 @@ public class MyXXLJobConfig implements IXXLJobsConfig {
 
     @Override
     public String logPath() {
-        return null;
+        return "/Users/abstergo/Downloads/log/jobhandler.txt";
     }
 
     @Override
