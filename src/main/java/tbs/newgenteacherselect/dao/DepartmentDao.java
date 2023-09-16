@@ -2,10 +2,9 @@ package tbs.newgenteacherselect.dao;
 
 import org.apache.ibatis.annotations.*;
 import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.Cacheable;
+import tbs.framework.redis.annotations.ShortTermCache;
 import tbs.framework.redis.constants.RedisConstants;
 import tbs.pojo.Department;
-
 
 import java.util.List;
 
@@ -19,8 +18,8 @@ public interface DepartmentDao {
     Department getParent(long id);
 
     @Select("select * from department where id=#{i} ")
-    @Cacheable(value = "dep_cache", key = "#i", cacheManager = RedisConstants.ShortTermCache, unless = "#result==null")
-    Department getById(long i);
+    @ShortTermCache(value = "dep_cache", key = "#i")
+    List<Department> getById(long i);
 
     @Update("update department set departname=#{name} where id=#{id}")
     @CacheEvict(value = "dep_cache", key = "#id", cacheManager = RedisConstants.ShortTermCache)

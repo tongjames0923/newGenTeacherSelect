@@ -1,7 +1,6 @@
 package tbs.newgenteacherselect.config.impl;
 
 import org.springframework.stereotype.Component;
-
 import tbs.framework.xxl.interfaces.IJsonJobHandler;
 import tbs.framework.xxl.interfaces.impl.IMapJsonJobHandler;
 import tbs.newgenteacherselect.service.DepartmentService;
@@ -15,8 +14,18 @@ public class UpdateDepartmentTask implements IMapJsonJobHandler {
     DepartmentService departmentService;
 
     @Override
-    public String handle(Map params) throws Exception {
+    public Class<? extends Integer> classType() {
+        return null;
+    }
+
+    @Override
+    public Integer paramConvert(Map mp) {
+        return (Integer) mp.getOrDefault("dep", 0);
+    }
+
+    @Override
+    public String handle(Integer integer) throws Exception {
         departmentService.updateDepartmentFullName();
-        return departmentService.fullName(0);
+        return departmentService.fullName(integer);
     }
 }
