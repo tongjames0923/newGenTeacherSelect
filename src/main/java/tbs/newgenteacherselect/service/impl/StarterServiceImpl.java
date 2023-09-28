@@ -1,5 +1,6 @@
 package tbs.newgenteacherselect.service.impl;
 
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import tbs.framework.redis.IRedisService;
 import tbs.newgenteacherselect.enums.SelectionEnums;
@@ -11,6 +12,7 @@ import javax.annotation.Resource;
 import java.util.concurrent.TimeUnit;
 
 @Component
+@Lazy
 public class StarterServiceImpl implements IStarterService {
 
     @Resource

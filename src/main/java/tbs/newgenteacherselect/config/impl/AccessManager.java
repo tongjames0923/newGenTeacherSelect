@@ -4,9 +4,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
-import tbs.framework.controller.enums.VerificationConclusion;
-import tbs.framework.controller.interfaces.IAccess;
-import tbs.framework.controller.interfaces.IPermissionVerification;
+import tbs.framework.process.controller.enums.VerificationConclusion;
+import tbs.framework.process.controller.interfaces.IAccess;
+import tbs.framework.process.controller.interfaces.IPermissionVerification;
 import tbs.framework.error.AuthorizationFailureException;
 import tbs.framework.model.BaseRoleModel;
 import tbs.framework.redis.IRedisService;
@@ -46,6 +46,9 @@ public class AccessManager implements IAccess, IPermissionVerification {
     @Resource
     RoleDao roleDao;
 
+    @Resource
+    AdminDao adminDao;
+
     long login_timeout = 30;
     TimeUnit login_timeout_unit = TimeUnit.MINUTES;
 
@@ -64,8 +67,6 @@ public class AccessManager implements IAccess, IPermissionVerification {
         return (int) TimeUnit.SECONDS.convert(login_timeout, login_timeout_unit);
     }
 
-    @Resource
-    AdminDao adminDao;
 
     public static final String PREFIX = "ACCESS_TOKEN_", ACCESS_TABLE = "ACCESS_TABLE::";
 

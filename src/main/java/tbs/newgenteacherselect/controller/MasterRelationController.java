@@ -5,10 +5,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 
-import tbs.framework.controller.BaseNetResultController;
-import tbs.framework.controller.annotation.AccessRequire;
-import tbs.framework.controller.model.NetResult;
-import tbs.framework.controller.model.SystemExecutionData;
+import tbs.framework.process.controller.BaseNetResultController;
+import tbs.framework.process.controller.annotation.AccessRequire;
+import tbs.framework.process.controller.model.NetResult;
+import tbs.framework.process.controller.model.SystemExecutionData;
 import tbs.framework.error.NetError;
 import tbs.framework.model.BaseRoleModel;
 

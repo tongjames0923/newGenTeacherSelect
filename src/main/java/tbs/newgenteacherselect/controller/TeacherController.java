@@ -5,9 +5,8 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import tbs.framework.controller.BaseController;
-import tbs.framework.controller.BaseNetResultController;
-import tbs.framework.controller.annotation.AccessRequire;
+import tbs.framework.process.controller.BaseNetResultController;
+import tbs.framework.process.controller.annotation.AccessRequire;
 import tbs.framework.db.QueryUtils;
 import tbs.newgenteacherselect.dao.QO.TeacherQO;
 import tbs.newgenteacherselect.service.TeacherService;

@@ -4,12 +4,10 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Component;
 
-import tbs.framework.controller.ControllerBeans;
-import tbs.framework.controller.interfaces.IAccess;
-import tbs.framework.controller.model.SystemExecutionData;
+import tbs.framework.process.controller.ControllerBeans;
+import tbs.framework.process.controller.model.SystemExecutionData;
 import tbs.framework.error.NetError;
 import tbs.framework.model.BaseRoleModel;
-import tbs.framework.redis.annotations.ShortTermCache;
 import tbs.framework.utils.EncryptionTool;
 import tbs.newgenteacherselect.CacheConstants;
 import tbs.newgenteacherselect.NetErrorEnum;

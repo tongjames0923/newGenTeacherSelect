@@ -2,7 +2,7 @@ package tbs.newgenteacherselect.config.impl;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
-import tbs.framework.controller.interfaces.IAccessInput;
+import tbs.framework.process.controller.interfaces.IAccessInput;
 
 
 import javax.servlet.http.Cookie;
